@@ -1,0 +1,250 @@
+.row{
+    width: 100%;
+    margin: 0px;
+}
+.warningText{
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #fcc156;
+}
+.importantIcon:after{
+    color: red;
+    font-family: 'Shazde_Regular2' !important;
+    content: '\E00B';
+}
+.uploadBase{
+    background: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    position: relative;
+}
+.uploadDiv{
+    border: dashed 4px #232323;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+.uploadText{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    height: 300px;
+    flex-direction: column;
+}
+.clickUpload{
+    background: white;
+    color: #3a3a3a;
+    padding: 10px;
+    border-radius: 50px;
+    margin-top: 15px;
+}
+
+.videoSetting{
+    display: none;
+    width: 100%;
+}
+.videoUploadProgressDiv{
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    border: dashed 5px #232323;
+    border-radius: 10px 10px 0px 0px;
+}
+.videoProgressPicDiv{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.progressDiv{
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.progressStatus{
+    color: #4dc7bc;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.cancelUpload{
+    padding: 10px;
+    background: red;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+.progressBar{
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+.progressColor{
+    position: absolute;
+    background-color: #fcc156;
+    top: 0px;
+    right: 0px;
+    width: 0%;
+    height: 100%;
+    border-radius: 10px;
+    transition: .2s;
+}
+.progressText{
+    z-index: 1;
+}
+
+.videoInfos{
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    border: dashed 5px #232323;
+    margin-top: 15px !important;
+    border-radius: 0px 0px 10px 10px;
+}
+.inputVideoLabel{
+    color: white;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+.rtlMultiSelect{
+    direction: rtl;
+    text-align: right;
+}
+.ui.dropdown .menu > .item{
+    text-align: right;
+    direction: rtl;
+}
+.ui.multiple.search.dropdown, .ui.multiple.search.dropdown > input.search{
+    text-align: right;
+    direction: rtl;
+}
+.buttonDiv{
+    display: flex;
+    justify-content: flex-end;
+}
+.saveButton{
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.releaseButton{
+    color: white;
+    background-color: #ffb227;
+    border-radius: 10px 0px 0px 10px;
+    transition: .5s;
+}
+.releaseButton:hover{
+    background-color: #fcc156;
+}
+
+.notReleaseButton{
+    color: white;
+    background: #2e9087;
+    border-radius: 0px 10px 10px 0px;
+    margin-left: 10px;
+    transition: .5s;
+}
+.notReleaseButton:hover{
+    background-color: #4dc7bc;
+}
+.thumbnailSelectDiv{
+    display: flex;
+    flex-wrap: wrap;
+}
+.thumbnailSelectImgDiv{
+    width: 48%;
+    margin: 4px;
+}
+.thumbnailSelectImg{
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 140px;
+}
+.thumbnailSelectImgChoose{
+    border: solid 8px #2e9087 !important;
+}
+.newThumbnailChoose{
+    color: white;
+    border-radius: 10px;
+    border: solid 4px white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    height: 140px;
+    cursor: pointer;
+}
+.newThumbnailModal{
+    display: none;
+    /*display: flex;*/
+    justify-content: center;
+    align-items: center;
+    opacity: 1 !important;
+}
+.closeDivVideoSection{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+.closeDivVideoSection:before{
+    content: "\00d7";
+    font-size: 40px;
+}
+.selectThumbnailDiv{
+    background: white;
+    border-radius: 10px;
+    opacity: 1;
+    width: 438px;
+    max-width: 100%;
+}
+.selectThumbnailDivVideoSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+}
+.resultThumbnail{
+    padding: 20px;
+    width: 100%;
+}
+@media (min-width: 992px){
+    .videoSetting .col-md-6, .col-md-8, .col-md-4{
+        float: right;
+    }
+}
+@media (max-width: 992px) {
+    .progressDiv{
+        height: 100px;
+    }
+    .progressStatus{
+        text-align: center;
+    }
+}
+@media (max-width: 767px){
+    .uploadBase{
+        width: 98%;
+    }
+}

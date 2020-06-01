@@ -16,31 +16,31 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::middleware(['web', 'vodShareData'])->group(function (){
-    Route::get('/', 'StreamingController@indexStreaming')->name('streaming.index');
+    Route::get('/', 'MainController@indexStreaming')->name('index');
 
-    Route::get('streaming/show/{code}', 'StreamingController@showStreaming')->name('streaming.show');
+    Route::get('streaming/show/{code}', 'MainController@showStreaming')->name('streaming.show');
 
-    Route::get('streaming/live/{room?}', 'StreamingController@streamingLive')->name('streaming.live');
+    Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
 
-    Route::post('streaming/search', 'StreamingController@search')->name('streaming.search');
+    Route::post('streaming/search', 'MainController@search')->name('streaming.search');
 
-    Route::get('streaming/list/{kind}/{value}', 'StreamingController@videoList')->name('streaming.list');
+    Route::get('streaming/list/{kind}/{value}', 'MainController@videoList')->name('streaming.list');
 
-    Route::post('streaming/getListElems', 'StreamingController@getVideoListElems')->name('streaming.list.getElems');
+    Route::post('streaming/getListElems', 'MainController@getVideoListElems')->name('streaming.list.getElems');
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('streaming/uploadPage', 'StreamingController@uploadVideoPage')->name('streaming.uploadPage');
+        Route::get('streaming/uploadPage', 'MainController@uploadVideoPage')->name('streaming.uploadPage');
 
-        Route::post('streaming/storeVideo', 'StreamingController@storeVideo')->name('streaming.storeVideo');
+        Route::post('streaming/storeVideo', 'MainController@storeVideo')->name('streaming.storeVideo');
 
-        Route::post('streaming/storeVideoInfo', 'StreamingController@storeVideoInfo')->name('streaming.storeVideoInfo');
+        Route::post('streaming/storeVideoInfo', 'MainController@storeVideoInfo')->name('streaming.storeVideoInfo');
 
-        Route::post('streaming/setVideoFeedback', 'StreamingController@setVideoFeedback')->name('streaming.setVideoFeedback');
+        Route::post('streaming/setVideoFeedback', 'MainController@setVideoFeedback')->name('streaming.setVideoFeedback');
 
-        Route::post('streaming/setVideoComment', 'StreamingController@setVideoComment')->name('streaming.setVideoComment');
+        Route::post('streaming/setVideoComment', 'MainController@setVideoComment')->name('streaming.setVideoComment');
 
-        Route::post('streaming/live/sendBroadcastMsg', 'StreamingController@sendBroadcastMsg')->name('sendBroadcastMsg');
-        Route::post('streaming/live/setVideoFeedback', 'StreamingController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
+        Route::post('streaming/live/sendBroadcastMsg', 'MainController@sendBroadcastMsg')->name('sendBroadcastMsg');
+        Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
 
     });
 
@@ -48,6 +48,8 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('/setVideoDuration', 'StreamingController@setVideoDuration');
 
-    Route::get('/confirmAll', 'StreamingController@confirmAll');
+    Route::get('policies', function(){
+        dd('policies');
+    })->name('policies');
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\models\Live;
 use App\models\VideoCategory;
 use App\models\VideoLive;
 use Carbon\Carbon;
@@ -23,8 +24,8 @@ class vodShareData
         foreach ($vodCategory as $cat){
             $cat->sub = VideoCategory::where('parent', $cat->id)->get();
             foreach ($cat->sub as $item){
-                $item->onIcon = \URL::asset('_images/video/category/'. $item->onIcon);
-                $item->offIcon = \URL::asset('_images/video/category/'. $item->offIcon);
+                $item->onIcon = \URL::asset('images/video/category/'. $item->onIcon);
+                $item->offIcon = \URL::asset('images/video/category/'. $item->offIcon);
             }
         }
 
@@ -38,7 +39,7 @@ class vodShareData
         $today = Carbon::now()->format('Y-m-d');
         $nowTime = Carbon::now()->format('H:i');
 
-        $lives = VideoLive::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
+        $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
         if($lives != null && ($lives->sDate < $today || ($lives->sDate == $today && $lives->sTime <= $nowTime)))
             $hasLive = $lives->code;
         else

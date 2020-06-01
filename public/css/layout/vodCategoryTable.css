@@ -1,0 +1,228 @@
+
+.categoryBackBody{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: #0000008c;
+    z-index: 9999;
+    justify-content: center;
+    display: none;
+}
+.categoryBody{
+    margin-top: 20px;
+    height: calc(100% - 40px);
+    width: calc(100% - 50px);
+    background: #232323;
+    border-radius: 20px;
+}
+.categoryBodySection{
+    height: 100%;
+    display: inline-block;
+    overflow-y: auto
+}
+.categoryBodySectionLeft{
+    color: white;
+    width: 30%;
+    border-left: solid red 2px;
+    padding: 15px 0px;
+}
+.categoryMainHeader{
+    color: white;
+    font-size: 25px;
+    font-weight: 500;
+    padding-right: 10%;
+    margin-bottom: 20px;
+}
+.categoryTabs{
+    font-size: 22px;
+    position: relative;
+    padding-left: 20px;
+    cursor: pointer;
+}
+.categoryTabName{
+    border-bottom: solid red 2px;
+    padding: 20px 0px;
+    padding-right: 20%;
+}
+.categoryLeftArrow{
+    border-left: solid 2px red;
+    border-bottom: solid 2px red;
+    transform: rotate(45deg);
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left: 10px;
+    bottom: 25px;
+}
+.categoryTabs:hover{
+    background: red;
+}
+.categoryTabs:hover .categoryLeftArrow{
+    border-color: white;
+}
+
+.categoryTabsActive{
+    background: red;
+}
+.categoryTabsActive .categoryLeftArrow{
+    border-color: white;
+}
+
+.categoryBodySectionRight{
+    width: 69%;
+    padding: 15px 90px;
+    position: relative;
+}
+.subCategoryBody{
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.subCategoryDiv{
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 265px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 45px;
+    padding: 15px 0px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.subCategoryDiv:hover{
+    color: white;
+}
+.subCategoryName{
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 0px 10px;
+    line-height: 25px;
+}
+
+.offIcon{
+    display: block;
+}
+.onIcon{
+    display: none;
+}
+.subCategoryDiv:hover{
+    background: red;
+}
+.subCategoryDiv:hover .offIcon{
+    display: none;
+}
+.subCategoryDiv:hover .onIcon{
+    display: block;
+}
+
+.backCategory{
+    display: none !important;
+}
+.categoryHeaderName{
+    display: none;
+}
+.closeCategoryBodyDiv{
+    position: absolute;
+    left: 35px;
+    right: auto;
+    top: 25px;
+    color: red;
+    font-size: 20px;
+    line-height: 10px;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+}
+.closeCategoryBodyDiv:before{
+    color: red;
+    font-size: 75px;
+}
+@media (max-width: 1200px) {
+    .categoryBodySectionRight{
+        padding: 15px 20px;
+    }
+}
+@media (max-width: 991px) {
+    .categoryHeaderName{
+        color: red;
+        display: inline-block;
+        border-bottom: solid;
+    }
+    .backCategory{
+        left: 100px;
+        text-align: center;
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        align-items: center;
+        top: 55px;
+        cursor: pointer;
+    }
+    .showCategoryBodySectionRight{
+        display: none;
+    }
+    .categoryBodySectionRight{
+        width: 100%;
+    }
+    .categoryBodySectionLeft{
+        width: 100%;
+    }
+    .backArrow{
+        border-left: solid 6px red;
+        border-bottom: solid 6px red;
+        transform: rotate(-135deg);
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 15px;
+        bottom: 25px;
+    }
+}
+@media (max-width: 700px) {
+    .subCategoryDiv{
+        width: 50%;
+    }
+}
+@media (max-width: 500px) {
+    .categoryBody{
+        width: 98%;
+    }
+    .categoryMainHeader{
+        font-size: 17px;
+    }
+    .categoryTabs{
+        font-size: 15px;
+    }
+    .closeCategoryBodyDiv{
+        font-size: 15px;
+    }
+    .closeCategoryBodyDiv:before{
+        font-size: 50px;
+    }
+    .backCategory{
+        left: 70px;
+        top: 52px;
+    }
+    .backArrow{
+        border-left: solid 4px red;
+        border-bottom: solid 4px red;
+        transform: rotate(-135deg);
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 8px;
+        bottom: 20px;
+    }
+}

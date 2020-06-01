@@ -1,0 +1,299 @@
+.masthead > div > div > div > div{
+    background: red !important;
+}
+.headerNavTitle:hover{
+    color: white;
+}
+.row{
+    width: 100%;
+    margin: 0px;
+}
+.centeredHeader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.loginButton{
+    display: flex;
+    align-items: center;
+    background: #ffcfcf;
+    color: red;
+    padding: 5px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 35px;
+    z-index: 9;
+    transition: .1s;
+}
+.loginButton:hover{
+    color: red;
+    box-shadow: 7px 5px #232323;
+}
+
+.addIcon{
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: red;
+    color: #ffcfcf;
+    margin-right: 10px;
+}
+
+.headerTab{
+    color: #ffcfcf;
+    height: 100%;
+    margin-left: auto;
+    display: flex;
+    align-items: flex-end;
+}
+.headerNavTitle{
+    cursor: pointer;
+    margin: 0px 15px;
+    font-size: 20px;
+    padding-bottom: 10px;
+    border-bottom: solid 3px red;
+    transition: .2s;
+    line-height: 35px;
+}
+.headerNavTitle:hover{
+    border-color: #ffcfcf;
+}
+
+.headerNavTitleActive{
+    border-color: #ffcfcf;
+}
+
+nav{
+    width: 100%;
+    background: red;
+    height: 75px;
+    display: flex;
+    padding: 0px 25px;
+    position: relative;
+}
+.headerLogo{
+    height: 100%;
+}
+.headerLeftSection{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 7px 0px;
+}
+.categoryIcon{
+    height: 100px;
+    width: 100px;
+}
+
+#loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp, #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp, #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass{
+    background: #232323;
+    color: white;
+}
+.ui_modal .header_text{
+    color: white;
+}
+.registerPaneInLoginPopUp > button{
+    background: red !important;
+}
+.registerPaneInLoginPopUp > button:hover{
+    color: white;
+}
+.abcRioButtonContentWrapper{
+    background: white;
+}
+.loginDividerBorder{
+    border-color: red !important;
+}
+.forgetPassLink{
+    color: red;
+}
+.loginSubBtn{
+    background: red !important;
+    border: none;
+}
+#loginPopUp .ui_close_x::before{
+    color: red;
+}
+
+.userHeaderIcon{
+    margin-right: 10px;
+    z-index: 9;
+}
+.userHeaderIcon:before{
+    font-family: 'Shazde_Regular' !important;
+    content: "\e0aa";
+    font-size: 25px;
+}
+
+.bookMarkHeaderIcon{
+    margin-left: 10px;
+    padding: 0;
+    height: 45px;
+    width: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bookMarkHeaderIcon:before{
+    font-family: 'Shazde_Regular' !important;
+    content: "\e0dd";
+}
+.userNameHeader{
+    position: relative;
+}
+.userHeaderMenu{
+    position: absolute;
+    width: 100%;
+    right: 0;
+    top: 25px;
+    background-color: #ffcfcf;
+    border-radius: 0px 0px 30px 30px;
+    font-size: 14px;
+    text-align: center;
+    height: 0;
+    overflow: hidden;
+    transition: .1s;
+}
+.userNameHeader:hover{
+    border-radius: 30px;
+}
+.userNameHeader:hover .userHeaderMenu{
+    height: 90px;
+    padding-top: 15px;
+}
+.userHeaderMenuTab{
+    color: red;
+    transition: .1s;
+    display: flex;
+    justify-content: center;
+}
+.userHeaderMenuTab:hover{
+    color: red;
+    font-weight: bold;
+}
+.antenIcon1{
+    width: 25px;
+}
+.headerRightSection{
+    display: none;
+}
+.headerLine1, .headerLine2, .headerLine3{
+    width: 35px;
+    height: 5px;
+    background: #ffcfcf;
+    margin: 3px 0px;
+    border-radius: 10px;
+    transition: .3s;
+}
+.change.headerLine1{
+    transform: translateY(5px) rotate(-45deg);
+    margin: 0;
+}
+.change.headerLine2{
+    display: none;
+    margin: 0;
+}
+.change.headerLine3{
+    transform: rotate(45deg);
+    margin: 0;
+}
+/*.change.headerRightSection{*/
+/*    right: 100px;*/
+/*}*/
+.headerRightTabs{
+    display: none;
+    position: absolute;
+    width: 0px;
+    background: red;
+    right: 0px;
+    z-index: 9;
+    transition: .3s;
+    border-radius: 0px 0px 0px 20px;
+    top: 75px;
+    overflow: hidden;
+    flex-direction: column;
+    color: #ffcfcf;
+}
+.change.headerRightTabs{
+    width: 210px;
+}
+
+
+@media (max-width: 1500px) {
+    .headerNavTitle{
+        font-size: 15px;
+        line-height: 25px;
+        margin: 0px 10px;
+    }
+    .loginButton{
+        font-size: 14px;
+        line-height: 25px;
+    }
+    .bookMarkHeaderIcon{
+        height: 40px;
+        width: 40px;
+    }
+    .antenIcon1{
+        width: 15px;
+    }
+}
+
+@media (max-width: 1015px){
+    .headerLogo{
+        margin: 0 auto;
+    }
+    .headerTab{
+        display: none;
+    }
+    .headerLeftSection{
+        position: absolute;
+        left: 25px;
+        bottom: 0;
+    }
+    .bookMarkHeaderIcon{
+        display: none;
+    }
+    .headerRightSection{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 25px;
+        bottom: 15px;
+        border-radius: 50%;
+        width: 50px;
+        height: 45px;
+        align-items: center;
+        justify-content: center;
+        transition: .3s;
+    }
+    .headerRightTabs{
+        display: flex;
+    }
+    .headerNavTitle{
+        font-size: 25px;
+        margin: 20px 10px;
+        text-align: center;
+        width: 190px;
+    }
+    .headerNavTitleActive{
+        border: none;
+    }
+    .userHeaderMenuTab{
+        margin: 5px 0px;
+    }
+}
+
+@media (max-width: 768px){
+    .headerNavTitle{
+        width: auto;
+    }
+}
+
