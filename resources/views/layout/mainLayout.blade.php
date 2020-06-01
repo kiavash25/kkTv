@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta name="theme-color" content="#4dc7bc"/>
     <meta name="msapplication-TileColor" content="#4dc7bc">
-    <meta name="msapplication-TileImage" content="{{ asset('images/icons/mainIcon.png') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('images/blank.jpg') }}">
     <meta name="twitter:card" content="summary"/>
     <meta property="og:url" content="{{Request::url()}}" />
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
@@ -19,11 +19,11 @@
     <meta name="title" content="کوچیتا | سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران" />
     <meta name='description' content='کوچیتا، سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران. اطلاعات اماکن و جاذبه ها، هتل ها، بوم گردی، ماجراجویی، آموزش سفر، فروشگاه صنایع‌دستی ، پادکست سفر' />
     <meta name='keywords' content='کوچیتا، هتل، تور ، سفر ارزان، سفر در ایران، بلیط، تریپ، نقد و بررسی، سفرنامه، کمپینگ، ایران گردی، آموزش سفر، مجله گردشگری، مسافرت، مسافرت داخلی, ارزانترین قیمت هتل ، مقایسه قیمت ، بهترین رستوران‌ها ، بلیط ارزان ، تقویم تعطیلات' />
-    <meta property="og:image" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
-    <meta property="og:image:secure_url" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
+    <meta property="og:image" content="{{ asset('images/blank.jpg') }}"/>
+    <meta property="og:image:secure_url" content="{{ asset('images/blank.jpg') }}"/>
     <meta property="og:image:width" content="550"/>
     <meta property="og:image:height" content="367"/>
-    <meta name="twitter:image" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
+    <meta name="twitter:image" content="{{ asset('images/blank.jpg') }}"/>
 
 
 {{--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>--}}
@@ -53,7 +53,6 @@
         });
     </script>
 
-{{--    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/theme2/long_lived_global_legacy_2.css')}}"/>--}}
     <link rel='stylesheet' type='text/css' href='{{ asset('css/layout/common.css') }}' />
     <link rel="stylesheet" href="{{ asset('css/default/font-awesome.min.css') }}">
 

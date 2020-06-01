@@ -387,10 +387,27 @@ input{
     opacity: 1 !important;
 }
 
+.ui_backdrop {
+    display: block;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.ui_backdrop.dark {
+    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.8);
+    filter: alpha(opacity 80);
+    -moz-opacity: .8;
+    -khtml-opacity: .8;
+    opacity: .8;
+}
 .closeIcon:before {
     font-size: 28px;
     line-height: 36px;
-    color: #00AF87;
+    color: red;
     content: "\00d7";
 }
 

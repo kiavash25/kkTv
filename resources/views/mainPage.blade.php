@@ -112,7 +112,7 @@
                         </div>
                         <div class="headerWithLineLine"></div>
 
-                        <a href="{{route('streaming.list', ['kind' => 'category', 'value' => $cat->id])}}" class="allVideoButton">
+                        <a href="{{route('video.list', ['kind' => 'category', 'value' => $cat->id])}}" class="allVideoButton">
                             مشاهده همه
                         </a>
                     </div>

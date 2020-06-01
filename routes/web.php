@@ -13,20 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
-
 Route::middleware(['web', 'vodShareData'])->group(function (){
     Route::get('/', 'MainController@indexStreaming')->name('index');
+
+    Route::post('video/search', 'MainController@search')->name('video.search');
+
+    Route::get('list/{kind}/{value}', 'MainController@videoList')->name('video.list');
+
+    Route::post('getListElems', 'MainController@getVideoListElems')->name('video.list.getElems');
+
 
     Route::get('streaming/show/{code}', 'MainController@showStreaming')->name('streaming.show');
 
     Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
 
-    Route::post('streaming/search', 'MainController@search')->name('streaming.search');
-
-    Route::get('streaming/list/{kind}/{value}', 'MainController@videoList')->name('streaming.list');
-
-    Route::post('streaming/getListElems', 'MainController@getVideoListElems')->name('streaming.list.getElems');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('streaming/uploadPage', 'MainController@uploadVideoPage')->name('streaming.uploadPage');
@@ -52,4 +52,7 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
         dd('policies');
     })->name('policies');
 });
+
+Auth::routes();
+
 

@@ -48,7 +48,7 @@ class MainController extends Controller
 
                     $category->subs = VideoCategory::where('parent', $category->id)->get();
                     foreach ($category->subs as $item)
-                        $item->icon = \URL::asset('_images/video/category/'.$item->offIcon);
+                        $item->icon = asset('images/video/category/'.$item->offIcon);
 
                     $subsId = VideoCategory::where('parent', $category->id)->pluck('id')->toArray();
                     $category->lastVideo = Video::where($confirmContidition)->whereIn('categoryId', $subsId)->take(10)->orderByDesc('created_at')->get();
@@ -63,34 +63,34 @@ class MainController extends Controller
                     }
 
                     if($category->onIcon != null)
-                        $category->icon = \URL::asset('_images/video/category/' . $category->onIcon);
+                        $category->icon = \URL::asset('images/video/category/' . $category->onIcon);
 
                     if($category->banner != null)
-                        $category->banner = \URL::asset('_images/video/category/' . $category->banner);
+                        $category->banner = \URL::asset('images/video/category/' . $category->banner);
                     else
-                        $category->banner = \URL::asset('images/streaming/defaultBanner.jpg');
+                        $category->banner = \URL::asset('images/mainPics/defaultBanner.jpg');
                 }
                 else {
-                    $category->icon = \URL::asset('_images/video/category/' . $category->onIcon);
+                    $category->icon = \URL::asset('images/video/category/' . $category->onIcon);
                     $mainCat = VideoCategory::find($category->parent);
 
                     if($category->banner == null) {
                         if ($mainCat->banner != null)
-                            $category->banner = \URL::asset('_images/video/category/' . $mainCat->banner);
+                            $category->banner = \URL::asset('images/video/category/' . $mainCat->banner);
                         else
-                            $category->banner = \URL::asset('images/streaming/defaultBanner.jpg');
+                            $category->banner = \URL::asset('images/mainPics/defaultBanner.jpg');
                     }
                     else
-                        $category->banner = \URL::asset('_images/video/category/' . $category->banner);
+                        $category->banner = \URL::asset('images/video/category/' . $category->banner);
 
                 }
 
                 $content = $category;
-                return view('streaming.page.videoList', compact(['kind', 'value', 'content']));
+                return view('page.videoList', compact(['kind', 'value', 'content']));
 
             }
         }
-        return view('streaming.page.videoList', compact(['kind', 'value']));
+        return view('page.videoList', compact(['kind', 'value']));
     }
 
     public function getVideoListElems(Request $request)
@@ -128,7 +128,8 @@ class MainController extends Controller
         if(isset($request->value)){
             $videos = Video::where('title', 'LIKE', '%' . $request->value . '%')
                 ->where(['state' => 1, 'confirm' => 1])
-                ->select(['id', 'title', 'code', 'categoryId'])->get();
+                ->select(['id', 'title', 'code', 'categoryId'])
+                ->get();
 
             foreach ($videos as $item) {
                 $item->category = VideoCategory::find($item->categoryId)->name;
@@ -445,11 +446,11 @@ class MainController extends Controller
     {
         $userLogin = auth()->check();
 
-        $loc = __DIR__ .'/../../../../assets/_images/video/' . $video->userId;
+        $loc = 'videos/' . $video->userId;
         if(is_file($loc .'/min_'. $video->thumbnail))
-            $video->pic = \URL::asset('_images/video/' . $video->userId . '/min_' . $video->thumbnail);
+            $video->pic = asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
         else
-            $video->pic = \URL::asset('_images/video/' . $video->userId . '/' . $video->thumbnail);
+            $video->pic = asset('videos/' . $video->userId . '/' . $video->thumbnail);
 
         $video->url = route('streaming.show', ['code' => $video->code]);
         $video->username = User::find($video->userId)->username;
@@ -463,76 +464,76 @@ class MainController extends Controller
         $video->places = [];
 
         if($main){
-            $video->pic = \URL::asset('_images/video/' . $video->userId . '/' . $video->thumbnail);
+            $video->pic = asset('videos/' . $video->userId . '/' . $video->thumbnail);
             $resultComment = [];
             $video->comments = $this->getVideoComments($video->id, 0);
 
-            $activityId = Activity::whereName('نظر')->first()->id;
-            $places = VideoPlaceRelation::where('videoId', $video->id)->get();
-            $result = [];
-            foreach ($places as $place) {
-                if ($place->kindPlaceId > 0) {
-                    $kindPlace = Place::find($place->kindPlaceId);
-                    $place = \DB::table($kindPlace->tableName)->where('id', $place->placeId)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId'])->first();
-                    if($place != null) {
-                        $file = $kindPlace->fileName;
-                        if (file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber)))
-                            $place->placePic = \URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
-                        else
-                            $place->placePic = \URL::asset("_images/nopic/blank.jpg");
-
-                        $place->url = createUrl($kindPlace->id, $place->id, 0, 0);
-                        $city = Cities::whereId($place->cityId);
-                        $place->placeCity = $city->name;
-                        $place->placeState = State::whereId($city->stateId)->name;
-                        $place->placeRate = getRate($place->id, $kindPlace->id)[1];
-                        $place->placeReviews = \DB::select('select count(*) as countNum from log, comment WHERE logId = log.id and status = 1 and placeId = ' . $place->id .
-                            ' and kindPlaceId = ' . $kindPlace->id . ' and activityId = ' . $activityId)[0]->countNum;
-
-                        $place->kindPlaceId = $kindPlace->id;
-
-                        array_push($result, $place);
-                    }
-                }
-                else {
-                    if($place->kindPlaceId == -1){
-                        $place = State::find($place->placeId);
-                        if($place != null){
-                            $place->placePic = null;
-                            $cities = Cities::where('stateId', $place->id)->get();
-                            foreach ($cities as $city){
-                                $p = getCityPic($city->id);
-                                if($p != null){
-                                    $place->placePic = $p;
-                                    break;
-                                }
-                            }
-                            if($place->placePic == null)
-                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
-
-                            $place->kindPlaceId = -1;
-                            $place->url = route('cityPage', ['kind' => 'state', 'city' => $place->name]);
-                            $place->name = 'استان '  . $place->name;
-                            array_push($result, $place);
-                        }
-                    }
-                    else{
-                        $place = Cities::find($place->placeId);
-                        if($place != null){
-                            $place->placePic = getCityPic($place->id);
-                            if($place->placePic == null)
-                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
-
-                            $place->placeState = State::find($place->stateId)->name;
-                            $place->kindPlaceId = 0;
-                            $place->url = route('cityPage', ['kind' => 'city', 'city' => $place->name]);
-                            $place->name = 'شهر '  . $place->name;
-                            array_push($result, $place);
-                        }
-                    }
-                }
-            }
-            $video->places = $result;
+//            $activityId = Activity::whereName('نظر')->first()->id;
+//            $places = VideoPlaceRelation::where('videoId', $video->id)->get();
+//            $result = [];
+//            foreach ($places as $place) {
+//                if ($place->kindPlaceId > 0) {
+//                    $kindPlace = Place::find($place->kindPlaceId);
+//                    $place = \DB::table($kindPlace->tableName)->where('id', $place->placeId)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId'])->first();
+//                    if($place != null) {
+//                        $file = $kindPlace->fileName;
+//                        if (file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber)))
+//                            $place->placePic = \URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
+//                        else
+//                            $place->placePic = \URL::asset("_images/nopic/blank.jpg");
+//
+//                        $place->url = createUrl($kindPlace->id, $place->id, 0, 0);
+//                        $city = Cities::whereId($place->cityId);
+//                        $place->placeCity = $city->name;
+//                        $place->placeState = State::whereId($city->stateId)->name;
+//                        $place->placeRate = getRate($place->id, $kindPlace->id)[1];
+//                        $place->placeReviews = \DB::select('select count(*) as countNum from log, comment WHERE logId = log.id and status = 1 and placeId = ' . $place->id .
+//                            ' and kindPlaceId = ' . $kindPlace->id . ' and activityId = ' . $activityId)[0]->countNum;
+//
+//                        $place->kindPlaceId = $kindPlace->id;
+//
+//                        array_push($result, $place);
+//                    }
+//                }
+//                else {
+//                    if($place->kindPlaceId == -1){
+//                        $place = State::find($place->placeId);
+//                        if($place != null){
+//                            $place->placePic = null;
+//                            $cities = Cities::where('stateId', $place->id)->get();
+//                            foreach ($cities as $city){
+//                                $p = getCityPic($city->id);
+//                                if($p != null){
+//                                    $place->placePic = $p;
+//                                    break;
+//                                }
+//                            }
+//                            if($place->placePic == null)
+//                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
+//
+//                            $place->kindPlaceId = -1;
+//                            $place->url = route('cityPage', ['kind' => 'state', 'city' => $place->name]);
+//                            $place->name = 'استان '  . $place->name;
+//                            array_push($result, $place);
+//                        }
+//                    }
+//                    else{
+//                        $place = Cities::find($place->placeId);
+//                        if($place != null){
+//                            $place->placePic = getCityPic($place->id);
+//                            if($place->placePic == null)
+//                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
+//
+//                            $place->placeState = State::find($place->stateId)->name;
+//                            $place->kindPlaceId = 0;
+//                            $place->url = route('cityPage', ['kind' => 'city', 'city' => $place->name]);
+//                            $place->name = 'شهر '  . $place->name;
+//                            array_push($result, $place);
+//                        }
+//                    }
+//                }
+//            }
+//            $video->places = $result;
         }
 
         $video->uLike = 0;

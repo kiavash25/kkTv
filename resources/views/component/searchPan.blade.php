@@ -72,7 +72,7 @@
 
             </div>
         </div>
-        <div onclick="$('#searchPane').addClass('hidden'); $('.dark').hide()" class="ui_close_x"></div>
+        <div onclick="$('#searchPane').addClass('hidden'); $('.dark').hide()" class="closeIcon searchPaneCloseIcon"></div>
     </span>
 
 <script>
@@ -102,7 +102,7 @@
 
             $.ajax({
                 type: "post",
-                url: '{{route("streaming.search")}}',
+                url: '{{route("video.search")}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     value: val,
@@ -116,6 +116,9 @@
                     }
                     catch (e) {
                     }
+                },
+                error: function(err){
+                    console.log(err)
                 }
             });
         }

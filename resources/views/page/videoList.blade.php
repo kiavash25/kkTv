@@ -1,10 +1,10 @@
-@extends('streaming.layout.streamingLayout')
+@extends('layout.mainLayout')
 
 
 @section('head')
 
-    <link rel="stylesheet" href="{{URL::asset('css/streaming/indexStreaming.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/streaming/pages/mainList.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/indexStreaming.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/mainList.css')}}">
 
     <style>
         .overMainPicDiv{
@@ -134,7 +134,7 @@
                         </div>
                         <div class="headerWithLineLine"></div>
 
-                        <a href="{{route('streaming.list', ['kind' => 'category', 'value' => $cont->id])}}" class="allVideoButton">
+                        <a href="{{route('video.list', ['kind' => 'category', 'value' => $cont->id])}}" class="allVideoButton">
                             مشاهده همه
                         </a>
                     </div>
@@ -295,7 +295,7 @@
 
                 $.ajax({
                     type: 'post',
-                    url: '{{route("streaming.list.getElems")}}',
+                    url: '{{route("video.list.getElems")}}',
                     data: {
                         _token: '{{csrf_token()}}',
                         kind: kind,

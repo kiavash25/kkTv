@@ -36,7 +36,7 @@
                 @foreach($vodCategory as $mainCat)
                     <div id="subCategoryMenu_{{$mainCat->id}}" class="subCategoryBody">
                         @foreach($mainCat->sub as $item)
-                            <a href="{{route('streaming.list', ['kind' => 'category', 'value' => $item->id])}}" class="subCategoryDiv">
+                            <a href="{{route('video.list', ['kind' => 'category', 'value' => $item->id])}}" class="subCategoryDiv">
                                 <img src="{{$item->offIcon}}" class="categoryIcon offIcon">
                                 <img src="{{$item->onIcon}}" class="categoryIcon onIcon">
                                 <div class="subCategoryName">

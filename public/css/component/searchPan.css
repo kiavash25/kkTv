@@ -277,16 +277,14 @@ div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
     height: 100%;
 }
 
-#searchPane .ui_close_x {
-    width: 70px;
-    height: 70px;
-    left: 0 !important;
+.searchPaneCloseIcon {
     position: absolute;
-    right: auto;
     color: red;
+    left: 15px;
+    top: 0px;
 }
 
-#searchPane .ui_close_x:before {
+.searchPaneCloseIcon:before {
     font-size: 50px;
     line-height: 70px;
     color: red;

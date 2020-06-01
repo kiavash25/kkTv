@@ -88,43 +88,43 @@ footer li > img, .small-ico {
 }
 
 .linkedin {
-    background-image: url('../../../images/icons/linkedin.png');
+    background-image: url('../../images/mainPics/linkedin.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .facebook {
-    background-image: url('../../../images/icons/facebook.png');
+    background-image: url('../../images/mainPics/facebook.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .pinterest {
-    background-image: url('../../../images/icons/pintrest.png');
+    background-image: url('../../images/mainPics/pintrest.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .instagram {
-    background-image: url('../../../images/icons/instagram.png');
+    background-image: url('../../images/mainPics/instagram.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .telegram {
-    background-image: url('../../../images/icons/telegram.png');
+    background-image: url('../../images/mainPics/telegram.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .aparat {
-    background-image: url('../../../images/icons/aparat.png');
+    background-image: url('../../images/mainPics/aparat.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
 
 .twitter {
-    background-image: url('../../../images/icons/twitter.png');
+    background-image: url('../../images/mainPics/twitter.png');
     background-repeat: no-repeat;
     display: inline-block;
 }
