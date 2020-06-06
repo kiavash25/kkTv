@@ -23,26 +23,73 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
     Route::post('getListElems', 'MainController@getVideoListElems')->name('video.list.getElems');
 
 
-    Route::get('streaming/show/{code}', 'MainController@showStreaming')->name('streaming.show');
+    Route::get('video/show/{code}', 'MainController@showVideo')->name('video.show');
 
     Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
 
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('streaming/uploadPage', 'MainController@uploadVideoPage')->name('streaming.uploadPage');
+        Route::get('video/uploadPage', 'MainController@uploadVideoPage')->name('video.uploadPage');
 
-        Route::post('streaming/storeVideo', 'MainController@storeVideo')->name('streaming.storeVideo');
+        Route::post('video/storeVideo', 'MainController@storeVideo')->name('video.storeVideo');
 
-        Route::post('streaming/storeVideoInfo', 'MainController@storeVideoInfo')->name('streaming.storeVideoInfo');
+        Route::post('video/storeVideoInfo', 'MainController@storeVideoInfo')->name('video.storeVideoInfo');
 
-        Route::post('streaming/setVideoFeedback', 'MainController@setVideoFeedback')->name('streaming.setVideoFeedback');
+        Route::post('video/setVideoFeedback', 'MainController@setVideoFeedback')->name('video.setVideoFeedback');
 
-        Route::post('streaming/setVideoComment', 'MainController@setVideoComment')->name('streaming.setVideoComment');
+        Route::post('video/setVideoComment', 'MainController@setVideoComment')->name('video.setVideoComment');
 
         Route::post('streaming/live/sendBroadcastMsg', 'MainController@sendBroadcastMsg')->name('sendBroadcastMsg');
-        Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
 
+        Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
     });
+
+
+//authenticated controller
+    Route::middleware(['throttle:30'])->group(function(){
+
+        Route::get('login', 'UserLoginController@login');
+
+        Route::post('login', array('as' => 'login', 'uses' => 'UserLoginController@mainDoLogin'));
+
+        Route::post('checkLogin', array('as' => 'checkLogin', 'uses' => 'UserLoginController@checkLogin'));
+
+        Route::post('login2', array('as' => 'login2', 'uses' => 'UserLoginController@doLogin'));
+
+        Route::post('checkEmail', array('as' => 'checkEmail', 'uses' => 'UserLoginController@checkEmail'));
+
+        Route::post('checkUserName', array('as' => 'checkUserName', 'uses' => 'UserLoginController@checkUserName'));
+
+        Route::post('registerAndLogin', array('as' => 'registerAndLogin', 'uses' => 'UserLoginController@registerAndLogin'));
+
+        Route::post('registerWithPhone', array('as' => 'registerWithPhone', 'uses' => 'UserLoginController@registerWithPhone'));
+
+        Route::post('retrievePasByEmail', array('as' => 'retrievePasByEmail', 'uses' => 'UserLoginController@retrievePasByEmail'));
+
+        Route::post('retrievePasByPhone', array('as' => 'retrievePasByPhone', 'uses' => 'UserLoginController@retrievePasByPhone'));
+
+        Route::post('checkPhoneNum', array('as' => 'checkPhoneNum', 'uses' => 'UserLoginController@checkPhoneNum'));
+
+        Route::post('checkActivationCode', array('as' => 'checkActivationCode', 'uses' => 'UserLoginController@checkActivationCode'));
+
+        Route::post('resendActivationCode', array('as' => 'resendActivationCode', 'uses' => 'UserLoginController@resendActivationCode'));
+
+        Route::post('resendActivationCodeForget', array('as' => 'resendActivationCodeForget', 'uses' => 'UserLoginController@resendActivationCodeForget'));
+
+        Route::post('checkReCaptcha', array('as' => 'checkReCaptcha', 'uses' => 'UserLoginController@checkReCaptcha'));
+
+        Route::get('loginWithGoogle', array('as' => 'loginWithGoogle', 'uses' => 'UserLoginController@loginWithGoogle'));
+
+        Route::get('logout', array('as' => 'logout', 'uses' => 'UserLoginController@logout'));
+    });
+
+
+
+
+
+    Route::get('profile', function(){
+        dd('profile');
+    })->name('profile');
 
     Route::get('/importVideoToDB', 'StreamingController@importVideoToDB');
 
@@ -52,6 +99,8 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
         dd('policies');
     })->name('policies');
 });
+
+Route::post('getTags', 'AjaxController@getTags')->name('getTags');
 
 Auth::routes();
 

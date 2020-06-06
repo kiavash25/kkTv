@@ -263,7 +263,6 @@ footer li > img, .small-ico {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 15px 0;
     font-weight: 700;
     font-size: initial;
 }
@@ -274,6 +273,8 @@ footer li > img, .small-ico {
     justify-content: center;
     cursor: pointer;
     font-weight: 400;
+    width: 24%;
+    padding: 15px 0;
 }
 
 .footerPhoneMenuBar > div > div.profileBtnText {

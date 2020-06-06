@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 if (Auth::check())
-    return Redirect::to(route('main'));
+    return Redirect::to(route('index'));
 
 require_once(__DIR__ . '/../../../app/Http/Controllers/glogin/libraries/Google/autoload.php');
 
@@ -55,7 +55,6 @@ $authUrl = $client->createAuthUrl();
     var checkEmailDir = '{{route('checkEmail')}}';
     var checkUserNameDir = '{{route('checkUserName')}}';
     var registerAndLoginDir = '{{route('registerAndLogin')}}';
-    var registerAndLoginDir2 = '{{route('registerAndLogin2')}}';
     var selectedUrl = "";
     var back = "";
     var email = "";
@@ -156,20 +155,13 @@ $authUrl = $client->createAuthUrl();
                 },
                 success: function (response) {
                     if (response == "ok") {
-                        hideElement('loginPopUp');
-                        // return document.location.href = selectedUrl;
-                        // document.location.reload();
-                        document.getElementById('form_userName').value = username;
-                        document.getElementById('form_pass').value = password;
-
-                        $('#second_login').submit();
+                        openLoading();
+                        location.reload();
                     }
-                    else if (response == "nok2") {
+                    else if (response == "nok2")
                         $("#loginErr").empty().append('حساب کاربری شما غیر فعال شده است');
-                    }
-                    else {
+                    else
                         $("#loginErr").empty().append('نام کاربری و یا رمز عبور اشتباه وارد شده است');
-                    }
                 },
                 error: function (xhr, status, error) {
                     if (xhr.responseText == "Too Many Attempts.")
@@ -183,7 +175,7 @@ $authUrl = $client->createAuthUrl();
         selectedUrl = url;
         $("#username_main").val("");
         $("#password_main").val("");
-        showElement('loginPopUp');
+        $("#loginPopUp").removeClass('hidden');
         $(".dark").show();
     }
 
@@ -355,23 +347,8 @@ $authUrl = $client->createAuthUrl();
                     'invitationCode': $("#invitationCode").val()
                 },
                 success: function (response) {
-                    if (response == "ok") {
-                        $.ajax({
-                            type: 'post',
-                            url: registerAndLoginDir,
-                            data: {
-                                'username': $("#username_final").val(),
-                                'password': pas,
-                                'email': email,
-                                'invitationCode': $("#invitationCode").val()
-                            },
-                            success: function (response) {
-                                if (response == "ok") {
-                                    document.location.href = '{{route('main')}}';
-                                }
-                            }
-                        });
-                    }
+                    if (response == "ok")
+                        registerUser();
                     else if (response == "nok1") {
                         $("#loginErrUserName").empty().append('نام کاربری وارد شده در سامانه موجود است');
                     }
@@ -389,22 +366,8 @@ $authUrl = $client->createAuthUrl();
                     'username': $("#username_final").val()
                 },
                 success: function (response) {
-                    if (response == "ok") {
-                        $.ajax({
-                            type: 'post',
-                            url: registerAndLoginDir,
-                            data: {
-                                'username': $("#username_final").val(),
-                                'password': pas,
-                                'email': email
-                            },
-                            success: function (response) {
-                                if (response == "ok") {
-                                    document.location.href = '{{route('main')}}';
-                                }
-                            }
-                        });
-                    }
+                    if (response == "ok")
+                        registerUser();
                     else if (response == "nok1") {
                         $("#loginErrUserName").empty().append('نام کاربری وارد شده در سامانه موجود است');
                     }
@@ -416,38 +379,20 @@ $authUrl = $client->createAuthUrl();
         }
     }
 
-    function checkUserName2() {
-
+    function registerUser(){
         $.ajax({
             type: 'post',
-            url: checkUserNameDir,
+            url: registerAndLoginDir,
             data: {
                 'username': $("#username_final").val(),
+                'password': pas,
+                'email': email,
+                'phoneNum': phoneNum,
                 'invitationCode': $("#invitationCode").val()
             },
             success: function (response) {
                 if (response == "ok") {
-                    $.ajax({
-                        type: 'post',
-                        url: registerAndLoginDir2,
-                        data: {
-                            'username': $("#username_final").val(),
-                            'password': pas,
-                            'email': email,
-                            'invitationCode': $("#invitationCode").val()
-                        },
-                        success: function (response) {
-                            if (response == "ok") {
-                                document.location.reload();
-                            }
-                        }
-                    });
-                }
-                else if (response == "nok1") {
-                    $("#loginErrUserName").empty().append('نام کاربری وارد شده در سامانه موجود است');
-                }
-                else {
-                    $("#loginErrUserName").empty().append('کد معرف وارد شده نامعتبر است');
+                    document.location.href = '{{route('index')}}';
                 }
             }
         });
@@ -463,16 +408,8 @@ $authUrl = $client->createAuthUrl();
             },
             success: function (response) {
                 if (response == "ok") {
-                    if (back == "email") {
-                        if ($("#username_final").val() != "") {
-                            checkUserName();
-                        }
-                    }
-                    else {
-                        if ($("#username_final").val() != "") {
-                            checkUserName2();
-                        }
-                    }
+                    if ($("#username_final").val() != "")
+                        checkUserName();
                 }
                 else {
                     $("#loginErrUserName").empty().append('لطفا ربات نبودن خود را ثابت کنید');
@@ -616,8 +553,8 @@ $authUrl = $client->createAuthUrl();
 </script>
 
 
-<link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/loginPopUp.css')}}'/>
-<link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/abbreviations.css')}}'/>
+<link rel='stylesheet' type='text/css' href='{{URL::asset('css/component/loginPopUp.css')}}'/>
+{{--<link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/abbreviations.css')}}'/>--}}
 
 {{--loginPopUp--}}
 <form id="second_login" method="post" action="{{route('checkLogin')}}">
@@ -628,8 +565,8 @@ $authUrl = $client->createAuthUrl();
 
 <span id="loginPopUp" onkeyup="if(event.keyCode == 13) login($('#username_main').val(), $('#password_main').val())"
       class="pop-up ui_modal hidden">
-    <div class="mainDivLoginMainLogo" style="display: flex; justify-content: center;">
-        <img class="loginMainLogo" src="{{URL::asset('images/streaming/vodLobo.png')}}" style="width: auto; height: 75px">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}" style="width: auto; height: 75px">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         <div class="loginPaneInLoginPopUp loginDividerBorder col-xs-6">
@@ -708,15 +645,15 @@ $authUrl = $client->createAuthUrl();
             <div class="header_text font-size-14Imp">همین حالا به سادگی در کوچیتا عضو شوید و از امکانات آن استفاده کنید.</div>
         </div>
     </div>
-    <div class="ui_close_x" onclick="hideElement('loginPopUp')" style="right: auto; left: 0px"></div>
+    <div class="closeIcon loginCloseIcon" onclick="hideElement('loginPopUp')"></div>
 </span>
 
 {{--Enter Email in login PopUp--}}
 <span id="EnterEmail-loginPopUp"
       onkeyup="if(event.keyCode == 13) login($('#username_email').val(), $('#password_email').val())"
       class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         {{--<div class="loginDividerBorder col-xs-6">--}}
@@ -775,8 +712,8 @@ $authUrl = $client->createAuthUrl();
 <span id="EnterPhone-loginPopUp"
       onkeyup="if(event.keyCode == 13) login($('#username_phone').val(), $('#password_phone').val())"
       class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         {{--<div class="loginDividerBorder col-xs-6">--}}
@@ -829,8 +766,8 @@ $authUrl = $client->createAuthUrl();
 <span id="Send_AND_EnterCode-loginPopUp"
       onkeyup="if(event.keyCode == 13) login($('#username_2').val(), $('#password_2').val())"
       class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         {{--<div class="loginDividerBorder col-xs-6">--}}
@@ -886,8 +823,8 @@ $authUrl = $client->createAuthUrl();
 <span id="EnterPassword-loginPopUp"
       onkeyup="if(event.keyCode == 13) login($('#username_3').val(), $('#password_3').val())"
       class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         {{--<div class="loginDividerBorder col-xs-6">--}}
@@ -934,8 +871,8 @@ $authUrl = $client->createAuthUrl();
 
 {{--Enter Username in login PopUp--}}
 <span id="EnterUsername-loginPopUp" class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         <div class="col-xs-12">
@@ -974,13 +911,13 @@ $authUrl = $client->createAuthUrl();
             <p id="loginErrUserName"></p>
         </div>
     </div>
-    <div class="ui_close_x" onclick="document.location.href = '{{route('main')}}'"></div>
+    <div class="ui_close_x" onclick="document.location.href = '{{route('index')}}'"></div>
 </span>
 
 {{--Forget Password in login PopUp--}}
 <span id="ForgetPassword" class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 mainContentInfos">
         <div class="header_text font-size-14Imp">برای بازیابی رمزعبور تان از کدام طریق اقدام میکنید:</div>
@@ -1006,8 +943,8 @@ $authUrl = $client->createAuthUrl();
 
 {{--Enter Email for ForgetPass in login PopUp--}}
 <span id="Email_ForgetPass" class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 rtl mainContentInfos">
         <div>
@@ -1027,8 +964,8 @@ $authUrl = $client->createAuthUrl();
 
 {{--Enter Phone for ForgetPass in login PopUp--}}
 <span id="Phone_ForgetPass" class="pop-up ui_modal hidden">
-    <div>
-        <img class="loginMainLogo" src="{{URL::asset('images/icons/mainIcon.svg')}}">
+    <div class="mainDivLoginMainLogo">
+        <img class="loginMainLogo" src="{{URL::asset('images/mainPics/vodLobo.png')}}">
     </div>
     <div class="col-xs-12 mainContentInfos">
         <div>

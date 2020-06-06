@@ -163,7 +163,7 @@
     .backCategory{
         left: 100px;
         text-align: center;
-        display: flex;
+        display: flex !important;
         position: absolute;
         flex-direction: column;
         align-items: center;

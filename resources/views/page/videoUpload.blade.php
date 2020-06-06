@@ -1,10 +1,10 @@
-@extends('streaming.layout.streamingLayout')
+@extends('layout.mainLayout')
 
 
 @section('head')
 
-    <link rel="stylesheet" type="text/css" href="{{asset('semanticUi/semantic.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/streaming/uploadVideoVod.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('pack/semanticUi/semantic.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/uploadVideoVod.css')}}">
 
     <style>
         .uploadLaw{
@@ -21,8 +21,15 @@
             padding: 50px 15px;
 
         }
+        .menu .header{
+            text-align: right;
+        }
+        .ui.dropdown .menu > .item:hover{
+            background: red;
+            color: white;
+        }
     </style>
-    <script src="{{asset('semanticUi/semantic.js')}}"></script>
+    <script src="{{asset('pack/semanticUi/semantic.js')}}"></script>
 @endsection
 
 @section('body')
@@ -201,9 +208,9 @@
 
     <script>
         let getTagsURL = "{{route('getTags')}}";
-        let totalSearchURL = "{{route('totalSearch')}}";
-        let storeVideoURL = '{{route("streaming.storeVideo")}}';
-        let storeVideoInfoURL = '{{route("streaming.storeVideoInfo")}}';
+        {{--let totalSearchURL = "{{route('totalSearch')}}";--}}
+        let storeVideoURL = '{{route("video.storeVideo")}}';
+        let storeVideoInfoURL = '{{route("video.storeVideoInfo")}}';
         let csrfToken = "{{csrf_token()}}";
         let categoryies = {!! $categories !!};
 
@@ -230,6 +237,7 @@
             if(files[0]['type'].includes('video/'))
                 storeVideo(files[0]);
         });
+
 
         function changeCategoryVideo(_value){
             $('#zeroValue').remove();
@@ -258,5 +266,5 @@
         }
     </script>
 
-    <script src="{{URL::asset('js/stream/uploadVideoVod.js')}}"></script>
+    <script src="{{URL::asset('js/pages/uploadVideoVod.js')}}"></script>
 @endsection

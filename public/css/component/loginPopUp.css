@@ -1,0 +1,363 @@
+.loginPaneInLoginPopUp{
+    float: left;
+}
+textarea:focus, input:focus, select:focus, button:focus, a:focus,
+textarea, input, select, button, a {
+    outline: none;
+}
+.loginCloseIcon{
+    right: auto;
+    left: 10px;
+    position: absolute;
+    top: 10px;
+    cursor: pointer;
+}
+.loginCloseIcon:before{
+    font-size: 50px;
+}
+.mainDivLoginMainLogo{
+    display: flex;
+    justify-content: center;
+}
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    color: #666666;
+}
+
+input[type="checkbox"] + label span {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    margin: -2px 10px 0 0;
+    vertical-align: middle;
+    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label span {
+    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+}
+
+.labelForCheckBox:before {
+    background-color: transparent !important;
+    border: none !important;
+    content: "" !important;
+}
+
+@media (max-width: 1150px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 15%;
+        right: 15%;
+    }
+}
+
+@media (min-width: 1151px) and (max-width: 1500px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 24%;
+        right: 24%;
+    }
+}
+
+@media (min-width: 1501px) and (max-width: 1850px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 28%;
+        right: 28%;
+    }
+}
+
+@media (min-width: 1851px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 32%;
+        right: 32%;
+    }
+}
+
+#loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+#Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp, #EnterUsername-loginPopUp,
+#ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+    position: fixed;
+    width: auto;
+    top: 7%;
+    bottom: auto;
+    z-index: 10000001;
+    padding: 40px 20px !important;
+    height: auto;
+    overflow: auto;
+}
+
+.loginMainLogo {
+    margin-bottom: 20px;
+    height: 76px;
+}
+
+.loginDividerBorder {
+    border-right: 1px solid #cccccc;
+}
+
+.registerPaneInLoginPopUp > button > img {
+    width: 20px;
+    float: right;
+    margin-left: 10px
+}
+
+#resendActivationCode {
+    background: #963019;
+    border-color: #963019;
+    margin-top: 15px;
+}
+
+#reminderTimePane {
+    padding-top: 8px;
+    font-size: 10px;
+}
+
+
+.loginInputTemp {
+    width: 85%;
+    padding: 7px;
+    text-align: center;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+}
+
+.forgetPassLink {
+    cursor: pointer;
+    font-size: 11px;
+    padding-top: 8px;
+    display: block;
+    color: #16174f;
+}
+
+.loginSubBtn {
+    background: #4DC7BC !important;
+    border-color: #4DC7BC !important;
+    padding-left: 22px;
+    padding-right: 20px;
+    border-radius: 10px;;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0 !important;
+}
+
+.loginReturnBtn {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginErr, #loginErrEmail, #loginErrActivationCode {
+    margin-top: 10px;
+    color: #963019;
+}
+
+#loginErrPhonePass1, #loginErrResetPasByEmail, #loginErrResetPasByPhone {
+    margin-top: 10px;
+}
+
+.registerPaneInLoginPopUp > button {
+    width: 90%;
+    margin: 0 5px 15px 5px;
+    background: #4DC7BC;
+    color: #FFF;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+.registerPaneInLoginPopUp > button > div {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(2) > div {
+    background-position: 0 0;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(3) > div {
+    background-position: 0 -41px;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(4) > div {
+    background-position: 0 -21px;
+}
+
+.registerPaneInLoginPopUp > button > span {
+    float: right;
+}
+
+#EnterUsername-loginPopUp > div:nth-child(2) > div > span {
+    font-size: 14px;
+}
+
+#EnterUsername-loginPopUp > div:nth-child(2) > div:nth-child(1) > div > div {
+    margin-left: 30px;
+    transform: scale(0.77);
+    -webkit-transform: scale(0.77);
+    transform-origin: right;
+    -webkit-transform-origin: right;
+}
+
+#submitAndFinishBtn {
+    background: #4DC7BC;
+    border-color: #4DC7BC;
+    padding-left: 22px;
+    padding-right: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginErrUserName {
+    margin-top: 10px;
+    color: #963019;
+}
+
+#invitationCode {
+    width: 60% !important;
+}
+
+#username_final, #invitationCode {
+    width: 85%;
+    padding: 7px;
+    text-align: center;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+}
+
+#ForgetPassword > div:nth-child(2),
+#Phone_ForgetPass > div:nth-child(2) {
+    direction: rtl;
+    text-align: center;
+}
+
+#ForgetPassword button.btn.showDetailsBtn {
+    width: 90%;
+    margin: 0 5px 15px 5px;
+    background: #4DC7BC;
+    color: #FFF;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#ForgetPassword .emailLogo {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    background-position: 0 0;
+}
+
+#ForgetPassword .phoneLogo {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    background-position: 0 -41px;
+}
+
+#ForgetPassword .returnBtnForgetPass {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginPopUp .ui_close_x::before {
+    color: #4DC7BC;
+}
+
+.ui_modal .header_text {
+    text-align: justify;
+}
+
+.loginButtonsMainDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 85%;
+}
+
+@media (max-width:992px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 10%;
+        right: 10%;
+    }
+}
+
+@media (max-width:768px) {
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp,
+    #Send_AND_EnterCode-loginPopUp, #EnterPassword-loginPopUp,
+    #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        left: 1%;
+        right: 1%;
+        padding: 40px 0 !important;
+    }
+}
+
+@media (max-width:630px) {
+
+    .loginInputTemp, .loginButtonsMainDiv {
+        width: 100%;
+    }
+
+    .ui_modal .header_text {
+        line-height: 1.8;
+        font-size: 14px;
+    }
+}
+
+@media (max-width:480px) {
+
+    .mainContentInfos > div {
+        width: 100%;
+    }
+
+    .loginDividerBorder {
+        border-bottom: 1px solid #cccccc;
+        border-right: none;
+        margin-bottom: 10px;
+    }
+
+    #loginPopUp, #EnterEmail-loginPopUp, #EnterPhone-loginPopUp, #Send_AND_EnterCode-loginPopUp,
+    #EnterPassword-loginPopUp, #EnterUsername-loginPopUp, #ForgetPassword, #Email_ForgetPass, #Phone_ForgetPass {
+        top: 2%;
+    }
+
+    /*.mainContentInfos {*/
+    /*    padding: 0;*/
+    /*}*/
+
+    /*.inputLabelText, #username_main, #username_email, #username_phone, #username_2, #username_3, #username_final, #invitationCode  {*/
+    /*    font-size: 14px;*/
+    /*}*/
+
+    /*.registerPaneInLoginPopUp > button > div {*/
+    /*    margin-left: 5px;*/
+    /*}*/
+}
+
+@media (max-width:400px) {
+
+    /*.inputLabelText, #username_main, #username_email, #username_phone, #username_2, #username_3, #username_final, #invitationCode {*/
+    /*    font-size: 10px;*/
+    /*    padding: 5px;*/
+    /*}*/
+}

@@ -4,10 +4,6 @@
         font-size: 13px ;
         margin-right: 10px;
     }
-    .LikeIcon:before{
-        content: '\B' !important;
-        font-family: Shazde_Regular2 !important;
-    }
     .mainUseruserNameComment{
         font-size: 22px;
         color: #0076a3;
@@ -210,6 +206,7 @@
             width: 100% ;
         }
         .topWho{
+            justify-content: center;
             align-items: flex-start;
         }
     }
@@ -418,7 +415,7 @@
         if(text.trim().length > 0){
             $.ajax({
                 type: 'post',
-                url: '{{route('streaming.setVideoComment')}}',
+                url: '{{route('video.setVideoComment')}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     data: commentingDefaultData,
@@ -524,7 +521,7 @@
 
         $.ajax({
             type: 'post',
-            url: '{{route("streaming.setVideoFeedback")}}',
+            url: '{{route("video.setVideoFeedback")}}',
             data: {
                 _token: '{{csrf_token()}}',
                 commentId: _id,

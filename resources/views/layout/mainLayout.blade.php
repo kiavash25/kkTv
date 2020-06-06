@@ -35,13 +35,18 @@
 {{--        gtag('config', 'UA-158914626-1');--}}
 {{--    </script>--}}
 
-    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/default/bootstrap.min.css')}}' />
     <link rel="icon" href="{{URL::asset('images/icons/mainIcon.svg')}}" sizes="any" type="image/svg+xml">
     <link rel="apple-touch-icon-precomposed" href="{{URL::asset('images/icons/mainIcon.svg')}}" sizes="any" type="image/svg+xml">
 
+    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/default/bootstrap.min.css')}}' />
     <link rel="stylesheet" href="{{URL::asset('css/default/swiper.css')}}">
+    <link rel='stylesheet' type='text/css' href='{{ asset('css/layout/common.css') }}' />
+    <link rel="stylesheet" href="{{ asset('css/default/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout/icons.css') }}">
+
 
     <script src="{{URL::asset('js/default/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{URL::asset('js/default/bootstrap.min.js')}}"></script>
     <script src="{{URL::asset('js/default/angular.js')}}"></script>
     <script src="{{URL::asset('js/default/swiper.min.js')}}"></script>
 
@@ -53,8 +58,7 @@
         });
     </script>
 
-    <link rel='stylesheet' type='text/css' href='{{ asset('css/layout/common.css') }}' />
-    <link rel="stylesheet" href="{{ asset('css/default/font-awesome.min.css') }}">
+
 
     @yield('head')
 
@@ -69,9 +73,9 @@
     @include('component.searchPan')
     @include('component.categoryTable')
 
-{{--    @if(!Auth::check())--}}
-{{--        @include('component.loginPopup')--}}
-{{--    @endif--}}
+    @if(!Auth::check())
+        @include('component.loginPopup')
+    @endif
 
     @include('layout.header')
 
@@ -145,6 +149,11 @@
     });
 
     $('.openSearchPanPage').on('click', openMainSearch);
+
+    function hideElement(_element){
+        $(".dark").hide();
+        $("#" + _element).addClass('hidden');
+    }
 
 </script>
 

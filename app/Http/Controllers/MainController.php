@@ -16,6 +16,7 @@ use App\models\VideoTagRelation;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Throwable;
 
 class MainController extends Controller
 {
@@ -133,7 +134,7 @@ class MainController extends Controller
 
             foreach ($videos as $item) {
                 $item->category = VideoCategory::find($item->categoryId)->name;
-                $item->url = route('streaming.show', ['code' => $item->code]);
+                $item->url = route('video.show', ['code' => $item->code]);
             }
             echo json_encode(['status' => 'ok', 'num' => $request->num, 'result' => $videos]);
         }
@@ -143,7 +144,7 @@ class MainController extends Controller
         return;
     }
 
-    public function showStreaming(Request $request, $code)
+    public function showVideo(Request $request, $code)
     {
         $video = Video::where('code', $code)->first();
         if ($video == null)
@@ -160,7 +161,7 @@ class MainController extends Controller
                 $video->seen++;
                 $video->save();
             }
-            $video->video = \URL::asset('_images/video/' . $video->userId . '/' . $video->video);
+            $video->video = \URL::asset('videos/' . $video->userId . '/' . $video->video);
             $video = $this->getVideoFullInfo($video, true);
 
             $userMoreVideo = Video::where('userId', $video->userId)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
@@ -179,9 +180,9 @@ class MainController extends Controller
             else
                 $thumbnail = \URL::asset('images/mainPics/vodLobo.png');
 
-            $localStorageData = ['title' => $video->title, 'pic' => $thumbnail , 'redirect' => route('streaming.show', ['code' => $video->code])];
+            $localStorageData = ['title' => $video->title, 'pic' => $thumbnail , 'redirect' => route('video.show', ['code' => $video->code])];
 
-            return view('streaming.streamingShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData']));
+            return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData']));
         }
 
         return redirect(route('streaming.index'));
@@ -208,7 +209,7 @@ class MainController extends Controller
             }
         }
 
-        return view('streaming.uploadVideo', compact(['categories', 'code']));
+        return view('page.videoUpload', compact(['categories', 'code']));
     }
 
     private function deleteLimbo()
@@ -234,7 +235,7 @@ class MainController extends Controller
             $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
             if ($limbo != null) {
                 $videoName = time() . $_FILES['video']['name'];
-                $location = __DIR__ . '/../../../../assets/_images/video';
+                $location ='videos';
                 if (!is_dir($location))
                     mkdir($location);
 
@@ -260,7 +261,7 @@ class MainController extends Controller
                         if ($min < 10)
                             $min = '0' . $min;
                         $duration = $duration . ':' . $min . ':' . $second;
-                    } catch (\Exception $exception) {
+                    } catch (Throwable $e) {
                         $duration = '01:00:00';
                     }
 
@@ -284,7 +285,7 @@ class MainController extends Controller
 
             $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
             if ($limbo != null) {
-                $location = __DIR__ . '/../../../../assets/_images/video';
+                $location = 'videos';
                 $nLoc = $location . '/' . $user->id;
                 if (!is_dir($nLoc))
                     mkdir($nLoc);
@@ -320,7 +321,7 @@ class MainController extends Controller
                 $newVideo->duration = $request->duration;
                 $newVideo->thumbnail = $thumbanil;
                 $newVideo->seen = 0;
-                $newVideo->confirm = 0;
+                $newVideo->confirm = 1;
                 $newVideo->state = $request->state;
                 $newVideo->save();
 
@@ -362,7 +363,7 @@ class MainController extends Controller
                     }
                 }
 
-                $url = route('streaming.show', ['code' => $newVideo->code]);
+                $url = route('video.show', ['code' => $newVideo->code]);
 
                 echo json_encode(['status' => 'ok', 'url' => $url]);
             } else
@@ -452,7 +453,7 @@ class MainController extends Controller
         else
             $video->pic = asset('videos/' . $video->userId . '/' . $video->thumbnail);
 
-        $video->url = route('streaming.show', ['code' => $video->code]);
+        $video->url = route('video.show', ['code' => $video->code]);
         $video->username = User::find($video->userId)->username;
         $video->userPic = getUserPic($video->userId);
         $video->time = getDifferenceTimeString($video->created_at);
@@ -628,7 +629,7 @@ class MainController extends Controller
             'haveVideo' => false
         ];
         if($room != null){
-            $video = VideoLive::where('code', $room)->where('isLive', 1)->first();
+            $video = Live::where('code', $room)->where('isLive', 1)->first();
             $today = Carbon::now()->format('Y-m-d');
             $nowTime = Carbon::now()->format('H:i');
             if($video != null){
@@ -639,14 +640,14 @@ class MainController extends Controller
                 $data['user'] = $user;
                 $data['haveVideo'] = true;
 
-                $data['likeCount'] = VideoLiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
-                $data['disLikeCount'] = VideoLiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
+                $data['likeCount'] = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
+                $data['disLikeCount'] = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
-                $data['chats'] = VideoLiveChats::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
-                $uniqueUser = VideoLiveChats::where('videoId', $video->id)->groupBy('userId')->get();
+                $data['chats'] = LiveChat::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
+                $uniqueUser = LiveChat::where('videoId', $video->id)->groupBy('userId')->get();
                 $data['uniqueUser'] = count($uniqueUser);
 
-                $data['guest'] = VideoLiveGuest::where('videoId', $video->id)->get();
+                $data['guest'] = LiveGuest::where('videoId', $video->id)->get();
                 foreach ($data['guest'] as $guest)
                     $guest->pic = \URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
             }
@@ -660,9 +661,9 @@ class MainController extends Controller
     {
         if(\auth()->check()) {
             broadcast(new CommentBroadCast($request->msg, $request->room, $request->userName, $request->userPic));
-            $live = VideoLive::where('code', $request->room)->first();
+            $live = Live::where('code', $request->room)->first();
 
-            $chat = new VideoLiveChats();
+            $chat = new LiveChat();
             $chat->videoId = $live->id;
             $chat->userId = \auth()->user()->id;
             $chat->text = $request->msg;
@@ -670,8 +671,8 @@ class MainController extends Controller
             $chat->userPic = $request->userPic;
             $chat->save();
 
-            $count = VideoLiveChats::where('videoId', $live->id)->count();
-            $uniqueUser = VideoLiveChats::where('videoId', $live->id)->groupBy('userId')->get();
+            $count = LiveChat::where('videoId', $live->id)->count();
+            $uniqueUser = LiveChat::where('videoId', $live->id)->groupBy('userId')->get();
             $uniqueUser = count($uniqueUser);
             echo json_encode(['count' => $count, 'uniqueUser' => $uniqueUser]);
         }
@@ -680,11 +681,11 @@ class MainController extends Controller
     public function setLiveFeedback(Request $request)
     {
         if(isset($request->room) && isset($request->like)){
-            $video = VideoLive::where('code', $request->room)->first();
+            $video = Live::where('code', $request->room)->first();
             if($video != null){
-                $like = VideoLiveFeedBack::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
+                $like = LiveFeedBack::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
                 if($like == null){
-                    $like = new VideoLiveFeedBack();
+                    $like = new LiveFeedBack();
                     $like->videoId = $video->id;
                     $like->userId = auth()->user()->id;
                 }
@@ -696,8 +697,8 @@ class MainController extends Controller
 
                 $like->save();
 
-                $likeCount = VideoLiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
-                $disLikeCount = VideoLiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
+                $likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
+                $disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
                 echo json_encode(['status' => 'ok', 'like' => $likeCount, 'disLike' => $disLikeCount]);
             }

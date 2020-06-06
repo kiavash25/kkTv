@@ -1,7 +1,7 @@
-@extends('streaming.layout.streamingLayout')
+@extends('layout.mainLayout')
 
 @section('head')
-    <link rel="stylesheet" href="{{URL::asset('css/streaming/showStreaming.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css')}}">
 
     <style>
         .videoPlaces{
@@ -41,7 +41,7 @@
 @section('body')
 
     <div class="mainDivStream">
-        <div class="container mainShowBase">
+        <div class="container mainShowBase hideOnTablet">
 
             <div class="videoInfos">
                 <div class="videoInfosVideoName">
@@ -155,46 +155,46 @@
             </div>
 
             <div class="toolSection">
-                    <div class="toolSectionButtons">
-                        <div class="toolSectionButtonsCircle" onclick="setFeedback('like', -1)">
-                            <span id="videoDisLikeIcon" class="DisLikeIcon {{$video->uLike == -1 ? 'fullDisLikeColor' : ''}}"></span>
-                        </div>
-                        <div class="toolSectionButtonsCircle" onclick="setFeedback('like', 1)">
-                            <span id="videoLikeIcon" class="LikeIcon {{$video->uLike == 1 ? 'fullLikeColor' : ''}}"></span>
-                        </div>
-                        <div class="toolSectionButtonsCircle" onclick="goToComments()">
-                            <span class="CommentIcon CommentIconSett"></span>
-                        </div>
-                        <div class="toolSectionButtonsCircle">
-                            <span class="ShareIcon ShareIconSett"></span>
-                        </div>
-                        <div class="toolSectionButtonsCircle">
-                            <span class="HeartIcon HeartIconSett"></span>
-                        </div>
-                        <div class="toolSectionButtonsCircle">
-                            <span class="BookMarkIcon BookMarkIconSett"></span>
-                        </div>
+                <div class="toolSectionButtons">
+                    <div class="toolSectionButtonsCircle" onclick="setFeedback('like', -1)">
+                        <span id="videoDisLikeIcon" class="DisLikeIcon {{$video->uLike == -1 ? 'fullDisLikeColor' : ''}}"></span>
                     </div>
-                    <div class="toolSectionInfos">
-                        <div class="toolSectionInfosTab">
-                            <span class="CommentIcon commentInfoTab"></span>
-                            <span id="commentCount" class="toolSectionInfosTabNumber">{{$video->commentsCount}}</span>
-                        </div>
-                        <div class="toolSectionInfosTab">
-                            <span class="LikeIcon likeInfoTab"></span>
-                            <span id="likeCount" class="toolSectionInfosTabNumber">{{$video->like}}</span>
-                        </div>
-                        <div class="toolSectionInfosTab">
-                            <span class="DisLikeIcon disLikeInfoTab"></span>
-                            <span id="disLikeCount" class="toolSectionInfosTabNumber">{{$video->disLike}}</span>
-                        </div>
-                        <div class="toolSectionInfosTab">
-                            <img src="{{URL::asset('images/streaming/eye.png')}}" class="eyeClass" style="width: 25px">
-                            <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
-                        </div>
+                    <div class="toolSectionButtonsCircle" onclick="setFeedback('like', 1)">
+                        <span id="videoLikeIcon" class="LikeIcon {{$video->uLike == 1 ? 'fullLikeColor' : ''}}"></span>
+                    </div>
+                    <div class="toolSectionButtonsCircle" onclick="goToComments()">
+                        <span class="CommentIcon CommentIconSett"></span>
+                    </div>
+                    <div class="toolSectionButtonsCircle">
+                        <span class="ShareIcon ShareIconSett"></span>
+                    </div>
+                    <div class="toolSectionButtonsCircle">
+                        <span class="HeartIcon HeartIconSett"></span>
+                    </div>
+                    <div class="toolSectionButtonsCircle">
+                        <span class="BookMarkIcon BookMarkIconSett"></span>
                     </div>
                 </div>
-            
+                <div class="toolSectionInfos">
+                    <div class="toolSectionInfosTab">
+                        <span class="CommentIcon commentInfoTab"></span>
+                        <span id="commentCount" class="toolSectionInfosTabNumber">{{$video->commentsCount}}</span>
+                    </div>
+                    <div class="toolSectionInfosTab">
+                        <span class="LikeIcon likeInfoTab"></span>
+                        <span id="likeCount" class="toolSectionInfosTabNumber">{{$video->like}}</span>
+                    </div>
+                    <div class="toolSectionInfosTab">
+                        <span class="DisLikeIcon disLikeInfoTab"></span>
+                        <span id="disLikeCount" class="toolSectionInfosTabNumber">{{$video->disLike}}</span>
+                    </div>
+                    <div class="toolSectionInfosTab">
+                        <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
+                        <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="showInPhone">
                 <div class="videoInfos" style="width: 100%">
                     <div class="videoInfosVideoName">
@@ -297,7 +297,7 @@
                     </div>
                     <div class="headerWithLineLine"></div>
                 </div>
-                @include('streaming.component.commentingSection')
+                @include('component.commentingSection')
                 <script>
                     commentingInitdata = {
                         'videoId': {{$video->id}}
@@ -310,27 +310,27 @@
             </div>
 
             <div class="otherSection">
-                    <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            شاید جالب باشد
-                        </div>
-                        <div class="headerWithLineLine"></div>
+                <div class="headerWithLine">
+                    <div class="headerWithLineText">
+                        شاید جالب باشد
                     </div>
-
-                    <div class="otherSectionBody">
-
-                        <div class="videoSuggestionSwiper swiper-container">
-
-                            <div id="maybeInterestedVideo" class="swiper-wrapper">
-                                {{--fill with js videoSuggestion()--}}
-                            </div>
-
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                        </div>
-
-                    </div>
+                    <div class="headerWithLineLine"></div>
                 </div>
+
+                <div class="otherSectionBody">
+
+                    <div class="videoSuggestionSwiper swiper-container">
+
+                        <div id="maybeInterestedVideo" class="swiper-wrapper">
+                            {{--fill with js videoSuggestion()--}}
+                        </div>
+
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+
+                </div>
+            </div>
 
         </div>
     </div>
@@ -338,7 +338,7 @@
 @endsection
 
 @section('script')
-    <script src="{{URL::asset('js/autosize.min.js')}}"></script>
+    <script src="{{URL::asset('js/default/autosize.min.js')}}"></script>
     <script>
         let video = {!! $video !!};
         let uLike = {{$video->uLike}};
@@ -352,81 +352,81 @@
 
         @if(isset($sameCategory) && count($sameCategory) > 0)
             sameCategory = {!! $sameCategory !!};
-            createVideoSuggestionDiv(sameCategory, 'maybeInterestedVideo');
+        createVideoSuggestionDiv(sameCategory, 'maybeInterestedVideo');
         @endif
 
-        @if(isset($userMoreVideo) && count($userMoreVideo) > 0)
+            @if(isset($userMoreVideo) && count($userMoreVideo) > 0)
             userMoreVideo = {!! $userMoreVideo !!}
-            createVideoSuggestionDiv(userMoreVideo, 'videoThisVideo', function(){
-                $('#videoThisVideo').find('.videoSuggestion').addClass('sideSuggestion');
-                resizeFitImg('resizeImgClass');
-            });
-        @endif
+        createVideoSuggestionDiv(userMoreVideo, 'videoThisVideo', function(){
+            $('#videoThisVideo').find('.videoSuggestion').addClass('sideSuggestion');
+            resizeFitImg('resizeImgClass');
+        });
+            @endif
 
 
         var swiper = new Swiper('.videoSuggestionSwiper', {
-            slidesPerGroup: 1,
-            spaceBetween: 5,
-            watchOverflow: true,
-            navigation: {
-                nextEl: '.swiper-button-prev',
-                prevEl: '.swiper-button-next',
-            },
-            breakpoints: {
-                700: {
-                    slidesPerView: 2,
+                slidesPerGroup: 1,
+                spaceBetween: 5,
+                watchOverflow: true,
+                navigation: {
+                    nextEl: '.swiper-button-prev',
+                    prevEl: '.swiper-button-next',
                 },
-                900: {
-                    slidesPerView: 3,
+                breakpoints: {
+                    700: {
+                        slidesPerView: 2,
+                    },
+                    900: {
+                        slidesPerView: 3,
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                    },
+                    10000: {
+                        slidesPerView: 5,
+                    }
                 },
-                1200: {
-                    slidesPerView: 4,
-                },
-                10000: {
-                    slidesPerView: 5,
-                }
-            },
-            on: {
-                init: function () {
+                on: {
+                    init: function () {
 
-                    let slideCount = this.slides.length;
-                    if(slideCount <= this.params.slidesPerView){
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
+                        let slideCount = this.slides.length;
+                        if(slideCount <= this.params.slidesPerView){
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                        }
+                        else{
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
+                        }
+
                         $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
-                    }
-                    else{
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
-                    }
+                    },
+                    resize: function(){
+                        let slideCount = this.slides.length;
+                        if(slideCount <= this.params.slidesPerView){
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                        }
+                        else{
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
+                        }
 
-                    $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                        resizeFitImg('resizeImgClass');
+                    },
+                    slideChange: function(){
+                        if(this.isBeginning)
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                        else
+                            $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
+
+                        if(this.isEnd)
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
+                        else
+                            $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
+                    }
                 },
-                resize: function(){
-                    let slideCount = this.slides.length;
-                    if(slideCount <= this.params.slidesPerView){
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
-                    }
-                    else{
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
-                    }
-
-                    resizeFitImg('resizeImgClass');
-                },
-                slideChange: function(){
-                    if(this.isBeginning)
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
-                    else
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
-
-                    if(this.isEnd)
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
-                    else
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
-                }
-            },
-        });
+            });
 
         function setFeedback(_kind, _value){
             if (!hasLogin) {
@@ -439,7 +439,7 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{route("streaming.setVideoFeedback")}}',
+                url: '{{route("video.setVideoFeedback")}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     kind: 'likeVideo',
@@ -499,5 +499,4 @@
         }
         // resizeFitImg('resizeImgClass');
     </script>
-
 @endsection

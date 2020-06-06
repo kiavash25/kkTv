@@ -182,7 +182,8 @@
             localStorage.setItem('lastPagesKoochitaTv', JSON.stringify(lastPages));
         }
 
-    } else
+    }
+    else
         console.log('your browser not support localStorage');
 
     function showLastPages(){
@@ -201,7 +202,6 @@
                 let text = recentlyMainSearchSample;
                 let fk = Object.keys(lastPages[i]);
 
-                text = text.replace(re, name);
                 for (let x of fk) {
                     let t = '##' + x + '##';
                     let re = new RegExp(t, "g");

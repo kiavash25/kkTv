@@ -1,0 +1,37 @@
+
+.LikeIcon:before{
+    content: '\E057' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.DisLikeIcon:before{
+    content: '\E058' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.CommentIcon:before{
+    content: '\E06C';
+    font-family: Shazde_Regular2 !important;
+}
+.ShareIcon:before{
+    content: '\E1F6';
+    font-family: Shazde_Regular2 !important;
+}
+.HeartIcon:before{
+    content: '\e012' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.BookMarkIcon:before{
+    content: "\E0DE" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.downArrowIcon:before{
+    content: '\E04A';
+    font-family: Shazde_Regular2 !important;
+}
+.LikeIconEmpty:before{
+    content: '\E1F9';
+    font-family: Shazde_Regular2 !important;
+}
+.DisLikeIconEmpty:before{
+    content: '\E1F8';
+    font-family: Shazde_Regular2 !important;
+}
