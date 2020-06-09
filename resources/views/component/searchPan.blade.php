@@ -1,27 +1,5 @@
 <link rel="stylesheet" href="{{URL::asset('css/component/searchPan.css')}}">
 
-<style>
-    .placeHolderAnime{
-        background: radial-gradient(circle, #6b6b6b 0%, rgba(58,58,58,1) 35%);
-        background-size: 400% 400%;
-        animation: gradient 1.5s infinite;
-    }
-    .resultLine{
-        width: 60%;
-        height: 10px;
-        margin-bottom: 10px;
-    }
-
-    @keyframes gradient {
-        0% {
-            background-position: 0% 50%;
-        }
-        100% {
-            background-position: 100% 50%;
-        }
-    }
-</style>
-
 <span id="searchPane" class="hidden searchPanes">
         <div id="searchDivForScroll" class="prw_rup prw_search_typeahead spSearchDivForScroll">
             <div>

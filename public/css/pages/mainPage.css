@@ -84,3 +84,23 @@
 .nowSeeThisVideoName:hover{
     color: white;
 }
+
+@media (max-width: 1015px) {
+
+    .mainSlider{
+        height: 400px;
+    }
+    .pushTopMainSlider{
+        height: 400px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .mainSlider{
+        height: 300px;
+    }
+    .pushTopMainSlider{
+        height: 300px;
+    }
+}

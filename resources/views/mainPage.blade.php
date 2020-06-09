@@ -3,7 +3,7 @@
 
 @section('head')
 
-    <link rel="stylesheet" href="{{ asset('css/indexStreaming.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mainPage.css') }}">
 @endsection
 
 @section('body')
@@ -14,7 +14,7 @@
             <div id="mainSlider" class="swiper-container backgroundColorForSlider">
                 <div class="swiper-wrapper">
 
-                    <div class="swiper-slide mobileHeight imgOfSliderBox">
+                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">
                         <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" class="resizeImgClass">
                         <div class="nowSeeThisVideoDiv">
                             <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">

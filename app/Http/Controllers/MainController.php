@@ -172,7 +172,7 @@ class MainController extends Controller
             foreach ($sameCategory as $vid)
                 $vid = $this->getVideoFullInfo($vid, false);
 
-            $thumbLoc = '_images/video/' . $video->userId;
+            $thumbLoc = 'images/video/' . $video->userId;
             if(is_file(__DIR__.'/../../../../assets/' . $thumbLoc . '/min_' . $video->thumbnail))
                 $thumbnail = \URL::asset($thumbLoc . '/min_' . $video->thumbnail);
             else if(is_file(__DIR__.'/../../../../assets/' . $thumbLoc . '/' . $video->thumbnail))

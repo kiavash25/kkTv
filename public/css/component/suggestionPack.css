@@ -104,8 +104,7 @@
     border-radius: 5px;
 }
 .videoSugUserInfoPlaceHolder{
-    margin-top: 10px;
-    margin-bottom: 0;
+    margin: 5px 0px!important;
 }
 
 @media (max-width: 767px) {
@@ -141,13 +140,20 @@
         margin-right: 0;
         color: grey;
     }
+    .likeOverPic{
+        bottom: 3px;
+    }
+    .overPicSug{
+        left: 3px;
+    }
+    .seenOverPic{
+        top: 3px;
+    }
+
 }
 @media (max-width: 450px){
     .overPicSug{
         font-size: 13px;
-    }
-    .mainShowBase{
-        width: calc(100% - 10px);
     }
     .videoSugPicSection{
         height: 110px;

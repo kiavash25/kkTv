@@ -574,10 +574,6 @@
     .TvPngClass {
         width: 13px;
     }
-
-    .mainDivStream {
-         width: calc(100% - 20px);
-     }
 }
 
 @media (max-width: 400px) {

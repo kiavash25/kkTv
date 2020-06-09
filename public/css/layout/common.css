@@ -343,6 +343,16 @@ input{
     border-radius: 20px;
     width: 100%;
 }
+.allVideoButton{
+    z-index: 1;
+    position: absolute;
+    left: -2px;
+    top: -20px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    cursor: pointer;
+    color: #fcc156;
+}
 .descriptionSectionBody{
     font-size: 14px;
     padding: 0px 35px;
@@ -414,6 +424,27 @@ input{
     background: #00000087;
 }
 
+.placeHolderAnime{
+    background: radial-gradient(circle, #6b6b6b 0%, rgba(58,58,58,1) 35%);
+    background-size: 400% 400%;
+    animation: gradient 1.5s infinite;
+}
+.resultLine{
+    width: 60%;
+    height: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
 @media (max-width: 992px) {
     .hideOnTablet{
         display: none;
@@ -451,6 +482,9 @@ input{
         font-size: 14px !important;
     }
 
+    .mainShowBase{
+        width: calc(100% - 15px);
+    }
 }
 
 /*in Screen*/

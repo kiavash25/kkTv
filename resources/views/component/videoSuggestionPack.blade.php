@@ -50,7 +50,7 @@
             <div class="videoSugPicSection placeHolderAnime"></div>
             <div class="videoSugInfo">
                 <div class="videoSugUserInfo videoSugUserInfoPlaceHolder">
-                    <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 15px"></div>
+                    <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 10px"></div>
                 </div>
 
                 <div class="videoSugUserPic">

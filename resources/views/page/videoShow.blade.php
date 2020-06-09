@@ -45,8 +45,8 @@
 
 @section('body')
 
-    <div class="mainDivStream">
-        <div class="container mainShowBase hideOnTablet">
+    <div style="width: 99%; display: flex">
+        <div class="container mainShowBase hideOnTablet" style="width: 24%">
 
             <div class="videoInfos">
                 <div class="videoInfosVideoName">
