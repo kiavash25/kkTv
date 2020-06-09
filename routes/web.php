@@ -22,7 +22,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::post('getListElems', 'MainController@getVideoListElems')->name('video.list.getElems');
 
-
     Route::get('video/show/{code}', 'MainController@showVideo')->name('video.show');
 
     Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');

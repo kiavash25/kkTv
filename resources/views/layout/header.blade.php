@@ -12,7 +12,7 @@
 <nav>
     <div class="headerLogo ">
         <a href="{{route('index')}}" class="global-nav-logo" style="display: flex; align-items: center; height: 100%; padding: 7px 0px;">
-            <img src="{{URL::asset('images/mainPics/vodLobo.png')}}" alt="کوچیتا" style="width: auto; height: 100%;"/>
+            <img src="{{ asset('images/mainPics/vodLobo.png')}}" alt="کوچیتا" style="width: auto; height: 100%;"/>
         </a>
     </div>
 

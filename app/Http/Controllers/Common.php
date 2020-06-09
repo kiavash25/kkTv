@@ -17,16 +17,16 @@ function getUserPic($id = 0){
                 $deffPic = DefaultPic::find($user->picture);
 
                 if($deffPic != null)
-                    $uPic = asset('images/defaultPic/' . $deffPic->name);
+                    $uPic = \URL::asset('images/defaultPic/' . $deffPic->name);
                 else
-                    $uPic = asset('images/blank.jpg');
+                    $uPic = \URL::asset('images/blank.jpg');
             }
             else
-                $uPic = asset('images/userProfile/' . $user->picture);
+                $uPic = \URL::asset('images/userProfile/' . $user->picture);
         }
     }
     else
-        $uPic = asset('images/blank.jpg');
+        $uPic = \URL::asset('images/blank.jpg');
 
     return $uPic;
 }

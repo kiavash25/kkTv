@@ -20,6 +20,11 @@
         .notShowPlace{
             display: none;
         }
+        @media (min-width: 992px) {
+            .mainShowBase{
+                width: 75%;
+            }
+        }
         @media (max-width: 1400px) {
 
             .sideSuggestion{

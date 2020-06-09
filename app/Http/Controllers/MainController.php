@@ -49,7 +49,7 @@ class MainController extends Controller
 
                     $category->subs = VideoCategory::where('parent', $category->id)->get();
                     foreach ($category->subs as $item)
-                        $item->icon = asset('images/video/category/'.$item->offIcon);
+                        $item->icon = \URL::asset('images/video/category/'.$item->offIcon);
 
                     $subsId = VideoCategory::where('parent', $category->id)->pluck('id')->toArray();
                     $category->lastVideo = Video::where($confirmContidition)->whereIn('categoryId', $subsId)->take(10)->orderByDesc('created_at')->get();
@@ -148,7 +148,7 @@ class MainController extends Controller
     {
         $video = Video::where('code', $code)->first();
         if ($video == null)
-            return redirect(route('streaming.index'));
+            return redirect(route('index'));
 
         $uId = 0;
         if (auth()->check())
@@ -235,7 +235,8 @@ class MainController extends Controller
             $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
             if ($limbo != null) {
                 $videoName = time() . $_FILES['video']['name'];
-                $location ='videos';
+                $location = __DIR__ . '/../../../../assets/_images/video';
+//                $location ='videos';
                 if (!is_dir($location))
                     mkdir($location);
 
@@ -285,7 +286,8 @@ class MainController extends Controller
 
             $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
             if ($limbo != null) {
-                $location = 'videos';
+                $location = __DIR__ . '/../../../../assets/_images/video';
+//                $location = 'videos';
                 $nLoc = $location . '/' . $user->id;
                 if (!is_dir($nLoc))
                     mkdir($nLoc);
@@ -449,9 +451,9 @@ class MainController extends Controller
 
         $loc = 'videos/' . $video->userId;
         if(is_file($loc .'/min_'. $video->thumbnail))
-            $video->pic = asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
+            $video->pic = \URL::asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
         else
-            $video->pic = asset('videos/' . $video->userId . '/' . $video->thumbnail);
+            $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
 
         $video->url = route('video.show', ['code' => $video->code]);
         $video->username = User::find($video->userId)->username;
@@ -465,7 +467,7 @@ class MainController extends Controller
         $video->places = [];
 
         if($main){
-            $video->pic = asset('videos/' . $video->userId . '/' . $video->thumbnail);
+            $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
             $resultComment = [];
             $video->comments = $this->getVideoComments($video->id, 0);
 
