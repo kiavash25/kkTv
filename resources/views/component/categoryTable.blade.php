@@ -13,14 +13,18 @@
                     دسته بندی های موجود
                 </div>
 
-                @foreach($vodCategory as $mainCat)
-                    <div class="categoryTabs" onclick="openSubCategoryMenuTab({{$mainCat->id}}, this)">
-                        <div class="categoryTabName">
-                            {{$mainCat->name}}
+                <div class="categoryMainCat">
+                    @foreach($vodCategory as $mainCat)
+                        <div class="categoryTabs" onclick="openSubCategoryMenuTab({{$mainCat->id}}, this)">
+                            <div class="categoryTabName">
+                                {{$mainCat->name}}
+                            </div>
+                            <div class="categoryArrowDiv">
+                                <div class="categoryLeftArrow"></div>
+                            </div>
                         </div>
-                        <div class="categoryLeftArrow"></div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
             <div class="categoryBodySection categoryBodySectionRight showCategoryBodySectionRight">
