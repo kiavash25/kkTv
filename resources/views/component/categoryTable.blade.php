@@ -2,7 +2,7 @@
 
 <div class="categoryBackBody">
     <div class="categoryBody">
-        <div class="row" style="height: 100%; padding: 10px; padding-right: 0px; position: relative">
+        <div class="row" style="height: 100%; padding: 10px; padding-right: 0px; position: relative; display: flex;">
 
             <div class="closeIcon closeCategoryBodyDiv" onclick="closeCategoryMenu()">
                 بستن
