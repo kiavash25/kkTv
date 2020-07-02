@@ -287,7 +287,6 @@ class MainController extends Controller
             $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
             if ($limbo != null) {
                 $location = __DIR__ . '/../../../../assets/_images/video';
-//                $location = 'videos';
                 $nLoc = $location . '/' . $user->id;
                 if (!is_dir($nLoc))
                     mkdir($nLoc);

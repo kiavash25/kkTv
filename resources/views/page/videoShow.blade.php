@@ -3,6 +3,13 @@
 @section('head')
     <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css')}}">
 
+    <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+
     <style>
         .videoPlaces{
             display: flex;
@@ -156,7 +163,9 @@
         </div>
         <div class="container mainShowBase">
             <div class="showVideo">
-                <video src="{{$video->video}}" controls poster="{{$video->pic}}" style="width: 100%"></video>
+                <video src="{{$video->video}}" poster="{{$video->pic}}" style="width: 100%" controls playsinline>
+                    <source src="{{$video->video}}" type="video/mp4">
+                </video>
             </div>
 
             <div class="toolSection">
@@ -170,15 +179,16 @@
                     <div class="toolSectionButtonsCircle" onclick="goToComments()">
                         <span class="CommentIcon CommentIconSett"></span>
                     </div>
-                    <div class="toolSectionButtonsCircle">
+                    <div id="share_pic" class="toolSectionButtonsCircle share_pic">
                         <span class="ShareIcon ShareIconSett"></span>
+                        @include('component.shareBox')
                     </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="HeartIcon HeartIconSett"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="BookMarkIcon BookMarkIconSett"></span>
-                    </div>
+{{--                    <div class="toolSectionButtonsCircle">--}}
+{{--                        <span class="HeartIcon HeartIconSett"></span>--}}
+{{--                    </div>--}}
+{{--                    <div class="toolSectionButtonsCircle">--}}
+{{--                        <span class="BookMarkIcon BookMarkIconSett"></span>--}}
+{{--                    </div>--}}
                 </div>
                 <div class="toolSectionInfos">
                     <div class="toolSectionInfosTab">

@@ -67,10 +67,15 @@
 <body class="rebrand_2017 desktop HomeRebranded  js_logging" style="background-color: #EAFBFF;">
 
     <div id="darkModeMainPage" class="ui_backdrop dark" ></div>
+
     @include('component.loading')
+
     @include('component.alerts')
+
     @include('component.videoSuggestionPack')
+
     @include('component.searchPan')
+
     @include('component.categoryTable')
 
     @if(!Auth::check())

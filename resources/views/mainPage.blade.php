@@ -2,8 +2,7 @@
 
 
 @section('head')
-
-    <link rel="stylesheet" href="{{ asset('css/mainPage.css') }}">
+    <link rel="stylesheet" type='text/css' href='{{URL::asset('css/pages/mainPage.css')}}'>
 @endsection
 
 @section('body')
