@@ -670,7 +670,7 @@ class UserLoginController extends Controller
             //Insert your cient ID and sexcret
             //You can get it from : https://console.developers.google.com/
             $client_id = env('GOOGLE_CLIENT_ID');
-            $client_secret = env('GOOGLE_CLIENT_SECRET');
+            $client_secret = env('GOOGLE_CLIENT_SECRET2');
             $redirect_uri = route('loginWithGoogle');
 
             /************************************************
