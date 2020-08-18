@@ -45,13 +45,54 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
 
 //authenticated controller
-    Route::middleware(['throttle:30'])->group(function(){
+//    Route::middleware(['throttle:30'])->group(function(){
+//
+//        Route::get('login', 'UserLoginController@login');
+//
+//        Route::post('login', array('as' => 'login', 'uses' => 'UserLoginController@mainDoLogin'));
+//
+//        Route::post('checkLogin', array('as' => 'checkLogin', 'uses' => 'UserLoginController@checkLogin'));
+//
+//        Route::post('login2', array('as' => 'login2', 'uses' => 'UserLoginController@doLogin'));
+//
+//        Route::post('checkEmail', array('as' => 'checkEmail', 'uses' => 'UserLoginController@checkEmail'));
+//
+//        Route::post('checkUserName', array('as' => 'checkUserName', 'uses' => 'UserLoginController@checkUserName'));
+//
+//        Route::post('registerAndLogin', array('as' => 'registerAndLogin', 'uses' => 'UserLoginController@registerAndLogin'));
+//
+//        Route::post('registerWithPhone', array('as' => 'registerWithPhone', 'uses' => 'UserLoginController@registerWithPhone'));
+//
+//        Route::post('retrievePasByEmail', array('as' => 'retrievePasByEmail', 'uses' => 'UserLoginController@retrievePasByEmail'));
+//
+//        Route::post('retrievePasByPhone', array('as' => 'retrievePasByPhone', 'uses' => 'UserLoginController@retrievePasByPhone'));
+//
+//        Route::post('checkPhoneNum', array('as' => 'checkPhoneNum', 'uses' => 'UserLoginController@checkPhoneNum'));
+//
+//        Route::post('checkActivationCode', array('as' => 'checkActivationCode', 'uses' => 'UserLoginController@checkActivationCode'));
+//
+//        Route::post('resendActivationCode', array('as' => 'resendActivationCode', 'uses' => 'UserLoginController@resendActivationCode'));
+//
+//        Route::post('resendActivationCodeForget', array('as' => 'resendActivationCodeForget', 'uses' => 'UserLoginController@resendActivationCodeForget'));
+//
+//        Route::post('checkReCaptcha', array('as' => 'checkReCaptcha', 'uses' => 'UserLoginController@checkReCaptcha'));
+//
+//        Route::get('loginWithGoogle', array('as' => 'loginWithGoogle', 'uses' => 'UserLoginController@loginWithGoogle'));
+//
+//        Route::get('logout', array('as' => 'logout', 'uses' => 'UserLoginController@logout'));
+//    });
 
-        Route::get('login', 'UserLoginController@login');
 
-        Route::post('login', array('as' => 'login', 'uses' => 'UserLoginController@mainDoLogin'));
+//authenticated controller
+    Route::group(array('middleware' => ['throttle:30']), function(){
+//    Route::get('login', 'UserLoginController@login');
+        Route::get('newPasswordEmail/{code}', 'UserLoginController@newPasswordEmailPage')->name('newPasswordEmail');
+
+        Route::post('setNewPasswordEmail', 'UserLoginController@setNewPasswordEmail')->name('setNewPasswordEmail');
 
         Route::post('checkLogin', array('as' => 'checkLogin', 'uses' => 'UserLoginController@checkLogin'));
+
+        Route::get('login', array('as' => 'login', 'uses' => 'UserLoginController@mainDoLogin'));
 
         Route::post('login2', array('as' => 'login2', 'uses' => 'UserLoginController@doLogin'));
 
@@ -63,11 +104,17 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
         Route::post('registerWithPhone', array('as' => 'registerWithPhone', 'uses' => 'UserLoginController@registerWithPhone'));
 
+        Route::post('registerAndLogin2', array('as' => 'registerAndLogin2', 'uses' => 'UserLoginController@registerAndLogin2'));
+
         Route::post('retrievePasByEmail', array('as' => 'retrievePasByEmail', 'uses' => 'UserLoginController@retrievePasByEmail'));
 
         Route::post('retrievePasByPhone', array('as' => 'retrievePasByPhone', 'uses' => 'UserLoginController@retrievePasByPhone'));
 
+        Route::post('setNewPassword', 'UserLoginController@setNewPassword')->name('user.setNewPassword');
+
         Route::post('checkPhoneNum', array('as' => 'checkPhoneNum', 'uses' => 'UserLoginController@checkPhoneNum'));
+
+        Route::post('checkRegisterData', 'UserLoginController@checkRegisterData')->name('checkRegisterData');
 
         Route::post('checkActivationCode', array('as' => 'checkActivationCode', 'uses' => 'UserLoginController@checkActivationCode'));
 
@@ -81,7 +128,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
         Route::get('logout', array('as' => 'logout', 'uses' => 'UserLoginController@logout'));
     });
-
 
 
 

@@ -79,7 +79,7 @@
     @include('component.categoryTable')
 
     @if(!Auth::check())
-        @include('component.loginPopup')
+        @include('component.nloginPopup')
     @endif
 
     @include('layout.header')

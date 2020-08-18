@@ -495,3 +495,13 @@ input{
         height: 0;
     }
 }
+
+
+:root {
+    --koochita-blue: #0076a3;
+    --koochita-light-green: #4dc7bc;
+    --koochita-dark-green: #053a3e;
+    --koochita-green: #0d6650;
+    --koochita-red: #720d19;
+    --koochita-yellow: #fcc156;
+}

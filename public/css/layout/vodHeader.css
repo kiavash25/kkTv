@@ -106,9 +106,9 @@ nav{
 .registerPaneInLoginPopUp > button:hover{
     color: white;
 }
-.abcRioButtonContentWrapper{
-    background: white;
-}
+/*.abcRioButtonContentWrapper{*/
+/*    background: white;*/
+/*}*/
 .loginDividerBorder{
     border-color: red !important;
 }

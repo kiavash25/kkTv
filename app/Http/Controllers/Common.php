@@ -146,3 +146,74 @@ function sendSMS($destNum, $text, $template, $token2 = "") {
 }
 
 
+//email
+function welcomeEmail($username, $email){
+    $header = 'به کوچیتا خوش آمدید';
+    $userName = $username;
+    $view = \View::make('emails.welcomeEmail', compact(['header', 'userName']));
+    $html = $view->render();
+    if(sendEmail($html, $header, $email))
+        return true;
+    else
+        return false;
+}
+
+function forgetPassEmail($userName, $link, $email){
+    $header = 'فراموشی رمز عبور';
+    $view = \View::make('emails.forgetPass', compact(['header', 'userName', 'link']));
+    $html = $view->render();
+    if(sendEmail($html, $header, $email))
+        return true;
+    else
+        return false;
+}
+
+function sendEmail($text, $subject, $to){
+    $mail = new PHPMailer(true);
+    try {
+        $mail->SMTPDebug = 0;
+        $mail->CharSet = "UTF-8";
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $text;
+        $mail->AltBody = $text;
+        $mail->setFrom('support@koochita.com', 'Koochita');
+        $mail->addAddress($to);
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => true
+            )
+        );
+//        $mail->addReplyTo('ghane@shazdemosafer.com', 'Information');
+//        $mail->addCC('cc@example.com');
+//        $mail->addBCC('bcc@example.com');
+        $mail->send();
+        return true;
+
+//        $mail->isSMTP();                                      // Set mailer to use SMTP
+//        $mail->SMTPAuth = true;             // Enable SMTP authentication
+//        $mail->CharSet = 'UTF-8';
+//        $mail->SMTPDebug = 2;                                 // Enable verbose debug output
+//        $mail->Host = '127.0.0.1';  // Specify main and backup SMTP servers
+//        $mail->Username = 'info';                 // SMTP username
+//        $mail->Password = 'adeli1982';                           // SMTP password
+//        $mail->SMTPOptions = array(
+//            'ssl' => array(
+//                'verify_peer' => false,
+//                'verify_peer_name' => false,
+//                'allow_self_signed' => true
+//            )
+//        );
+//        $mail->setFrom( 'info@koochita.com', 'koochita');
+//        $mail->addAddress($to);
+//        $mail->isHTML(true);                                  // Set email format to HTML
+//        $mail->Subject = $subject;
+//        $mail->Body = $text;
+//        $mail->send();
+    }
+    catch (Exception $e) {
+        return false;
+    }
+}

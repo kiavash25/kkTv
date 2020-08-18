@@ -4,7 +4,7 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Live extends Model
+class VideoFeedback extends Model
 {
-    protected $table = 'videoLives';
+    protected $table = 'videoFeedbacks';
 }

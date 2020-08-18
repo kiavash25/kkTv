@@ -4,8 +4,8 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LiveChat extends Model
+class VideoTagRelation extends Model
 {
-    protected $table = 'videoLiveChats';
+    protected $table = 'videoTagRelations';
     public $timestamps = false;
 }

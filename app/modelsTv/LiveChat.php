@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LiveChat extends Model
 {
-    protected $table = 'videoLiveChats';
+    protected $table = 'liveChats';
     public $timestamps = false;
 }

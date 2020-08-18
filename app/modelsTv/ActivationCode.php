@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $phoneNum
  * @property string $code
+ * @property integer $userId
  * @property string $sendTime
  * @method static \Illuminate\Database\Query\Builder|\App\models\ActivationCode wherePhoneNum($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\ActivationCode whereCode($value)
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 
 class ActivationCode extends Model {
+
     protected $table = 'activationCode';
     public $timestamps = false;
 }

@@ -50,7 +50,7 @@
                 </div>
                 <div class="userHeaderIcon"></div>
                 <div class="userHeaderMenu">
-                    <a href="{{URL('profile')}}" class="userHeaderMenuTab">
+                    <a href="https://koochita.com/profile/index/{{auth()->user()->username}}" class="userHeaderMenuTab">
                         صفحه ی کاربری
                     </a>
                     <a href="{{route('logout')}}" class="userHeaderMenuTab">

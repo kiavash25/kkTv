@@ -32,6 +32,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Query\Builder|\App\models\User wherePhone($value)
  */
 
+//include_once 'app\Http\Controllers\Common.php';
+
 class User extends Authenticatable{
 
     use Notifiable;
@@ -81,8 +83,8 @@ class User extends Authenticatable{
         return User::find($value);
     }
 
-    public function getUserActivityCount(){
-        $user = \Auth::user();
+    public static function getUserActivityCount($uId){
+        $user = User::find($uId);
 
         $postCount = 0;
         $picCount = 0;
@@ -91,17 +93,30 @@ class User extends Authenticatable{
         $questionCount = 0;
         $ansCount = 0;
         $scoreCount = 0;
-        $postActivity = Activity::whereName('نظر')->first();
-        $questionActivity = Activity::whereName('سوال')->first();
-        $ansActivity = Activity::whereName('پاسخ')->first();
-        $postCount += LogModel::whereActivityId($postActivity->id)->where('visitorId', $user->id)->count();
-        $picCount += PhotographersPic::where('userId', $user->id)->count();
-        $picCount += \DB::select('SELECT COUNT(reviewPics.id) AS count FROM reviewPics RIGHT JOIN log ON log.visitorId = ' . $user->id . ' AND reviewPics.isVideo = 0 AND reviewPics.is360 = 0 AND reviewPics.logId = log.id ')[0]->count;
-        $videoCount += \DB::select('SELECT COUNT(reviewPics.id) AS count FROM reviewPics RIGHT JOIN log ON log.visitorId = ' . $user->id . ' AND reviewPics.isVideo = 1 AND reviewPics.is360 = 0 AND reviewPics.logId = log.id ')[0]->count;
-        $video360Count += \DB::select('SELECT COUNT(reviewPics.id) AS count FROM reviewPics RIGHT JOIN log ON log.visitorId = ' . $user->id . ' AND reviewPics.isVideo = 1 AND reviewPics.is360 = 1 AND reviewPics.logId = log.id ')[0]->count;
-        $questionCount += LogModel::whereActivityId($questionActivity->id)->where('visitorId', $user->id)->count();
-        $ansCount += LogModel::whereActivityId($ansActivity->id)->where('visitorId', $user->id)->count();
-        $scoreCount += count(\DB::select('SELECT questionUserAns.logId as PlaceCount FROM questionUserAns INNER JOIN log ON log.visitorId = ' . $user->id . ' AND questionUserAns.logId = log.id GROUP BY PlaceCount'));
+        $addPlace = 0;
+
+        if($user != null) {
+            $postActivity = Activity::whereName('نظر')->first();
+            $questionActivity = Activity::whereName('سوال')->first();
+            $ansActivity = Activity::whereName('پاسخ')->first();
+            $postCount = LogModel::whereActivityId($postActivity->id)->where('visitorId', $user->id)->count();
+            $picCount = PhotographersPic::where('userId', $user->id)->count();
+
+            $picLog = ReviewPic::where('isVideo', 0)->where('is360', 0)->pluck('logId')->toArray();
+            $picCount += LogModel::whereIn('id', $picLog)->where('visitorId', $user->id)->count();
+
+            $videoLog = ReviewPic::where('isVideo', 1)->where('is360', 0)->pluck('logId')->toArray();
+            $videoCount = LogModel::whereIn('id', $videoLog)->where('visitorId', $user->id)->count();
+
+            $videoCLog = ReviewPic::where('isVideo', 1)->where('is360', 1)->pluck('logId')->toArray();
+            $video360Count = LogModel::whereIn('id', $videoCLog)->where('visitorId', $user->id)->count();
+
+            $questionCount = LogModel::whereActivityId($questionActivity->id)->where('visitorId', $user->id)->count();
+            $ansCount = LogModel::whereActivityId($ansActivity->id)->where('visitorId', $user->id)->count();
+            $scoreCount = count(\DB::select('SELECT questionUserAns.logId as PlaceCount FROM questionUserAns INNER JOIN log ON log.visitorId = ' . $user->id . ' AND questionUserAns.logId = log.id GROUP BY PlaceCount'));
+            $addPlace = UserAddPlace::where('userId', $user->id)->count();
+        }
+
         $userCount = [
             'postCount' => $postCount,
             'picCount' => $picCount,
@@ -110,6 +125,7 @@ class User extends Authenticatable{
             'questionCount' => $questionCount,
             'ansCount' => $ansCount,
             'scoreCount' => $scoreCount,
+            'addPlace' => $addPlace,
         ];
 
         return $userCount;
@@ -117,12 +133,63 @@ class User extends Authenticatable{
 
     public function getUserTotalPoint()
     {
-        return getUserPoints(auth()->user()->id);
+        return $this->getUserPointInModel(auth()->user()->id);
     }
 
     public function getUserNearestLevel()
     {
-        return nearestLevel(auth()->user()->id);
+        return $this->nearestLevelInModel(auth()->user()->id);
+    }
+
+    public static function nearestLevelInModel($uId)
+    {
+        $points = User::getUserPointInModel($uId);
+        $currLevel = Level::where('floor', '<=', $points)->orderBy('floor', 'DESC')->first();
+
+        if($currLevel == null)
+            $currLevel = Level::orderBy('floor', 'ASC')->first();
+
+        $nextLevel = Level::where('floor', '>', $points)->orderBy('floor', 'ASC')->first();
+
+        if($nextLevel == null)
+            $nextLevel = Level::orderBy('floor', 'ASC')->first();
+
+        return [$currLevel, $nextLevel];
+    }
+
+    public static function getUserPointInModel($uId)
+    {
+        $points = \DB::select("SELECT SUM(activity.rate) as total FROM log, activity WHERE confirm = 1 and log.visitorId = " . $uId . " and log.activityId = activity.id");
+
+        if($points == null || count($points) == 0 || $points[0]->total == "")
+            return 0;
+
+        return $points[0]->total;
+    }
+
+    public function getUserPicInModel($id = 0)
+    {
+        $user = User::find($id);
+        if($user != null){
+            if(strpos($user->picture, 'http') !== false)
+                return $user->picture;
+            else{
+                if($user->uploadPhoto == 0){
+                    $deffPic = DefaultPic::find($user->picture);
+
+                    if($deffPic != null)
+                        $uPic = \URL::asset('defaultPic/' . $deffPic->name);
+                    else
+                        $uPic = \URL::asset('_images/nopic/blank.jpg');
+                }
+                else
+                    $uPic = \URL::asset('userProfile/' . $user->picture);
+            }
+        }
+        else
+            $uPic = \URL::asset('_images/nopic/blank.jpg');
+
+        return $uPic;
     }
 
     public function deleteUser(){

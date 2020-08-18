@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LiveFeedBack extends Model
 {
-    protected $table = 'videoLiveFeedBacks';
+    protected $table = 'liveFeedBacks';
 }
