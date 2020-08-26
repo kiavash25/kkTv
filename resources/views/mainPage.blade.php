@@ -8,32 +8,30 @@
 @section('body')
 
     <div class="container mainShowBase">
-
         <div class="mainSlider">
-            <div id="mainSlider" class="swiper-container backgroundColorForSlider">
-                <div class="swiper-wrapper">
-
-                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">
-                        <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" class="resizeImgClass">
-                        <div class="nowSeeThisVideoDiv">
-                            <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">
-                            <a href="#" class="nowSeeThisVideoButton">
-                                همین حالا ببینید
-                            </a>
-                        </div>
-                        <div class="nowSeeThisVideoNameDiv">
-                            <a href="#" class="nowSeeThisVideoName">
-                                گفتگوی زنده
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
-                <!-- Add Arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+            <div id="mainSlider" class="swiper-container backgroundColorForSlider" style="display: flex; justify-content: center; align-items: center;">
+                <video autoplay muted>
+                    <source src="{{URL::asset('images/comp2.mp4')}}">
+                </video>
+{{--                <div class="swiper-wrapper">--}}
+{{--                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">--}}
+{{--                        <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" class="resizeImgClass">--}}
+{{--                        <div class="nowSeeThisVideoDiv">--}}
+{{--                            <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">--}}
+{{--                            <a href="#" class="nowSeeThisVideoButton">--}}
+{{--                                همین حالا ببینید--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                        <div class="nowSeeThisVideoNameDiv">--}}
+{{--                            <a href="#" class="nowSeeThisVideoName">--}}
+{{--                                گفتگوی زنده--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="swiper-pagination"></div>--}}
+{{--                <div class="swiper-button-next"></div>--}}
+{{--                <div class="swiper-button-prev"></div>--}}
             </div>
 
 
