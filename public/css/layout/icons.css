@@ -35,3 +35,11 @@
     content: '\E1F8';
     font-family: Shazde_Regular2 !important;
 }
+.soundIcon:before{
+    content: '\E0C2';
+    font-family: Shazde_Regular2 !important;
+}
+.muteIcon:before{
+    content: '\E0C1';
+    font-family: Shazde_Regular2 !important;
+}

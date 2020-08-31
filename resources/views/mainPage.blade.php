@@ -3,6 +3,23 @@
 
 @section('head')
     <link rel="stylesheet" type='text/css' href='{{URL::asset('css/pages/mainPage.css')}}'>
+    <style>
+        .commonSoundIcon{
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            color: white;
+            font-size: 50px;
+            line-height: 50px;
+            border: solid 3px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .videoInMobile{
+            /*height: 100%;*/
+            /*width: auto;*/
+        }
+    </style>
 @endsection
 
 @section('body')
@@ -10,9 +27,10 @@
     <div class="container mainShowBase">
         <div class="mainSlider">
             <div id="mainSlider" class="swiper-container backgroundColorForSlider" style="display: flex; justify-content: center; align-items: center;">
-                <video autoplay muted>
-                    <source src="{{URL::asset('images/comp2.mp4')}}">
-                </video>
+                <video id="mainVideo" src="#" autoplay muted loop></video>
+                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>
+                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>
+
 {{--                <div class="swiper-wrapper">--}}
 {{--                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">--}}
 {{--                        <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" class="resizeImgClass">--}}
@@ -249,5 +267,45 @@
                 prevEl: '.swiper-button-prev',
             },
         });
+
+        function toggleVideoSound(_kind, _element){
+            $(_element).hide();
+            if(_kind == 1){
+                $('#mainVideo').prop('muted', false);
+                $(_element).prev().show();
+            }
+            else{
+                $('#mainVideo').prop('muted', true);
+                $(_element).next().show();
+            }
+        }
+
+        let mobileVideo = "{{URL::asset('images/tv_mobile.mp4')}}";
+        let pcVideo = "{{URL::asset('images/comp2.mp4')}}";
+        $(window).on('resize', changeVideoSource);
+
+        function changeVideoSource(){
+            console.log('in');
+            let currentTime = document.getElementById('mainVideo').currentTime;
+            if($(this).width() < 771){
+                $('#mainVideo').attr('src', mobileVideo);
+                if($(this).width() < 500){
+                    $('#mainVideo').css('height', '100%');
+                    $('#mainVideo').css('width', 'auto');
+                }
+                else{
+                    $('#mainVideo').css('width', '100%');
+                    $('#mainVideo').css('height', 'auto');
+                }
+            }
+            else{
+                $('#mainVideo').attr('src', pcVideo);
+                $('#mainVideo').css('height', '100%');
+                $('#mainVideo').css('width', 'auto');
+            }
+            document.getElementById('mainVideo').currentTime = currentTime;
+        }
+
+        $(document).ready(changeVideoSource);
     </script>
 @endsection
