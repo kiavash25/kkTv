@@ -285,10 +285,11 @@
         $(window).on('resize', changeVideoSource);
 
         function changeVideoSource(){
-            console.log('in');
             let currentTime = document.getElementById('mainVideo').currentTime;
             if($(this).width() < 771){
-                $('#mainVideo').attr('src', mobileVideo);
+                if($('#mainVideo').attr('src') != mobileVideo)
+                    $('#mainVideo').attr('src', mobileVideo);
+
                 if($(this).width() < 500){
                     $('#mainVideo').css('height', '100%');
                     $('#mainVideo').css('width', 'auto');
@@ -299,7 +300,9 @@
                 }
             }
             else{
-                $('#mainVideo').attr('src', pcVideo);
+                if($('#mainVideo').attr('src') != pcVideo)
+                    $('#mainVideo').attr('src', pcVideo);
+
                 $('#mainVideo').css('height', '100%');
                 $('#mainVideo').css('width', 'auto');
             }
