@@ -21,24 +21,24 @@ if(auth()->check()){
                 <img src="{{URL::asset('images/mainPics/vodLobo.png')}}" class="content-icon" width="100%">
             </a>
             <div class="footerSocialMediaBox">
-                <a rel="nofollow" target="_blank" href="https://www.linkedin.com/in/shazde-mosafer-652817143/">
+                <a rel="nofollow" target="_blank" href="#">
                     <div class="footerIconHor linkedin"></div>
                 </a>
                 <a rel="nofollow" target="_blank" href="https://www.facebook.com/profile.php?id=100016313805277&ref=br_rs">
                     <div class="footerIconHor facebook"></div>
                 </a>
-                <a rel="nofollow" target="_blank" href="https://twitter.com/shazdemosafer">
+                <a rel="nofollow" target="_blank" href="#">
                     <div class="footerIconHor twitter"></div>
                 </a>
-                <a rel="nofollow" target="_blank" href="https://www.instagram.com/shazdehmosafer/">
+                <a rel="nofollow" target="_blank" href="https://www.instagram.com/koochita_com/">
                     <div class="footerIconHor instagram"></div>
                 </a>
-                <a class="socialLink" rel="nofollow"target="_blank" href="https://t.me/shazdehmosafer">
+                <a class="socialLink" rel="nofollow"target="_blank" href="#">
                     <div class="footerIconHor telegram"></div>
                 </a>
-                <a class="socialLink" rel="nofollow" target="_blank" href="">
-                    <div class="footerIconHor aparat"></div>
-                </a>
+{{--                <a class="socialLink" rel="nofollow" target="_blank" href="">--}}
+{{--                    <div class="footerIconHor aparat"></div>--}}
+{{--                </a>--}}
             </div>
         </div>
         {{--        aboutShazdeMoreLess--}}

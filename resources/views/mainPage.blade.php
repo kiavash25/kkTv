@@ -15,9 +15,11 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        .videoInMobile{
-            /*height: 100%;*/
-            /*width: auto;*/
+        @media (max-width: 771px) {
+            .commonSoundIcon{
+                font-size: 25px;
+                line-height: 25px;
+            }
         }
     </style>
 @endsection
@@ -250,23 +252,23 @@
         });
 
         // mainSlider
-        new Swiper('#mainSlider', {
-            spaceBetween: 30,
-            centeredSlides: true,
-            loop: true,
-            autoplay: {
-                delay: 50000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+        // new Swiper('#mainSlider', {
+        //     spaceBetween: 30,
+        //     centeredSlides: true,
+        //     loop: true,
+        //     autoplay: {
+        //         delay: 50000,
+        //         disableOnInteraction: false,
+        //     },
+        //     pagination: {
+        //         el: '.swiper-pagination',
+        //         clickable: true,
+        //     },
+        //     navigation: {
+        //         nextEl: '.swiper-button-next',
+        //         prevEl: '.swiper-button-prev',
+        //     },
+        // });
 
         function toggleVideoSound(_kind, _element){
             $(_element).hide();
