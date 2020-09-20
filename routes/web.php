@@ -13,7 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::get('stream', ["as" => "stream", "uses" => "StreamController@run"]);
+
+Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamController@updateLink"]);
+
+
 Route::middleware(['web', 'vodShareData'])->group(function (){
+
+
     Route::get('/', 'MainController@indexStreaming')->name('index');
 
     Route::post('video/search', 'MainController@search')->name('video.search');

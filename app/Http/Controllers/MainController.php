@@ -154,14 +154,14 @@ class MainController extends Controller
         if (auth()->check())
             $uId = auth()->user()->id;
 
-        if (($video->confirm == 1 && $video->state == 1) || ($video->userId == $uId)) {
+        if (($video->confirm == 1 && $video->state == 1 && $video->link != null) || ($video->userId == $uId)) {
 
             if (!\Cookie::has('video_' . $video->code)) {
                 \Cookie::queue(\Cookie::make('video_' . $video->code, 1, 5));
                 $video->seen++;
                 $video->save();
             }
-            $video->video = \URL::asset('videos/' . $video->userId . '/' . $video->video);
+            $video->video = ($video->link == null) ? \URL::asset('videos/' . $video->userId . '/' . $video->video) : $video->link;
             $video = $this->getVideoFullInfo($video, true);
 
             $userMoreVideo = Video::where('userId', $video->userId)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
@@ -185,7 +185,7 @@ class MainController extends Controller
             return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData']));
         }
 
-        return redirect(route('streaming.index'));
+        return redirect(route('index'));
 
     }
 

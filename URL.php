@@ -33,6 +33,8 @@ class URL extends Facade
     }
 
     static function asset($path, $secure = null) {
+
+dd('in');
         $tmp = explode('/', $path);
 
         if(count($tmp) > 0) {
