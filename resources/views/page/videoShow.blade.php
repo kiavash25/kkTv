@@ -163,9 +163,18 @@
         </div>
         <div class="container mainShowBase">
             <div class="showVideo">
-                <video src="{{$video->video}}" poster="{{$video->pic}}" style="width: 100%" controls playsinline>
-                    <source src="{{$video->video}}" type="video/mp4">
-                </video>
+                <video id="video_1" class="video-js playads" controls style="width: 100%" data-setup='{"fluid": true}'></video>
+                <script>
+                    var myPlayer = videojs('video_1', {autoplay: 'any'});
+                    myPlayer.src({
+                        src: '{{$video->video}}',
+                        // type: 'application/x-mpegURL',
+                        withCredentials: false
+                    });
+                </script>
+{{--                <video src="{{$video->video}}" poster="{{$video->pic}}" style="width: 100%" controls playsinline>--}}
+{{--                    <source src="{{$video->video}}" type="video/mp4">--}}
+{{--                </video>--}}
             </div>
 
             <div class="toolSection">
