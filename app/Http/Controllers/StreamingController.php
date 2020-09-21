@@ -34,6 +34,9 @@ use Illuminate\Support\Facades\DB;
 
 class StreamingController extends Controller
 {
+
+	private $sharedKey = "kia20#AndMohammad10#";
+
     public function importVideoToDB()
     {
         $loc = __DIR__ . '/../../../../assets/_images/video';
@@ -117,7 +120,7 @@ $servers = DB::select("select * from servers order by rand()");
 if($servers == null || count($servers) == 0)
         return;
 
-$videos = Videos::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
+$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
 $serverIdx = 0;
 $last_fetches = [];
 
@@ -131,10 +134,6 @@ for ($i = 0; $i < count($videos); $i++) {
 
 for ($i = 0; $i < count($videos); $i++) {
 
-$nonce = Nonce::first();
-if($nonce == null)
-        return;
-
 if ($serverIdx >= count($servers))
         $serverIdx = 0;
 
@@ -142,19 +141,20 @@ if(time() - $last_fetches[$serverIdx] < 600)
         sleep(600 + $last_fetches[$serverIdx] - time());
 
 $serverIP = $servers[$serverIdx]->ip;
-$filepath = $videos[$i]->video;
+$filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
 
-$cfile = curl_file_create('/var/www/' . $filepath,'application/octet-stream','1.mp4'); // try adding
+$cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
 
 // Assign POST data
-$data = array('file' => $cfile, 'nonce' => $nonce->nonce, 'videoId' => $videos[$i]->id);
+$time = time();
+$hash = hash("sha256", $this->sharedKey . $time);
+$data = array('file' => $cfile, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
 $data += ["first_res" => ($videos[$i]->first_res) ? "ok" : "nok"];
 $data += ["second_res" => ($videos[$i]->second_res) ? "ok" : "nok"];
 $data += ["third_res" => ($videos[$i]->third_res) ? "ok" : "nok"];
 $data += ["forth_res" => ($videos[$i]->forth_res) ? "ok" : "nok"];
 $data += ["fifth_res" => ($videos[$i]->fifth_res) ? "ok" : "nok"];
 $data += ["sixth_res" => ($videos[$i]->sixth_res) ? "ok" : "nok"];
-$nonce->delete();
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
@@ -163,39 +163,37 @@ curl_setopt($ch, CURLOPT_URL, 'http://' . $serverIP . '/uploadFile.php');
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 $data2 = curl_exec($ch);
+
+if ($data2 === false)
+    echo curl_error($ch);
+
 curl_close($ch);
 $last_fetches[$serverIdx] = time();
 $serverIdx++;
 }
 }
 
-public function play($id) {
-
-$video = Videos::whereId($id);
-
-if($video == null || $video->link == null || empty($video->link) || !$video->confirm) {
-dd("err");
-}
-
-return view('play', ['url' => $video->link]);
-
-}
-
 public function updateLink() {
 
-        if(isset($_POST["newLink"]) && isset($_POST["nonce"]) && isset($_POST["videoId"])) {
+        if(isset($_POST["newLink"]) && isset($_POST["time"]) && isset($_POST["digest"]) && isset($_POST["videoId"])) {
 
-                $nonce = $_POST["nonce"];
-                $nonce = Nonce::where('nonce', '=', $nonce)->first();
-                if($nonce == null) {
+                $time = $_POST["time"];
+		if(time() - $time > 180) {
+			echo "nok4";
+			return;
+		}
+
+		$digest = $_POST["digest"];
+		$hash = hash("sha256", $this->sharedKey . $time);
+
+                if($hash != $digest) {
                         echo "nok3";
                         return;
                 }
-                $nonce->delete();
 
                 $newLink = $_POST["newLink"];
                 $videoId = $_POST["videoId"];
-                $video = Videos::whereId($videoId);
+                $video = Video::whereId($videoId);
 
                 if($video == null) {
                         echo "nok1";

@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('stream', ["as" => "stream", "uses" => "StreamController@run"]);
-
-Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamController@updateLink"]);
+Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamingController@updateLink"]);
 
 
 Route::middleware(['web', 'vodShareData'])->group(function (){
