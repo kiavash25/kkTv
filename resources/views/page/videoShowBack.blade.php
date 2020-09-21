@@ -10,6 +10,12 @@
         }
     </style>
 
+    <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
 
     <style>
         .videoPlaces{
@@ -164,7 +170,18 @@
         </div>
         <div class="container mainShowBase">
             <div class="showVideo">
-                <video id="video_1" class="playads embed-responsive-item video-js vjs-default-skin" controls style="width: 100%" data-setup='{"preload": "none", "auto-play": false }'></video>
+                <video id="video_1" class="video-js playads" controls style="width: 100%" data-setup='{"fluid": true, "preload": "none", "auto-play": false }'></video>
+                <script>
+                    var myPlayer = videojs('video_1', {autoplay: 'any'});
+                    myPlayer.src({
+                        src: '{{$video->video}}',
+                        // type: 'application/x-mpegURL',
+                        withCredentials: false
+                    });
+                </script>
+{{--                <video src="{{$video->video}}" poster="{{$video->pic}}" style="width: 100%" controls playsinline>--}}
+{{--                    <source src="{{$video->video}}" type="video/mp4">--}}
+{{--                </video>--}}
             </div>
 
             <div class="toolSection">
@@ -354,10 +371,9 @@
 @section('script')
 
 	<script src="https://vjs.zencdn.net/5.19.2/video.js"></script>
-	<script src="{{URL::asset('js/video/hls.min.js?v=v0.9.1')}}"></script>
-        <script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
-        <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
-
+    <script src="{{URL::asset('js/video/hls.min.js?v=v0.9.1')}}"></script>
+    <script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
+    <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
     <script>
         var player = videojs('video_1');
 
