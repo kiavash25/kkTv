@@ -8,6 +8,14 @@
         .video-js {
             font-size: 1rem;
         }
+	.vjs-control-bar {
+		direction: ltr !important;
+	}
+	.vjs-big-play-button {
+		top: 45% !important;
+		left: 46% !important;
+		width: 8% !important;
+	}
     </style>
 
 
@@ -164,7 +172,7 @@
         </div>
         <div class="container mainShowBase">
             <div class="showVideo">
-                <video id="video_1" class="playads embed-responsive-item video-js vjs-default-skin" controls style="width: 100%" data-setup='{"preload": "none", "auto-play": false }'></video>
+                <video id="video_1" class="playads embed-responsive-item video-js vjs-default-skin" controls style="width: 100%; direction: ltr;" data-setup='{"fluid": true, "preload": "none", "auto-play": false }'></video>
             </div>
 
             <div class="toolSection">
