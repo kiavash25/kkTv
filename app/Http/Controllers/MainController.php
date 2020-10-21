@@ -160,7 +160,7 @@ class MainController extends Controller
         if (auth()->check())
             $uId = auth()->user()->id;
 
-        $video->isLink = true;
+        $isLink = true;
 
         if (($video->confirm == 1 && $video->state == 1 && $video->link != null) || ($video->userId == $uId)) {
 
@@ -189,12 +189,12 @@ class MainController extends Controller
 
             if($video->userId == $uId && $video->link == null) {
                 $video->link = URL::asset('videos/' . $video->userId . '/' . $video->video);
-                $video->isLink = false;
+                $isLink = false;
             }
 
             $localStorageData = ['title' => $video->title, 'pic' => $thumbnail , 'redirect' => route('video.show', ['code' => $video->code])];
 
-            return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData']));
+            return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink']));
         }
 
         return redirect(route('index'));
