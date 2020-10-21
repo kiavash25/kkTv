@@ -1,7 +1,7 @@
-@extends('streaming.layout.streamingLayout')
+@extends('layout.mainLayout')
 
 @section('head')
-    <link rel="stylesheet" href="{{URL::asset('css/streaming/showStreaming.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css')}}">
 
     <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
 
@@ -16,6 +16,9 @@
         /*    width: 100%;*/
         /*}*/
 
+        .vjs-control-bar{
+            direction: ltr;
+        }
         .liveComments {
             background: white;
             display: flex;
@@ -123,10 +126,12 @@
         }
         .guestSection{
             position: absolute;
-            left: 0;
+            /*left: 0;*/
+            right: 0;
             background-color: #3a3a3a;
-            border-radius: 0px 20px 20px 0px;
+            border-radius: 20px 0px 0px 20px;
             display: flex;
+            z-index: 9;
         }
         .guestName{
             padding: 0px;
@@ -150,6 +155,7 @@
             width: 300px;
             border: solid red 2px;
             padding: 8px;
+            margin-left: 10px;
         }
         .guestSection:hover .guestName{
             display: block;
@@ -164,6 +170,12 @@
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
+        }
+        .descriptionSection{
+            width: 100% !important;
+        }
+        .headerWithLine{
+            margin-top: 30px;
         }
 
         /*@media (max-width: 1300px) {*/
@@ -201,9 +213,6 @@
             .mainDivStream > div:first-child{
                 width: 40%;
             }
-            .guestNotPcSection{
-                display: block;
-            }
             .guestRow{
                 width: 150px !important;
                 height: 150px;
@@ -236,12 +245,32 @@
         }
 
         @media (max-width: 991px){
+            .guestNotPcSection{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
             .hideOnSmall{
                 display: none;
+            }
+            .guestRow{
+                border-bottom: none;
+            }
+            .guestPicSection{
+                border: solid 1px red;
+                margin-bottom: 10px;
+            }
+            .guestName{
+                font-weight: bold;
+            }
+            .guestAction{
+                font-size: 10px;
+                margin-top: 3px;
             }
         }
 
         @media (max-width: 767px){
+
             .mainDivStream{
                 width: 100%;
             }
@@ -258,63 +287,93 @@
 @section('body')
 
     <div class="mainDivStream">
-        <div class="container mainShowBase hideOnSmall">
+        <div class="container mainShowBase hideOnSmall" style="width: 200px">
             @if($data['haveVideo'])
                 <div class="liveInfosAndComments">
                     <div class="videoInfos">
-                        <div class="videoInfosVideoName">
-                            {{$data['title']}}
-                            <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">
-                        </div>
-                        <div class="row mainUserPicSection">
-                            <div class="userPicDiv">
-                                <img src="{{$data['userPic']}}" alt="koochita">
-                            </div>
-                            <div class="mainUserInfos">
-                                <div class="mainUseruserName">
-                                    {{isset($data['user']) && $data['user'] != '' ? $data['user']->username : ''}}
-                                </div>
-                                <div class="videoUploadTime">
-                                    هم اکنون
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{--                        <div class="videoInfosVideoName">--}}
+{{--                            {{$data['title']}}--}}
+{{--                            <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">--}}
+{{--                        </div>--}}
 
-                    <div class="liveComments">
-                        <div class="liveCommentsFirstLine">
-                            <div class="liveCommentsTitle">
-                                در گفتگو شرکت کنید
-                            </div>
-                            <div class="liveCommentStatistics">
-                                <div class="liveCommentsQuantity liveCommentStatisticsDivs">
-                                    <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>
-                                    <div class="liveCommentsQuantityIcon"></div>
-                                </div>
-                                <div class="liveCommentWriters liveCommentStatisticsDivs">
-                                    <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>
-                                    <div class="liveCommentsWriterIcon "></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="liveCommentsMainDiv"></div>
-
-                        @if(auth()->check())
-                            <div class="commentInputSection">
-                                <div class="userPicDiv">
-                                    <img src="{{$userPicture}}" alt="koochita">
-                                </div>
-                                <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>
-                                <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>
-                            </div>
-                        @else
-                            <div class="commentInputSection">
-                                <div class="commentInputSendButton login-button">ورود</div>
-                            </div>
-                        @endif
+{{--                        <div class="row mainUserPicSection">--}}
+{{--                            <div class="userPicDiv">--}}
+{{--                                <img src="{{$data['user']->pic}}" alt="koochita">--}}
+{{--                            </div>--}}
+{{--                            <div class="mainUserInfos">--}}
+{{--                                <div class="mainUseruserName">--}}
+{{--                                    {{isset($data['user']) && $data['user'] != '' ? $data['user']->username : ''}}--}}
+{{--                                </div>--}}
+{{--                                <div class="videoUploadTime">--}}
+{{--                                    هم اکنون--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                     </div>
+
+                    <div class="row" style="color:white; text-align: center">
+                        مهمانان برنامه
+                    </div>
+                    @foreach($data['guest'] as $item)
+                        <div class="row guestRow">
+                            <div class="guestSection">
+                                <div class="guestMainSection {{$item->text != null ? 'setMarginInGuestSection' : ''}}">
+                                    <div class="col-md-12" style="display: flex; justify-content: center; padding: 0px">
+                                        <div class="guestPicSection">
+                                            <img src="{{$item->pic}}" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 guestName">
+                                        {{$item->name}}
+                                    </div>
+                                    <div class="col-md-12 guestAction" >
+                                        {{$item->action}}
+                                    </div>
+                                </div>
+                                @if($item->text != null)
+                                    <div class="guestSideSection setMarginInGuestSection">
+                                        <div class="guestText">
+                                            {{$item->text}}
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+
+{{--                    <div class="liveComments">--}}
+{{--                        <div class="liveCommentsFirstLine">--}}
+{{--                            <div class="liveCommentsTitle">--}}
+{{--                                در گفتگو شرکت کنید--}}
+{{--                            </div>--}}
+{{--                            <div class="liveCommentStatistics">--}}
+{{--                                <div class="liveCommentsQuantity liveCommentStatisticsDivs">--}}
+{{--                                    <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>--}}
+{{--                                    <div class="liveCommentsQuantityIcon"></div>--}}
+{{--                                </div>--}}
+{{--                                <div class="liveCommentWriters liveCommentStatisticsDivs">--}}
+{{--                                    <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>--}}
+{{--                                    <div class="liveCommentsWriterIcon "></div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="liveCommentsMainDiv"></div>--}}
+{{--                        @if(auth()->check())--}}
+{{--                            <div class="commentInputSection">--}}
+{{--                                <div class="userPicDiv">--}}
+{{--                                    <img src="{{$userPicture}}" alt="koochita">--}}
+{{--                                </div>--}}
+{{--                                <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>--}}
+{{--                                <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>--}}
+{{--                            </div>--}}
+{{--                        @else--}}
+{{--                            <div class="commentInputSection">--}}
+{{--                                <div class="commentInputSendButton login-button">ورود</div>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+
                 </div>
             @endif
         </div>
@@ -323,12 +382,13 @@
             <div class="showVideo">
                 <div class="videoContainer">
                     @if($data['haveVideo'] == true)
-                        <video id="video_1" class="video-js playads" controls style="width: 100%" data-setup='{"fluid": true}'></video>
+                        <video id="video_1" class="video-js playads" controls style="width: 100%; direction: ltr" data-setup='{"fluid": true}'></video>
 
                         <script>
                             var myPlayer = videojs('video_1', {autoplay: 'any'});
                             myPlayer.src({
-                                src: 'https://streaming.koochita.com/hls/{{$room}}.m3u8',
+                                {{--src: 'https://streaming.koochita.com/hls/{{$room}}.m3u8',--}}
+                                src: 'https://yom.ir/vod/144p.m3u8',
                                 type: 'application/x-mpegURL',
                                 withCredentials: false
                             });
@@ -409,6 +469,7 @@
             <table style="width: 100%;" id="rooms-list"></table>
 
             <div class="toolSection">
+
                 <div class="toolSectionButtons">
                     <div class="toolSectionButtonsCircle" onclick="feedBack(-1)">
                         <span class="DisLikeIcon"></span>
@@ -422,13 +483,14 @@
                     <div class="toolSectionButtonsCircle">
                         <span class="ShareIcon ShareIconSett"></span>
                     </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="HeartIcon HeartIconSett"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="BookMarkIcon BookMarkIconSett"></span>
-                    </div>
+{{--                    <div class="toolSectionButtonsCircle">--}}
+{{--                        <span class="HeartIcon HeartIconSett"></span>--}}
+{{--                    </div>--}}
+{{--                    <div class="toolSectionButtonsCircle">--}}
+{{--                        <span class="BookMarkIcon BookMarkIconSett"></span>--}}
+{{--                    </div>--}}
                 </div>
+
                 <div class="toolSectionInfos">
 {{--                    <div class="toolSectionInfosTab">--}}
 {{--                        <span class="CommentIcon commentInfoTab"></span>--}}
@@ -444,71 +506,97 @@
                     </div>
                     <div class="toolSectionInfosTab">
                         <span class="toolSectionInfosTabNumber">100</span>
-                        <img src="{{URL::asset('images/streaming/eye.png')}}" class="eyeClass" style="width: 25px">
+                        <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
                     </div>
                 </div>
             </div>
 
             <div class="liveInfosAndComments hideOnWide">
-                <div class="videoInfos">
-                    <div class="videoInfosVideoName">
-                        {{$data['title']}}
-                        <img class="float-left" src="{{URL::asset('images/streaming/live.png')}}">
-                    </div>
-                    <div class="row mainUserPicSection">
-                        <div class="userPicDiv">
-                            <img src="{{$data['userPic']}}" alt="koochita">
-                        </div>
-                        <div class="mainUserInfos">
-                            <div class="mainUseruserName">
-                                {{isset($data['user']) && $data['user'] != '' ? $data['user']->username : ''}}
-                            </div>
-                            <div class="videoUploadTime">
-                                هم اکنون
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="liveComments">
-                    <div class="liveCommentsFirstLine">
-                        <div class="liveCommentsTitle">
-                            در گفتگو شرکت کنید
-                        </div>
-                        <div class="liveCommentStatistics">
-                            <div class="liveCommentsQuantity liveCommentStatisticsDivs">
-                                <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>
-                                <div class="liveCommentsQuantityIcon"></div>
-                            </div>
-                            <div class="liveCommentWriters liveCommentStatisticsDivs">
-                                <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>
-                                <div class="liveCommentsWriterIcon "></div>
-                            </div>
-                        </div>
-                    </div>
+{{--                <div class="videoInfos">--}}
+{{--                    <div class="videoInfosVideoName">--}}
+{{--                        {{$data['title']}}--}}
+{{--                        <img class="float-left" src="{{URL::asset('images/streaming/live.png')}}">--}}
+{{--                    </div>--}}
+{{--                    <div class="row mainUserPicSection">--}}
+{{--                        <div class="userPicDiv">--}}
+{{--                            <img src="{{$data['userPic']}}" alt="koochita">--}}
+{{--                        </div>--}}
+{{--                        <div class="mainUserInfos">--}}
+{{--                            <div class="mainUseruserName">--}}
+{{--                                {{isset($data['user']) && $data['user'] != '' ? $data['user']->username : ''}}--}}
+{{--                            </div>--}}
+{{--                            <div class="videoUploadTime">--}}
+{{--                                هم اکنون--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                    <div class="liveCommentsMainDiv"></div>
+{{--                <div class="liveComments">--}}
+{{--                    <div class="liveCommentsFirstLine">--}}
+{{--                        <div class="liveCommentsTitle">--}}
+{{--                            در گفتگو شرکت کنید--}}
+{{--                        </div>--}}
+{{--                        <div class="liveCommentStatistics">--}}
+{{--                            <div class="liveCommentsQuantity liveCommentStatisticsDivs">--}}
+{{--                                <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>--}}
+{{--                                <div class="liveCommentsQuantityIcon"></div>--}}
+{{--                            </div>--}}
+{{--                            <div class="liveCommentWriters liveCommentStatisticsDivs">--}}
+{{--                                <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>--}}
+{{--                                <div class="liveCommentsWriterIcon "></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                    @if(auth()->check())
-                        <div class="commentInputSection">
+{{--                    <div class="liveCommentsMainDiv"></div>--}}
+
+{{--                    @if(auth()->check())--}}
+{{--                        <div class="commentInputSection">--}}
 {{--                            <div class="userPicDiv">--}}
 {{--                                <img src="{{$userPicture}}" alt="koochita">--}}
 {{--                            </div>--}}
-                            <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>
-                            <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>
-                        </div>
-                    @else
-                        <div class="commentInputSection">
-                            <div class="commentInputSendButton login-button">ورود</div>
-                        </div>
-                    @endif
-                </div>
+{{--                            <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>--}}
+{{--                            <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>--}}
+{{--                        </div>--}}
+{{--                    @else--}}
+{{--                        <div class="commentInputSection">--}}
+{{--                            <div class="commentInputSendButton login-button">ورود</div>--}}
+{{--                        </div>--}}
+{{--                    @endif--}}
+{{--                </div>--}}
 
             </div>
 
+            @if($data['desc'] != '')
+                <div class="videoInfosVideoName" style="color: white; font-size: 25px; margin: 15px 0px;">
+                    {{$data['title']}}
+                    <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">
+                </div>
+
+                <div class="descriptionSection">
+                    <div class="headerWithLine">
+                        <div class="headerWithLineText">
+                            معرفی کلی
+                        </div>
+                        <div class="headerWithLineLine"></div>
+                    </div>
+                    <div class="descriptionSectionBody">
+                        {{$data['desc']}}
+                    </div>
+    {{--                <div class="moreBtn">بیشتر</div>--}}
+                </div>
+            @endif
+
             <div class="guestNotPcSection">
-                <div class="row" style="color:white; text-align: center">
-                    مهمانان برنامه
+                <div class="row">
+                    <div class="headerWithLine">
+                        <div class="headerWithLineText">
+                            مهمانان برنامه
+                        </div>
+                        <div class="headerWithLineLine"></div>
+                    </div>
                 </div>
                 <div class="guestPhoneRows">
                     @foreach($data['guest'] as $item)
@@ -540,54 +628,39 @@
                 </div>
             </div>
 
-            @if($data['desc'] != '')
-                <div class="descriptionSection">
-                    <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            معرفی کلی
-                        </div>
-                        <div class="headerWithLineLine"></div>
-                    </div>
-                    <div class="descriptionSectionBody">
-                        {{$data['desc']}}
-                    </div>
-    {{--                <div class="moreBtn">بیشتر</div>--}}
-                </div>
-            @endif
-
         </div>
 
-        <div class="container mainShowBase lestSideLiveVideo">
-            <div class="row" style="color:white; text-align: center">
-                مهمانان برنامه
-            </div>
-            @foreach($data['guest'] as $item)
-                <div class="row guestRow">
-                    <div class="guestSection">
-                        <div class="guestMainSection {{$item->text != null ? 'setMarginInGuestSection' : ''}}">
-                            <div class="col-md-12" style="display: flex; justify-content: center; padding: 0px">
-                                <div class="guestPicSection">
-                                    <img src="{{$item->pic}}" style="width: 100%;">
-                                </div>
-                            </div>
-                            <div class="col-md-12 guestName">
-                                {{$item->name}}
-                            </div>
-                            <div class="col-md-12 guestAction" >
-                                {{$item->action}}
-                            </div>
-                        </div>
-                        @if($item->text != null)
-                            <div class="guestSideSection setMarginInGuestSection">
-                                <div class="guestText">
-                                    {{$item->text}}
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
-        </div>
+{{--        <div class="container mainShowBase lestSideLiveVideo">--}}
+{{--            <div class="row" style="color:white; text-align: center">--}}
+{{--                مهمانان برنامه--}}
+{{--            </div>--}}
+{{--            @foreach($data['guest'] as $item)--}}
+{{--                <div class="row guestRow">--}}
+{{--                    <div class="guestSection">--}}
+{{--                        <div class="guestMainSection {{$item->text != null ? 'setMarginInGuestSection' : ''}}">--}}
+{{--                            <div class="col-md-12" style="display: flex; justify-content: center; padding: 0px">--}}
+{{--                                <div class="guestPicSection">--}}
+{{--                                    <img src="{{$item->pic}}" style="width: 100%;">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-12 guestName">--}}
+{{--                                {{$item->name}}--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-12 guestAction" >--}}
+{{--                                {{$item->action}}--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        @if($item->text != null)--}}
+{{--                            <div class="guestSideSection setMarginInGuestSection">--}}
+{{--                                <div class="guestText">--}}
+{{--                                    {{$item->text}}--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            @endforeach--}}
+{{--        </div>--}}
     </div>
 
 @endsection

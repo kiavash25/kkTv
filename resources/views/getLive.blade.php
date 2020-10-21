@@ -32,7 +32,7 @@
     $(document).ready(function () {
 
         var myPlayer = videojs('video', {autoplay: 'any'});
-	var url = '{{$url}}';
+        var url = '{{$url}}';
 
         myPlayer.src({
             src: 'https://yom.ir/vod/144p.m3u8',

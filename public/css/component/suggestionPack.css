@@ -49,7 +49,7 @@
     overflow: hidden;
 }
 .videoSugUserInfo{
-    margin: 10px 0px;
+    margin: 10px 0px 0px 0px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

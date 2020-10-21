@@ -17,18 +17,18 @@
     </div>
 
     <div class="headerTab hideOnPhone">
-        @if(true)
-            <a href="https://koochitatv.com/getLive/2" class="headerNavTitle">
+        @if($hasLive)
+{{--            <a href="https://koochitatv.com/getLive/2" class="headerNavTitle">--}}
+            <a href="{{route('streaming.live', ['room' => $hasLive])}}" class="headerNavTitle">
                 <img src="{{URL::asset('images/mainPics/anten.gif')}}" class="antenIcon1">
                 پخش زنده
             </a>
-        else
+        @else
             <div class="headerNavTitle">
                 <img src="{{URL::asset('images/mainPics/anten.png')}}" class="antenIcon1">
                 پخش زنده
             </div>
         @endif
-{{--        headerNavTitleActive--}}
         <div class="headerNavTitle " onclick="openCategoryMenu()">دسته بندی ها</div>
         <div class="headerNavTitle">فراخوان</div>
         <div class="headerNavTitle">همکاری با ما</div>

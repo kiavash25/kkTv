@@ -16,6 +16,7 @@ use App\models\VideoTagRelation;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Throwable;
 
 class MainController extends Controller
@@ -23,7 +24,11 @@ class MainController extends Controller
     public function indexStreaming()
     {
         $confirmContidition = ['state' => 1, 'confirm' => 1];
-        $lastVideos = Video::where($confirmContidition)->take(10)->orderByDesc('created_at')->get();
+        $lastVideos = Video::where($confirmContidition)
+                            ->take(10)
+                            ->orderByDesc('created_at')
+                            ->get();
+
         foreach ($lastVideos as $lvid)
             $lvid = $this->getVideoFullInfo($lvid, false);
 
@@ -155,6 +160,8 @@ class MainController extends Controller
         if (auth()->check())
             $uId = auth()->user()->id;
 
+        $video->isLink = true;
+
         if (($video->confirm == 1 && $video->state == 1 && $video->link != null) || ($video->userId == $uId)) {
 
             if (!\Cookie::has('video_' . $video->code)) {
@@ -162,7 +169,6 @@ class MainController extends Controller
                 $video->seen++;
                 $video->save();
             }
-            $video->video = ($video->link == null) ? \URL::asset('videos/' . $video->userId . '/' . $video->video) : $video->link;
             $video = $this->getVideoFullInfo($video, true);
 
             $userMoreVideo = Video::where('userId', $video->userId)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
@@ -180,6 +186,11 @@ class MainController extends Controller
                 $thumbnail = \URL::asset($thumbLoc . '/' . $video->thumbnail);
             else
                 $thumbnail = \URL::asset('images/mainPics/vodLobo.png');
+
+            if($video->userId == $uId && $video->link == null) {
+                $video->link = URL::asset('videos/' . $video->userId . '/' . $video->video);
+                $video->isLink = false;
+            }
 
             $localStorageData = ['title' => $video->title, 'pic' => $thumbnail , 'redirect' => route('video.show', ['code' => $video->code])];
 
@@ -625,6 +636,8 @@ class MainController extends Controller
             'title' => '',
             'desc' => '',
             'user' => '',
+            'chats' => [],
+            'uniqueUser' => 0,
             'userPic' => getUserPic(0),
             'like' => 0,
             'disLike' => 0,
@@ -646,17 +659,16 @@ class MainController extends Controller
                 $data['disLikeCount'] = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
                 $data['chats'] = LiveChat::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
-                $uniqueUser = LiveChat::where('videoId', $video->id)->groupBy('userId')->get();
+                $uniqueUser = LiveChat::where('videoId', $video->id)->get()->groupBy('userId');
                 $data['uniqueUser'] = count($uniqueUser);
-
                 $data['guest'] = LiveGuest::where('videoId', $video->id)->get();
                 foreach ($data['guest'] as $guest)
-                    $guest->pic = \URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
+                    $guest->pic = URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
             }
             else
                 $room = '';
         }
-        return view('streaming.streamingLive', compact(['room', 'data']));
+        return view('streamingLive', compact(['room', 'data']));
     }
 
     public function sendBroadcastMsg(Request $request)

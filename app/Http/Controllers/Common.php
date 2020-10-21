@@ -5,9 +5,9 @@ use App\models\DefaultPic;
 use App\models\Tags;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
 
 function getUserPic($id = 0){
-
     $user = User::find($id);
     if($user != null){
         if(strpos($user->picture, 'http') !== false)
@@ -15,19 +15,19 @@ function getUserPic($id = 0){
         else{
             if($user->uploadPhoto == 0){
                 $deffPic = DefaultPic::find($user->picture);
-
                 if($deffPic != null)
-                    $uPic = \URL::asset('images/defaultPic/' . $deffPic->name);
+                    $uPic = URL::asset('_images/defaultPic/' . $deffPic->name);
                 else
-                    $uPic = \URL::asset('images/blank.jpg');
+                    $uPic = URL::asset('_images/blank.jpg');
             }
             else
-                $uPic = \URL::asset('images/userProfile/' . $user->picture);
+                $uPic = URL::asset('userProfile/' . $user->picture);
         }
     }
     else
-        $uPic = \URL::asset('images/blank.jpg');
+        $uPic = URL::asset('images/blank.jpg');
 
+//    dd($uPic);
     return $uPic;
 }
 

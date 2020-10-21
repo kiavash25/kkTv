@@ -371,10 +371,11 @@
 
         player.qualityPickerPlugin();
 
-        player.src({
-            src: '{{$video->link}}',
-            type: 'application/x-mpegURL'
-        });
+        @if($video->isLink)
+            player.src({ src: '{{$video->link}}', type: 'application/x-mpegURL' });
+        @else
+            player.src({ src: '{{$video->link}}'});
+        @endif
 
     </script>
 
