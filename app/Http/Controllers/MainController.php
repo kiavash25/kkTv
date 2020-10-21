@@ -146,7 +146,8 @@ class MainController extends Controller
 
     public function showVideo(Request $request, $code)
     {
-        $video = Video::where('code', $code)->first();
+        $video = Video::whereCode($code)->first();
+
         if ($video == null)
             return redirect(route('index'));
 

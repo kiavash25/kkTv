@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamingController@updateLink"]);
 
+Route::get("liveTest", function () {
+    return view('stream');
+});
+
+Route::get("getLive/{code}", function ($code) {
+    return view('getLive', ['url' => $code]);
+});
+
+Route::get("pyGetLive/{code}", function ($code) {
+    return view('getLive2', ['url' => $code]);
+});
 
 Route::middleware(['web', 'vodShareData'])->group(function (){
 

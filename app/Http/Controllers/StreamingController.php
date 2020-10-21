@@ -114,13 +114,14 @@ class StreamingController extends Controller
 
 public function run() {
 
-echo "\n" . "called" . "\n";
+echo "called" . "\n";
 $servers = DB::select("select * from servers order by rand()");
 
 if($servers == null || count($servers) == 0)
         return;
 
-$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
+$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->skip(0)->take(2)->get();
+//$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
 $serverIdx = 0;
 $last_fetches = [];
 
@@ -129,8 +130,37 @@ for($i = 0; $i < count($servers); $i++)
 
 for ($i = 0; $i < count($videos); $i++) {
         $videos[$i]->status = 0;
+	/*
+	$filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
+	$res = shell_exec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 " . $filepath);
+	if(strpos($res, 'x') !== false && strlen($res) < 10) {
+		$res = str_replace("\n", "", $res);
+		$tmp = explode("x", $res);
+		$res = $tmp[1];
+		$videos[$i]->first_res = 1;
+
+		if($res >= 240)
+			$videos[$i]->second_res = 1;
+
+		if($res >= 360)
+			$videos[$i]->third_res = 1;
+
+		if($res >= 480)
+			$videos[$i]->forth_res = 1;
+
+		if($res >= 720)
+			$videos[$i]->fifth_res = 1;
+
+		if($res >= 1080)
+			$videos[$i]->sixth_res = 1;
+
+	        $videos[$i]->save();
+	}
+	*/
         $videos[$i]->save();
 }
+
+//dd("finish");
 
 for ($i = 0; $i < count($videos); $i++) {
 
@@ -142,6 +172,9 @@ if(time() - $last_fetches[$serverIdx] < 600)
 
 $serverIP = $servers[$serverIdx]->ip;
 $filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
+
+if(!file_exists($filepath))
+	dd("file not found " . $filepath);
 
 $cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
 
@@ -157,7 +190,7 @@ $data += ["fifth_res" => ($videos[$i]->fifth_res) ? "ok" : "nok"];
 $data += ["sixth_res" => ($videos[$i]->sixth_res) ? "ok" : "nok"];
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 curl_setopt($ch, CURLOPT_URL, 'http://' . $serverIP . '/uploadFile.php');
 curl_setopt($ch, CURLOPT_POST, 1);
@@ -166,7 +199,9 @@ $data2 = curl_exec($ch);
 
 if ($data2 === false)
     echo curl_error($ch);
-
+else
+	echo "sent \n";
+//echo $data2;
 curl_close($ch);
 $last_fetches[$serverIdx] = time();
 $serverIdx++;
@@ -208,11 +243,11 @@ public function updateLink() {
                         return;
                 }
                 $server = $server[0];
-                try {
-                if (file_exists("/var/www/" . $video->video))
-                        unlink("/var/www/" . $video->video);
-                }
-                catch(\Exception $x) {}
+                //try {
+                //if (file_exists("/var/www/" . $video->video))
+                //        unlink("/var/www/" . $video->video);
+                //}
+                //catch(\Exception $x) {}
 
                 $video->link = $newLink;
                 $video->save();

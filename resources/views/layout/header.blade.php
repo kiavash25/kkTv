@@ -17,12 +17,12 @@
     </div>
 
     <div class="headerTab hideOnPhone">
-        @if($hasLive !== false)
-            <a href="{{route('streaming.live', ['room' => $hasLive] )}}" class="headerNavTitle">
+        @if(true)
+            <a href="https://koochitatv.com/getLive/2" class="headerNavTitle">
                 <img src="{{URL::asset('images/mainPics/anten.gif')}}" class="antenIcon1">
                 پخش زنده
             </a>
-        @else
+        else
             <div class="headerNavTitle">
                 <img src="{{URL::asset('images/mainPics/anten.png')}}" class="antenIcon1">
                 پخش زنده
