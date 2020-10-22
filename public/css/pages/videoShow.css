@@ -227,13 +227,14 @@
 }
 
 .toolSection{
+    color: white;
     width: 100%;
     background: #232323;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 0px;
-    border-radius: 5px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .fromThisPerson  {
@@ -323,10 +324,12 @@
     cursor: context-menu;
 }
 .toolSectionInfosTab{
+    font-size: 25px;
     margin: 0px 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 .toolSectionInfosTabNumber{
 
@@ -507,17 +510,6 @@
     }
     .videoInfos{
         padding: 10px 10px;
-    }
-    .toolSection{
-        justify-content: center;
-        flex-direction: column-reverse;
-    }
-    .toolSectionButtons{
-        margin: 5px 0px;
-        padding-top: 10px;
-        border-top: solid white;
-        width: 92%;
-        justify-content: space-evenly;
     }
     .toolSectionButtonsCircle{
         /*margin: 0px 15px;*/

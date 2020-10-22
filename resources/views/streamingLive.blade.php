@@ -12,55 +12,6 @@
 
 
     <style>
-        /*video{*/
-        /*    width: 100%;*/
-        /*}*/
-
-        .vjs-control-bar{
-            direction: ltr;
-        }
-        .liveComments {
-            background: white;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 50px;
-            margin-top: 20px;
-        }
-        .liveComments .commentInputSection {
-            align-items: center;
-            padding: 5px;
-        }
-
-        .liveComments .userPicDiv {
-            width: 30px;
-            height: 30px;
-        }
-
-        .liveComments .commentInput {
-            padding: 5px;
-            font-size: 14px;
-            margin-right:5px;
-            overflow: hidden;
-        }
-        .commentInput{
-            width: 98%;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        .liveComments .commentInputSendButton {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 5px;
-            border-radius: 5px;
-            margin-right: 5px;
-            cursor: pointer;
-            text-align: center;
-            /* background-color: #232323; */
-            /* color: white; */
-            border-radius: 10px;
-            font-size: 17px;
-        }
 
         #videoThisVideo{
             display: flex;
@@ -74,211 +25,12 @@
             width: 49%;
         }
 
-        .video_1-dimensions {
-            width: 100%;
-            height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .mainDivStream{
+            width: 90%;
         }
-
-        .video-js .vjs-big-play-button {
-            position: relative;
-        }
-
-        .lestSideLiveVideo{
-            width: auto;
-            margin-right: 5px;
-        }
-        .guestRow{
-            color: white;
-            width: 150px !important;
-            text-align: center;
-            margin: 15px 0px !important;
-            font-size: 14px;
-            border-bottom: solid 1px red;
-            display: flex;
-            position: relative;
-            height: 150px;
-            transition: .3s;
-        }
-        .guestPicSection{
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            overflow: hidden;
-        }
-        .guestAction{
-            padding: 0px;
-            font-size: 12px;
-            color: #0076a3;
-        }
-        .guestMainSection{
-            width: 100%;
-        }
-        .guestSideSection{
-            transition: .3s;
-            width: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            text-align: justify;
-        }
-        .guestSection{
-            position: absolute;
-            /*left: 0;*/
-            right: 0;
-            background-color: #3a3a3a;
-            border-radius: 20px 0px 0px 20px;
-            display: flex;
-            z-index: 9;
-        }
-        .guestName{
-            padding: 0px;
-            vertical-align: middle;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 150px;
-        }
-        .guestText{
-            display: none;
-        }
-        .guestSection:hover .setMarginInGuestSection{
-            margin: 10px 0px;
-            width: 150px;
-        }
-        .guestSection:hover .guestText{
-            display: block;
-        }
-        .guestSection:hover .guestSideSection{
-            width: 300px;
-            border: solid red 2px;
-            padding: 8px;
-            margin-left: 10px;
-        }
-        .guestSection:hover .guestName{
-            display: block;
-        }
-        .guestSection:hover .guestAction{
-            display: block;
-        }
-        .guestNotPcSection{
-            display: none;
-        }
-        .guestPhoneRows{
-            display: flex;
-            justify-content: space-evenly;
-            flex-wrap: wrap;
-        }
-        .descriptionSection{
-            width: 100% !important;
-        }
-        .headerWithLine{
-            margin-top: 30px;
-        }
-
-        /*@media (max-width: 1300px) {*/
-        /*    .guestRow{*/
-        /*        width: 75px !important;*/
-        /*        height: 90px;*/
-        /*    }*/
-        /*    .guestPicSection{*/
-        /*        width: 75px;*/
-        /*        height: 75px;*/
-        /*    }*/
-        /*    .guestName{*/
-        /*        display: none;*/
-        /*        font-size: 10px;*/
-        /*    }*/
-        /*    .guestAction{*/
-        /*        font-size: 9px;*/
-        /*        display: none;*/
-        /*    }*/
-        /*    .guestText{*/
-        /*        font-size: 13px;*/
-        /*    }*/
-        /*    .guestHeader{*/
-        /*        font-size: 11px;*/
-        /*    }*/
-        /*    .guestRow:hover{*/
-        /*        height: 110px !important;*/
-        /*    }*/
-        /*}*/
-
-        @media (max-width: 1300px){
-            .lestSideLiveVideo{
-                display: none;
-            }
-            .mainDivStream > div:first-child{
-                width: 40%;
-            }
-            .guestRow{
-                width: 150px !important;
-                height: 150px;
-            }
-            .guestPicSection{
-                width: 100px;
-                height: 100px;
-            }
-            .guestName{
-                font-size: 14px;
-                display: block;
-            }
-            .guestAction{
-                font-size: 12px;
-                display: block;
-            }
-            .guestSection{
-                flex-direction: column;
-                justify-content: center;
-                align-items: flex-end;
-                width: 150px;
-                z-index: 9;
-            }
-            .guestSection:hover .guestSideSection{
-                background-color: #3a3a3a;
-            }
-            .guestSection:hover{
-                z-index: 10;
-            }
-        }
-
-        @media (max-width: 991px){
-            .guestNotPcSection{
-                display: flex;
-                flex-direction: column;
+        @media (max-width: 991px) {
+            .mainDivStream {
                 width: 100%;
-            }
-            .hideOnSmall{
-                display: none;
-            }
-            .guestRow{
-                border-bottom: none;
-            }
-            .guestPicSection{
-                border: solid 1px red;
-                margin-bottom: 10px;
-            }
-            .guestName{
-                font-weight: bold;
-            }
-            .guestAction{
-                font-size: 10px;
-                margin-top: 3px;
-            }
-        }
-
-        @media (max-width: 767px){
-
-            .mainDivStream{
-                width: 100%;
-            }
-            .mainShowBase{
-                width: calc(100% - 10px);
-            }
-            .guestSection:hover .guestSideSection{
-                width: 150px;
             }
         }
     </style>
@@ -379,137 +131,120 @@
         </div>
 
         <div class="container mainShowBase">
-            <div class="showVideo">
-                <div class="videoContainer">
-                    @if($data['haveVideo'] == true)
-                        <video id="video_1" class="video-js playads" controls style="width: 100%; direction: ltr" data-setup='{"fluid": true}'></video>
+            <div class="darkShadowBox" style="border-radius: 5px;">
+                <div class="showVideo">
+                    <div class="videoContainer">
+                        @if($data['haveVideo'] == true)
+                            <video id="video_1" class="video-js playads" controls style="width: 100%; direction: ltr" data-setup='{"fluid": true}'></video>
 
-                        <script>
-                            var myPlayer = videojs('video_1', {autoplay: 'any'});
-                            myPlayer.src({
-                                {{--src: 'https://streaming.koochita.com/hls/{{$room}}.m3u8',--}}
-                                src: 'https://yom.ir/vod/144p.m3u8',
-                                type: 'application/x-mpegURL',
-                                withCredentials: false
-                            });
-                        </script>
-                    @else
-                        <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" style="width: 100%">
-                    @endif
-                    <div class="liveCommentsOnFS display-none">
+                            <script>
+                                var myPlayer = videojs('video_1', {autoplay: 'any'});
+                                myPlayer.src({
+                                    {{--src: 'https://streaming.koochita.com/hls/{{$room}}.m3u8',--}}
+                                    src: 'https://yom.ir/vod/144p.m3u8',
+                                    type: 'application/x-mpegURL',
+                                    withCredentials: false
+                                });
+                            </script>
+                        @else
+                            <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" style="width: 100%">
+                        @endif
+                        <div class="liveCommentsOnFS display-none">
 
-                        <div class="videoInfos">
-                            <div class="videoInfosVideoName">
-                                NAME
-                                <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">
-                            </div>
-                            <div class="row mainUserPicSection">
-                                <div class="userPicDiv">
-                                    <img src="{{URL::asset('_images/nopic/blank.jpg')}}" alt="koochita">
+                            <div class="videoInfos">
+                                <div class="videoInfosVideoName">
+                                    NAME
+                                    <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">
                                 </div>
-                                <div class="mainUserInfos">
-                                    <div class="mainUseruserName">
-                                        koochita
-                                    </div>
-                                    <div class="videoUploadTime">
-                                        هم اکنون
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="liveCommentsToggleBar" onclick="liveCMToggle(this)">
-                            <div class="textToggle">نمایش پنل گفتگو</div>
-                            <div class="iconToggle glyphicon glyphicon-chevron-down"></div>
-                        </div>
-
-                        <div class="liveComments display-none">
-                            <div class="liveCommentsFirstLine">
-                                <div class="liveCommentsTitle">
-                                    در گفتگو شرکت کنید
-                                </div>
-                                <div class="liveCommentStatistics">
-                                    <div class="liveCommentsQuantity liveCommentStatisticsDivs">
-                                        <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>
-                                        <div class="liveCommentsQuantityIcon"></div>
-                                    </div>
-                                    <div class="liveCommentWriters liveCommentStatisticsDivs">
-                                        <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>
-                                        <div class="liveCommentsWriterIcon "></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="liveCommentsMainDiv"></div>
-
-                            @if(auth()->check())
-                                <div class="commentInputSection">
+                                <div class="row mainUserPicSection">
                                     <div class="userPicDiv">
-                                        <img src="{{$userPicture}}" alt="koochita">
+                                        <img src="{{URL::asset('_images/nopic/blank.jpg')}}" alt="koochita">
                                     </div>
-                                    <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>
-                                    <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>
+                                    <div class="mainUserInfos">
+                                        <div class="mainUseruserName">
+                                            koochita
+                                        </div>
+                                        <div class="videoUploadTime">
+                                            هم اکنون
+                                        </div>
+                                    </div>
                                 </div>
-                            @else
-                                <div class="commentInputSection">
-                                    <div class="commentInputSendButton login-button">ورود</div>
+                            </div>
+
+                            <div class="liveCommentsToggleBar" onclick="liveCMToggle(this)">
+                                <div class="textToggle">نمایش پنل گفتگو</div>
+                                <div class="iconToggle glyphicon glyphicon-chevron-down"></div>
+                            </div>
+
+                            <div class="liveComments display-none">
+                                <div class="liveCommentsFirstLine">
+                                    <div class="liveCommentsTitle">
+                                        در گفتگو شرکت کنید
+                                    </div>
+                                    <div class="liveCommentStatistics">
+                                        <div class="liveCommentsQuantity liveCommentStatisticsDivs">
+                                            <div class="liveCommentsNums chatCount">{{count($data['chats'])}}</div>
+                                            <div class="liveCommentsQuantityIcon"></div>
+                                        </div>
+                                        <div class="liveCommentWriters liveCommentStatisticsDivs">
+                                            <div class="liveCommentsNums uniqueUserChat">{{$data['uniqueUser']}}</div>
+                                            <div class="liveCommentsWriterIcon "></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endif
+
+                                <div class="liveCommentsMainDiv"></div>
+
+                                @if(auth()->check())
+                                    <div class="commentInputSection">
+                                        <div class="userPicDiv">
+                                            <img src="{{$userPicture}}" alt="koochita">
+                                        </div>
+                                        <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>
+                                        <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>
+                                    </div>
+                                @else
+                                    <div class="commentInputSection">
+                                        <div class="commentInputSendButton login-button">ورود</div>
+                                    </div>
+                                @endif
+                            </div>
+
                         </div>
+                    </div>
+                </div>
+                <script>
+                    function liveCMToggle(element) {
+                        $(element).next().toggle()
+                    }
+                </script>
 
+                <table style="width: 100%;" id="rooms-list"></table>
+
+                <div class="toolSection">
+                    <div class="toolSectionButtons">
+                        <div class="iconButton LikeIconEmptyAfter likeVideoButton" onclick="setFeedback(1)">
+                            0
+                        </div>
+                        <div class="iconButton DisLikeIconEmptyAfter disLikeVideoButton " onclick="setFeedback(-1)">
+                            0
+                        </div>
+                        <div class="iconButton CommentIconAfter">
+                            0
+                        </div>
+                    </div>
+                    <div class="toolSectionInfos">
+                        <div class="iconButton shareIcon share_pic">
+                            @include('component.shareBox')
+                        </div>
+                        <div class="toolSectionInfosTab">
+                            <span class="toolSectionInfosTabNumber">0</span>
+                            <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
+                        </div>
                     </div>
                 </div>
             </div>
-            <script>
-                function liveCMToggle(element) {
-                    $(element).next().toggle()
-                }
-            </script>
 
-            <table style="width: 100%;" id="rooms-list"></table>
-
-            <div class="toolSection">
-
-                <div class="toolSectionButtons">
-                    <div class="toolSectionButtonsCircle" onclick="feedBack(-1)">
-                        <span class="DisLikeIcon"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle" onclick="feedBack(1)">
-                        <span class="LikeIcon"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="CommentIcon CommentIconSett"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle">
-                        <span class="ShareIcon ShareIconSett"></span>
-                    </div>
-{{--                    <div class="toolSectionButtonsCircle">--}}
-{{--                        <span class="HeartIcon HeartIconSett"></span>--}}
-{{--                    </div>--}}
-{{--                    <div class="toolSectionButtonsCircle">--}}
-{{--                        <span class="BookMarkIcon BookMarkIconSett"></span>--}}
-{{--                    </div>--}}
-                </div>
-
-                <div class="toolSectionInfos">
-{{--                    <div class="toolSectionInfosTab">--}}
-{{--                        <span class="CommentIcon commentInfoTab"></span>--}}
-{{--                        <span class="toolSectionInfosTabNumber">100,000</span>--}}
-{{--                    </div>--}}
-                    <div class="toolSectionInfosTab">
-                        <span class="LikeIcon likeInfoTab"></span>
-                        <span id="liveLikeCount" class="toolSectionInfosTabNumber">{{$data['likeCount']}}</span>
-                    </div>
-                    <div class="toolSectionInfosTab">
-                        <span class="DisLikeIcon disLikeInfoTab"></span>
-                        <span id="liveDisLikeCount" class="toolSectionInfosTabNumber">{{$data['disLikeCount']}}</span>
-                    </div>
-                    <div class="toolSectionInfosTab">
-                        <span class="toolSectionInfosTabNumber">100</span>
-                        <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
-                    </div>
-                </div>
-            </div>
 
             <div class="liveInfosAndComments hideOnWide">
 

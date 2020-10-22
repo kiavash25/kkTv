@@ -1,7 +1,7 @@
 
 <link rel='stylesheet' type='text/css' media='screen, print' href='{{URL::asset('css/component/shareBox.css')}}'/>
 
-<div id="share_box" class="hidden" style="width: 200px">
+<div id="share_box" class="hidden shareBoxClass afterArrow" style="width: 200px">
     <a target="_blank" class="link mg-tp-5" rel="nofollow" href="https://www.facebook.com/sharer/sharer.php?u={{Request::url()}}">
         <img src="{{URL::asset("images/mainPics/shareBoxImg/facebook.png")}}" class="display-inline-block float-right" style="border-radius: 50%; margin-left: 5px;">
         <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه در فیسبوک</div>
@@ -70,9 +70,11 @@
         $(elmt).children('div.first').toggleClass('sharePageIconFill');
     }
 
-    $('.share_pic').click(function () {
-        $('#share_box').toggleClass('hidden');
-        openShareBox = !openShareBox;
+    $('.share_pic').on('click', e => {
+        setTimeout(() => {
+            $('#share_box').toggleClass('hidden');
+            openShareBox = !openShareBox;
+        }, 100);
     });
 
 </script>

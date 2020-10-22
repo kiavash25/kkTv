@@ -20,6 +20,10 @@
 
 
     <style>
+        .videoShowPageBody{
+            display: flex;
+            width: 90%;
+        }
         .videoPlaces{
             display: flex;
             justify-content: space-around;
@@ -55,13 +59,16 @@
                 display: flex;
                 flex-direction: column;
             }
+            .videoShowPageBody{
+                width: 100%;
+            }
         }
     </style>
 @endsection
 
 @section('body')
 
-    <div style="width: 99%; display: flex">
+    <div class="videoShowPageBody">
         <div class="container mainShowBase hideOnTablet" style="width: 24%">
 
             <div class="videoInfos">
@@ -171,48 +178,30 @@
 
         </div>
         <div class="container mainShowBase">
-            <div class="showVideo">
-                <video id="video_1" class="playads embed-responsive-item video-js vjs-default-skin" controls style="width: 100%; direction: ltr;" data-setup='{"fluid": true, "preload": "none", "auto-play": false }'></video>
-            </div>
-
-            <div class="toolSection">
-                <div class="toolSectionButtons">
-                    <div class="toolSectionButtonsCircle" onclick="setFeedback('like', -1)">
-                        <span id="videoDisLikeIcon" class="DisLikeIcon {{$video->uLike == -1 ? 'fullDisLikeColor' : ''}}"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle" onclick="setFeedback('like', 1)">
-                        <span id="videoLikeIcon" class="LikeIcon {{$video->uLike == 1 ? 'fullLikeColor' : ''}}"></span>
-                    </div>
-                    <div class="toolSectionButtonsCircle" onclick="goToComments()">
-                        <span class="CommentIcon CommentIconSett"></span>
-                    </div>
-                    <div id="share_pic" class="toolSectionButtonsCircle share_pic">
-                        <span class="ShareIcon ShareIconSett"></span>
-                        @include('component.shareBox')
-                    </div>
-{{--                    <div class="toolSectionButtonsCircle">--}}
-{{--                        <span class="HeartIcon HeartIconSett"></span>--}}
-{{--                    </div>--}}
-{{--                    <div class="toolSectionButtonsCircle">--}}
-{{--                        <span class="BookMarkIcon BookMarkIconSett"></span>--}}
-{{--                    </div>--}}
+            <div class="darkShadowBox" style="border-radius: 5px;">
+                <div class="showVideo">
+                    <video id="video_1" class="playads embed-responsive-item video-js vjs-default-skin" controls style="width: 100%; direction: ltr;" data-setup='{"fluid": true, "preload": "none", "auto-play": false }'></video>
                 </div>
-                <div class="toolSectionInfos">
-                    <div class="toolSectionInfosTab">
-                        <span class="CommentIcon commentInfoTab"></span>
-                        <span id="commentCount" class="toolSectionInfosTabNumber">{{$video->commentsCount}}</span>
+                <div class="toolSection">
+                    <div class="toolSectionButtons">
+                        <div class="iconButton LikeIconEmptyAfter likeVideoButton {{$video->uLike == 1 ? 'fill' : ''}}" onclick="setFeedback(1)">
+                            {{$video->like}}
+                        </div>
+                        <div class="iconButton DisLikeIconEmptyAfter disLikeVideoButton {{$video->uLike == -1 ? 'fill' : ''}}" onclick="setFeedback(-1)">
+                            {{$video->disLike}}
+                        </div>
+                        <div class="iconButton CommentIconAfter">
+                            {{$video->commentsCount}}
+                        </div>
                     </div>
-                    <div class="toolSectionInfosTab">
-                        <span class="LikeIcon likeInfoTab"></span>
-                        <span id="likeCount" class="toolSectionInfosTabNumber">{{$video->like}}</span>
-                    </div>
-                    <div class="toolSectionInfosTab">
-                        <span class="DisLikeIcon disLikeInfoTab"></span>
-                        <span id="disLikeCount" class="toolSectionInfosTabNumber">{{$video->disLike}}</span>
-                    </div>
-                    <div class="toolSectionInfosTab">
-                        <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
-                        <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
+                    <div class="toolSectionInfos">
+                        <div class="iconButton shareIcon share_pic">
+                            @include('component.shareBox')
+                        </div>
+                        <div class="toolSectionInfosTab">
+                            <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
+                            <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -363,8 +352,8 @@
 
 	<script src="https://vjs.zencdn.net/5.19.2/video.js"></script>
 	<script src="{{URL::asset('js/video/hls.min.js?v=v0.9.1')}}"></script>
-        <script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
-        <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
+    <script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
+    <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
 
     <script>
         var player = videojs('video_1');
@@ -469,7 +458,7 @@
                 },
             });
 
-        function setFeedback(_kind, _value){
+        function setFeedback(_value){
             if (!hasLogin) {
                 showLoginPrompt();
                 return;
@@ -488,20 +477,18 @@
                     like: _value
                 },
                 success: function(response){
-                    response = JSON.parse(response);
-                    if(response['status'] == 'ok'){
+                    if(response.status == 'ok') {
+                        $('.likeVideoButton').removeClass('fill');
+                        $('.disLikeVideoButton').removeClass('fill');
+
+                        if (_value == 1)
+                            $('.likeVideoButton').toggleClass('fill');
+                        else if (_value == -1)
+                            $('.disLikeVideoButton').toggleClass('fill');
+
+                        $('.likeVideoButton').text(response.like);
+                        $('.disLikeVideoButton').text(response.disLike);
                         uLike = _value;
-
-                        $('#likeCount').text(response.like);
-                        $('#disLikeCount').text(response.disLike);
-
-                        $('#videoDisLikeIcon').removeClass('fullDisLikeColor');
-                        $('#videoLikeIcon').removeClass('fullLikeColor');
-
-                        if(_value == 1)
-                            $('#videoLikeIcon').addClass('fullLikeColor');
-                        else if(_value == -1)
-                            $('#videoDisLikeIcon').addClass('fullDisLikeColor');
                     }
                 }
             })
@@ -529,15 +516,6 @@
                 notShowPlace.css('display', 'none');
                 $(_element).text('بیشتر');
             }
-            // if($(_element).next().css('display') == 'none') {
-            //     $(_element).next().css('display', 'flex');
-            //     $(_element).text('کمتر');
-            // }
-            // else {
-            //     $(_element).next().css('display', 'none');
-            //     $(_element).text('بیشتر');
-            // }
         }
-        // resizeFitImg('resizeImgClass');
     </script>
 @endsection

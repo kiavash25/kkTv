@@ -395,8 +395,9 @@ class MainController extends Controller
             if ($video != null) {
                 if ($request->kind == 'likeVideo') {
                     $feedback = VideoFeedback::where('videoId', $request->videoId)
-                        ->where('userId', $user->id)
-                        ->whereNotNull('like')->first();
+                                                ->where('userId', $user->id)
+                                                ->whereNotNull('like')
+                                                ->first();
                     if ($feedback != null && $request->like == 0)
                         $feedback->delete();
                     elseif ($feedback == null) {
@@ -436,24 +437,19 @@ class MainController extends Controller
                     $likeCount = VideoFeedback::where('videoId', $request->videoId)->where('commentId', $request->commentId)->where('like', 1)->count();
                     $disLikeCount = VideoFeedback::where('videoId', $request->videoId)->where('commentId', $request->commentId)->where('like', -1)->count();
 
-                    echo json_encode(['status' => 'ok', 'like' => $likeCount, 'disLike' => $disLikeCount]);
-                    return;
+                    return response()->json(['status' => 'ok', 'like' => $likeCount, 'disLike' => $disLikeCount]);
                 }
                 else
-                    echo json_encode(['status' => 'nok2']);
+                    return response()->json(['status' => 'nok2']);
 
                 $fullInfo = $this->getVideoFullInfo($video, false);
-                echo json_encode(['status' => 'ok', 'like' => $fullInfo->like, 'disLike' => $fullInfo->disLike, 'commentsCount' => $fullInfo->commentsCount]);
-
+                return response()->json(['status' => 'ok', 'like' => $fullInfo->like, 'disLike' => $fullInfo->disLike, 'commentsCount' => $fullInfo->commentsCount]);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
     private function getVideoFullInfo($video, $main = false)

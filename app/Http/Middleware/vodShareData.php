@@ -45,7 +45,9 @@ class vodShareData
         else
             $hasLive = false;
 
-        View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'hasLive' => $hasLive]);
+        $fileVersion = 1;
+
+        View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 
         return $next($request);
     }

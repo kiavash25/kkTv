@@ -40,9 +40,10 @@
 
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/default/bootstrap.min.css')}}' />
     <link rel="stylesheet" href="{{URL::asset('css/default/swiper.css')}}">
-    <link rel='stylesheet' type='text/css' href='{{ asset('css/layout/common.css') }}' />
+    <link rel='stylesheet' type='text/css' href='{{ asset('css/layout/common.css?v='.$fileVersion) }}' />
     <link rel="stylesheet" href="{{ asset('css/default/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/layout/icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout/icons.css?v='.$fileVersion) }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css?v='.$fileVersion) }}">
 
 
     <script src="{{URL::asset('js/default/jquery-3.4.1.min.js')}}"></script>

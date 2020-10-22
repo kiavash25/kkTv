@@ -9,7 +9,6 @@
         color: #0076a3;
     }
     .commentSectionBody{
-        background: white;
         width: 100%;
         border-radius: 10px;
         padding: 15px;
@@ -224,7 +223,7 @@
 </style>
 
 
-<div id="commentSectionBody" class="commentSectionBody">
+<div id="commentSectionBody" class="commentSectionBody darkShadowBox">
     <div class="commentInputSection">
         <div class="userPicDiv">
             <img id="userPictureCommenting" src="" alt="koochita">

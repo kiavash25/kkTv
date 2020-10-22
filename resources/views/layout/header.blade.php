@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{URL::asset('css/layout/vodHeader.css')}}">
+<link rel="stylesheet" href="{{URL::asset('css/layout/vodHeader.css?v='.$fileVersion)}}">
 
 <?php
     if(auth()->check())

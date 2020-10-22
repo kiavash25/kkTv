@@ -22,11 +22,11 @@
     padding: 5px 20px;
     border-radius: 30px;
     cursor: pointer;
-    font-size: 20px;
     font-weight: 400;
-    line-height: 35px;
     z-index: 9;
     transition: .1s;
+    font-size: 14px;
+    line-height: 25px;
 }
 .loginButton:hover{
     color: red;
@@ -56,12 +56,12 @@
 }
 .headerNavTitle{
     cursor: pointer;
-    margin: 0px 15px;
-    font-size: 20px;
     padding-bottom: 10px;
     border-bottom: solid 3px red;
     transition: .2s;
-    line-height: 35px;
+    font-size: 15px;
+    line-height: 25px;
+    margin: 0px 10px;
 }
 .headerNavTitle:hover{
     border-color: #ffcfcf;
@@ -74,7 +74,7 @@
 nav{
     width: 100%;
     background: red;
-    height: 75px;
+    height: 60px;
     display: flex;
     padding: 0px 25px;
     position: relative;
@@ -136,8 +136,8 @@ nav{
 .bookMarkHeaderIcon{
     margin-left: 10px;
     padding: 0;
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -180,7 +180,7 @@ nav{
     font-weight: bold;
 }
 .antenIcon1{
-    width: 25px;
+    width: 15px;
 }
 .headerRightSection{
     display: none;
@@ -217,33 +217,13 @@ nav{
     z-index: 9;
     transition: .3s;
     border-radius: 0px 0px 0px 20px;
-    top: 75px;
+    top: 60px;
     overflow: hidden;
     flex-direction: column;
     color: #ffcfcf;
 }
 .change.headerRightTabs{
     width: 210px;
-}
-
-
-@media (max-width: 1500px) {
-    .headerNavTitle{
-        font-size: 15px;
-        line-height: 25px;
-        margin: 0px 10px;
-    }
-    .loginButton{
-        font-size: 14px;
-        line-height: 25px;
-    }
-    .bookMarkHeaderIcon{
-        height: 40px;
-        width: 40px;
-    }
-    .antenIcon1{
-        width: 15px;
-    }
 }
 
 @media (max-width: 1015px){
@@ -266,13 +246,12 @@ nav{
         flex-direction: column;
         position: absolute;
         right: 25px;
-        bottom: 15px;
         border-radius: 50%;
         width: 50px;
-        height: 45px;
         align-items: center;
         justify-content: center;
         transition: .3s;
+        height: 100%;
     }
     .headerRightTabs{
         display: flex;

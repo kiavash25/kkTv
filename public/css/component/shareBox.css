@@ -1,4 +1,4 @@
-#share_box, #share_box_mobile{
+.shareBoxClass, #share_box_mobile{
     position: absolute;
     right: 0;
     bottom: -190px;
@@ -17,12 +17,9 @@
     bottom: -240px;
 }
 
-#share_box::before, #share_box_mobile::before {
-    content: '';
+.shareBoxClass:before, .shareBoxClass:after,  #share_box_mobile::before {
     position: absolute;
-    left: 180px;
     top: -10px;
-    margin-left: -10px;
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
@@ -34,8 +31,18 @@
     -webkit-filter: drop-shadow(0 0 0 #999);
     filter: drop-shadow(0 0 0 #999);
 }
+.shareBoxClass.beforeArrow:before{
+    content: '';
+    left: 180px;
+    margin-left: -10px;
+}
+.shareBoxClass.afterArrow:after{
+    content: '';
+    right: 180px;
+    margin-right: -10px;
+}
 
-#share_box > a, #share_box_mobile > a {
+.shareBoxClass > a, #share_box_mobile > a {
     cursor: pointer;
     float: right;
     display: flex;
@@ -43,9 +50,10 @@
     width: 100%;
     padding: 0 5px;
     margin-top: 3px;
+    align-items: center;
 }
 
-#share_box > a > div {
+.shareBoxClass > a > div {
     color: white;
 }
 
@@ -61,12 +69,12 @@
     color: #0076a3;
 }
 
-#share_box > a:hover, #share_box_mobile > a:hover {
+.shareBoxClass > a:hover, #share_box_mobile > a:hover {
     background-color: #3a3a3a;
     border-radius: 20px;
 }
 
-#share_box > span, #share_box_mobile > span {
+.shareBoxClass > span, #share_box_mobile > span {
     cursor: pointer;
     float: right;
     margin-left: 5px;
