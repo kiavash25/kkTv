@@ -30,7 +30,6 @@ Route::get("pyGetLive/{code}", function ($code) {
 
 Route::middleware(['web', 'vodShareData'])->group(function (){
 
-
     Route::get('/', 'MainController@indexStreaming')->name('index');
 
     Route::post('video/search', 'MainController@search')->name('video.search');
@@ -43,8 +42,11 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
 
+    Route::get('streaming/getChats', 'StreamingController@updateLiveVideoChat')->name('streaming.getChats');
 
     Route::middleware(['auth'])->group(function () {
+        Route::post('streaming/storeLiveChat', 'StreamingController@storeLiveChat')->name('streaming.storeLiveChat');
+
         Route::get('video/uploadPage', 'MainController@uploadVideoPage')->name('video.uploadPage');
 
         Route::post('video/storeVideo', 'MainController@storeVideo')->name('video.storeVideo');
@@ -59,46 +61,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
         Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
     });
-
-
-//authenticated controller
-//    Route::middleware(['throttle:30'])->group(function(){
-//
-//        Route::get('login', 'UserLoginController@login');
-//
-//        Route::post('login', array('as' => 'login', 'uses' => 'UserLoginController@mainDoLogin'));
-//
-//        Route::post('checkLogin', array('as' => 'checkLogin', 'uses' => 'UserLoginController@checkLogin'));
-//
-//        Route::post('login2', array('as' => 'login2', 'uses' => 'UserLoginController@doLogin'));
-//
-//        Route::post('checkEmail', array('as' => 'checkEmail', 'uses' => 'UserLoginController@checkEmail'));
-//
-//        Route::post('checkUserName', array('as' => 'checkUserName', 'uses' => 'UserLoginController@checkUserName'));
-//
-//        Route::post('registerAndLogin', array('as' => 'registerAndLogin', 'uses' => 'UserLoginController@registerAndLogin'));
-//
-//        Route::post('registerWithPhone', array('as' => 'registerWithPhone', 'uses' => 'UserLoginController@registerWithPhone'));
-//
-//        Route::post('retrievePasByEmail', array('as' => 'retrievePasByEmail', 'uses' => 'UserLoginController@retrievePasByEmail'));
-//
-//        Route::post('retrievePasByPhone', array('as' => 'retrievePasByPhone', 'uses' => 'UserLoginController@retrievePasByPhone'));
-//
-//        Route::post('checkPhoneNum', array('as' => 'checkPhoneNum', 'uses' => 'UserLoginController@checkPhoneNum'));
-//
-//        Route::post('checkActivationCode', array('as' => 'checkActivationCode', 'uses' => 'UserLoginController@checkActivationCode'));
-//
-//        Route::post('resendActivationCode', array('as' => 'resendActivationCode', 'uses' => 'UserLoginController@resendActivationCode'));
-//
-//        Route::post('resendActivationCodeForget', array('as' => 'resendActivationCodeForget', 'uses' => 'UserLoginController@resendActivationCodeForget'));
-//
-//        Route::post('checkReCaptcha', array('as' => 'checkReCaptcha', 'uses' => 'UserLoginController@checkReCaptcha'));
-//
-//        Route::get('loginWithGoogle', array('as' => 'loginWithGoogle', 'uses' => 'UserLoginController@loginWithGoogle'));
-//
-//        Route::get('logout', array('as' => 'logout', 'uses' => 'UserLoginController@logout'));
-//    });
-
 
 //authenticated controller
     Route::group(array('middleware' => ['throttle:30']), function(){

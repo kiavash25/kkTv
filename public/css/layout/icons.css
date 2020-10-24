@@ -31,6 +31,10 @@
     content: '\E04A';
     font-family: Shazde_Regular2 !important;
 }
+.sendIcon:before{
+    content: "\E01B";
+    font-family: 'Shazde_Regular' !important;
+}
 .LikeIconEmpty:before{
     content: '\E1F9';
     font-family: Shazde_Regular2 !important;

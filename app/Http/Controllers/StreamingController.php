@@ -27,9 +27,6 @@ use Illuminate\Http\Request;
 use App\models\History;
 use App\models\Servers;
 use Illuminate\Support\Facades\DB;
-
-
-
 //use Intervention\Image\Image;
 
 class StreamingController extends Controller
@@ -112,103 +109,103 @@ class StreamingController extends Controller
         dd('done');
     }
 
-public function run() {
+    public function run() {
 
-echo "called" . "\n";
-$servers = DB::select("select * from servers order by rand()");
+    echo "called" . "\n";
+    $servers = DB::select("select * from servers order by rand()");
 
-if($servers == null || count($servers) == 0)
-        return;
+    if($servers == null || count($servers) == 0)
+            return;
 
-$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->skip(0)->take(2)->get();
-//$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
-$serverIdx = 0;
-$last_fetches = [];
+    $videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->skip(0)->take(2)->get();
+    //$videos = Video::whereConfirm(1)->whereNull('link')->whereStatus(-1)->get();
+    $serverIdx = 0;
+    $last_fetches = [];
 
-for($i = 0; $i < count($servers); $i++)
-        $last_fetches[$i] = -1;
+    for($i = 0; $i < count($servers); $i++)
+            $last_fetches[$i] = -1;
 
-for ($i = 0; $i < count($videos); $i++) {
-        $videos[$i]->status = 0;
-	/*
-	$filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
-	$res = shell_exec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 " . $filepath);
-	if(strpos($res, 'x') !== false && strlen($res) < 10) {
-		$res = str_replace("\n", "", $res);
-		$tmp = explode("x", $res);
-		$res = $tmp[1];
-		$videos[$i]->first_res = 1;
+    for ($i = 0; $i < count($videos); $i++) {
+            $videos[$i]->status = 0;
+        /*
+        $filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
+        $res = shell_exec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 " . $filepath);
+        if(strpos($res, 'x') !== false && strlen($res) < 10) {
+            $res = str_replace("\n", "", $res);
+            $tmp = explode("x", $res);
+            $res = $tmp[1];
+            $videos[$i]->first_res = 1;
 
-		if($res >= 240)
-			$videos[$i]->second_res = 1;
+            if($res >= 240)
+                $videos[$i]->second_res = 1;
 
-		if($res >= 360)
-			$videos[$i]->third_res = 1;
+            if($res >= 360)
+                $videos[$i]->third_res = 1;
 
-		if($res >= 480)
-			$videos[$i]->forth_res = 1;
+            if($res >= 480)
+                $videos[$i]->forth_res = 1;
 
-		if($res >= 720)
-			$videos[$i]->fifth_res = 1;
+            if($res >= 720)
+                $videos[$i]->fifth_res = 1;
 
-		if($res >= 1080)
-			$videos[$i]->sixth_res = 1;
+            if($res >= 1080)
+                $videos[$i]->sixth_res = 1;
 
-	        $videos[$i]->save();
-	}
-	*/
-        $videos[$i]->save();
-}
+                $videos[$i]->save();
+        }
+        */
+            $videos[$i]->save();
+    }
 
-//dd("finish");
+    //dd("finish");
 
-for ($i = 0; $i < count($videos); $i++) {
+    for ($i = 0; $i < count($videos); $i++) {
 
-if ($serverIdx >= count($servers))
-        $serverIdx = 0;
+    if ($serverIdx >= count($servers))
+            $serverIdx = 0;
 
-if(time() - $last_fetches[$serverIdx] < 600)
-        sleep(600 + $last_fetches[$serverIdx] - time());
+    if(time() - $last_fetches[$serverIdx] < 600)
+            sleep(600 + $last_fetches[$serverIdx] - time());
 
-$serverIP = $servers[$serverIdx]->ip;
-$filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
+    $serverIP = $servers[$serverIdx]->ip;
+    $filepath = __DIR__ . '/../../../../assets/_images/video/' . $videos[$i]->userId . '/' . $videos[$i]->video;
 
-if(!file_exists($filepath))
-	dd("file not found " . $filepath);
+    if(!file_exists($filepath))
+        dd("file not found " . $filepath);
 
-$cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
+    $cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
 
-// Assign POST data
-$time = time();
-$hash = hash("sha256", $this->sharedKey . $time);
-$data = array('file' => $cfile, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
-$data += ["first_res" => ($videos[$i]->first_res) ? "ok" : "nok"];
-$data += ["second_res" => ($videos[$i]->second_res) ? "ok" : "nok"];
-$data += ["third_res" => ($videos[$i]->third_res) ? "ok" : "nok"];
-$data += ["forth_res" => ($videos[$i]->forth_res) ? "ok" : "nok"];
-$data += ["fifth_res" => ($videos[$i]->fifth_res) ? "ok" : "nok"];
-$data += ["sixth_res" => ($videos[$i]->sixth_res) ? "ok" : "nok"];
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-curl_setopt($ch, CURLOPT_URL, 'http://' . $serverIP . '/uploadFile.php');
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-$data2 = curl_exec($ch);
+    // Assign POST data
+    $time = time();
+    $hash = hash("sha256", $this->sharedKey . $time);
+    $data = array('file' => $cfile, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
+    $data += ["first_res" => ($videos[$i]->first_res) ? "ok" : "nok"];
+    $data += ["second_res" => ($videos[$i]->second_res) ? "ok" : "nok"];
+    $data += ["third_res" => ($videos[$i]->third_res) ? "ok" : "nok"];
+    $data += ["forth_res" => ($videos[$i]->forth_res) ? "ok" : "nok"];
+    $data += ["fifth_res" => ($videos[$i]->fifth_res) ? "ok" : "nok"];
+    $data += ["sixth_res" => ($videos[$i]->sixth_res) ? "ok" : "nok"];
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_URL, 'http://' . $serverIP . '/uploadFile.php');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    $data2 = curl_exec($ch);
 
-if ($data2 === false)
-    echo curl_error($ch);
-else
-	echo "sent \n";
-//echo $data2;
-curl_close($ch);
-$last_fetches[$serverIdx] = time();
-$serverIdx++;
-}
-}
+    if ($data2 === false)
+        echo curl_error($ch);
+    else
+        echo "sent \n";
+    //echo $data2;
+    curl_close($ch);
+    $last_fetches[$serverIdx] = time();
+    $serverIdx++;
+    }
+    }
 
-public function updateLink() {
+    public function updateLink() {
 
         if(isset($_POST["newLink"]) && isset($_POST["time"]) && isset($_POST["digest"]) && isset($_POST["videoId"])) {
 
@@ -261,5 +258,6 @@ public function updateLink() {
         }
         echo "nok2";
 }
+
 
 }

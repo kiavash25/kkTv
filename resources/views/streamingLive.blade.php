@@ -60,6 +60,51 @@
             color: #d8d8d8;
             font-weight: 300;
         }
+        .inputYouChat{
+            display: flex;
+            flex-direction: column;
+            padding: 0px 5px;
+        }
+        .inputYouChat .userInfo{
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .inputYouChat .userInfo .pic{
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .inputYouChat .userInfo .userName{
+            margin-right: 10px;
+        }
+        .inputYouChat .inputRow{
+            display: flex;
+        }
+        .inputYouChat input{
+            width: 100%;
+            background: #3a3a3a;
+            border: none;
+            border-bottom: solid 1px gray;
+            color: white;
+            height: 30px;
+        }
+        .inputYouChat .submitChat{
+            color: #232323;
+            transform: rotate(225deg);
+            font-size: 30px;
+            display: flex;
+            justify-content: center;
+            width: 45px;
+            margin-right: auto;
+            cursor: pointer;
+        }
 
 
         .liveChatSec.open .downArrowIconAfter:after{
@@ -140,8 +185,18 @@
                             @endfor
                         </div>
                         <div class="inputYouChat">
-                            <input type="text">
-                            <div class="submitChat"></div>
+                            @if($user != null)
+                                <div class="userInfo">
+                                    <div class="pic">
+                                        <img src="{{$user->pic}}" style="width: 100%">
+                                    </div>
+                                    <div class="userName">{{$user['username']}}</div>
+                                </div>
+                            @endif
+                            <div class="inputRow">
+                                <input type="text" id="liveChatInputPc" placeholder="تو گفتگو شرکت کن..." onfocus="checkLogin()" >
+                                <div class="submitChat sendIcon" onclick="sendLiveChat(this)"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -174,38 +229,6 @@
                             </div>
                         @endforeach
                     </div>
-
-{{--                    <div class="liveComments">--}}
-{{--                        <div class="liveCommentsFirstLine">--}}
-{{--                            <div class="liveCommentsTitle">--}}
-{{--                                در گفتگو شرکت کنید--}}
-{{--                            </div>--}}
-{{--                            <div class="liveCommentStatistics">--}}
-{{--                                <div class="liveCommentsQuantity liveCommentStatisticsDivs">--}}
-{{--                                    <div class="liveCommentsNums chatCount">{{count($video->chats)}}</div>--}}
-{{--                                    <div class="liveCommentsQuantityIcon"></div>--}}
-{{--                                </div>--}}
-{{--                                <div class="liveCommentWriters liveCommentStatisticsDivs">--}}
-{{--                                    <div class="liveCommentsNums uniqueUserChat">{{$video->uniqueUser}}</div>--}}
-{{--                                    <div class="liveCommentsWriterIcon "></div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="liveCommentsMainDiv"></div>--}}
-{{--                        @if(auth()->check())--}}
-{{--                            <div class="commentInputSection">--}}
-{{--                                <div class="userPicDiv">--}}
-{{--                                    <img src="{{$userPicture}}" alt="koochita">--}}
-{{--                                </div>--}}
-{{--                                <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>--}}
-{{--                                <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>--}}
-{{--                            </div>--}}
-{{--                        @else--}}
-{{--                            <div class="commentInputSection">--}}
-{{--                                <div class="commentInputSendButton login-button">ورود</div>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
 
                 </div>
             @endif
@@ -512,45 +535,8 @@
         let lastChats = videoData.chats;
 
         @if(auth()->check())
-            let userPic = '{{$userPicture}}';
-            let userName = '{{auth()->user()->username}}';
+            window.userPic = '{{$user->pic}}';
             let room = '{{$room}}';
-
-            function sendMsg(_element){
-                let msg = $(_element).prev().val();
-                $(_element).prev().val('');
-
-                if(msg.trim().length > 0) {
-                    ajaxMsg(msg);
-                }
-            }
-
-            function ajaxMsg(_msg){
-                $.ajax({
-                    type: 'post',
-                    url: '{{route("sendBroadcastMsg")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        msg: _msg,
-                        userPic: userPic,
-                        userName: userName,
-                        room: room,
-                    },
-                    success: function (response) {
-                        try{
-                            response = JSON.parse(response);
-                            $('.chatCount').text(response.count);
-                            $('.uniqueUserChat').text(response.uniqueUser);
-                        }
-                        catch (e) {
-                            console.log('error in send chat');
-                        }
-                    },
-                    error: function (err) {
-                        console.log('err')
-                    }
-                })
-            }
 
             $('.commentInput').keydown(function (e) {
                 if (e.keyCode == 13){
@@ -571,30 +557,6 @@
             else
                 setBottom = false;
         });
-
-        window.Echo.channel('liveComments.{{$room}}')
-            .listen('CommentBroadCast', (e) => {
-                createCommentRow(e.message, e.username, e.userPic);
-            });
-
-        function createCommentRow(_txt, _name, _pic){
-            let text = '                      <div class="eachLiveCommentMainDiv">\n' +
-                '                                <div class="eachLiveCommentTitle">\n' +
-                '                                    <div class="userPicDiv">\n' +
-                '                                        <img src="' + _pic + '" alt="koochita">\n' +
-                '                                    </div>\n' +
-                '                                    <div class="mainUserInfos">\n' +
-                '                                        <div class="mainUseruserName">' + _name + '</div>\n' +
-                '                                    </div>\n' +
-                '                                </div>\n' +
-                '                                <div class="liveCommentContents">' + _txt + '</div>\n' +
-                '                            </div>\n';
-
-            $('.liveCommentsMainDiv').append(text);
-            if(setBottom)
-                $('.liveCommentsMainDiv').scrollTop($(this).height());
-        }
-        lastChats.forEach(item => createCommentRow(item.text, item.username, item.userPic));
 
         function setFeedback(_like){
             if (!hasLogin) {
@@ -656,6 +618,43 @@
             //     $('.liveCommentsOnFS').toggle();
             // });
         });
+
+        function updateLiveChat(){
+            $.ajax({
+                type: 'get',
+                url: '{{route("streaming.getChats")}}',
+                success: response => {
+                    console.log(response)
+                },
+                error: err => console.log(err),
+            })
+        }
+
+        function sendLiveChat(_element){
+            if (!checkLogin)
+                return;
+
+            let text = $(_element).val();
+            if(text.trim().length > 0){
+                $.ajax({
+                    type: 'post',
+                    url: '{{route('streaming.storeLiveChat')}}',
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        room: '{{$room}}',
+                        text: text,
+                        userPic: window.userPic,
+                    },
+                    success: response => {
+                        console.log(response);
+                    },
+                    error: err => {
+                        console.log(err);
+                    }
+                })
+            }
+        }
+
     </script>
 
 @endsection

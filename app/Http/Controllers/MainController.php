@@ -16,6 +16,7 @@ use App\models\VideoTagRelation;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Throwable;
 
@@ -587,8 +588,8 @@ class MainController extends Controller
                 $video->likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
                 $video->disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
-                $video->chats = LiveChat::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
-                $video->uniqueUser = LiveChat::where('videoId', $video->id)->get()->groupBy('userId')->count();
+                $video->chats = LiveChat::where('roomId', $room)->select(['id', 'text', 'username', 'userPic'])->get();
+                $video->uniqueUser = LiveChat::where('roomId', $room)->get()->groupBy('userId')->count();
                 $video->guest = LiveGuest::where('videoId', $video->id)->get();
                 foreach ($video->guest as $guest)
                     $guest->pic = URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
@@ -603,9 +604,37 @@ class MainController extends Controller
             }
             else
                 $room = '';
+
+            $user = null;
+            if(auth()->check()){
+                $user = User::select(['id', 'username'])->find(\auth()->user()->id);
+                $user->pic = getUserPic(auth()->user()->id);
+            }
         }
 
-        return view('streamingLive', compact(['room', 'video', 'hasVideo']));
+        return view('streamingLive', compact(['room', 'video', 'hasVideo', 'user']));
+    }
+
+    public function storeLiveChat(Request $request)
+    {
+        if(\auth()->check()){
+            $chat = new LiveChat();
+            $chat->text = $request->text;
+            $chat->userId = \auth()->user()->id;
+            $chat->roomId = $request->roomId;
+            $chat->username = \auth()->user()->username;
+            $chat->userPic = $request->userPic;
+            $chat->save();
+
+            return response()->json(['status' => 'ok']);
+        }
+        else
+            return response()->json(['status' => 'notAuth']);
+    }
+
+    public function updateLiveVideoChat()
+    {
+
     }
 
     public function sendBroadcastMsg(Request $request)
