@@ -41,7 +41,7 @@ class MainController extends Controller
         }
 
         $topId = [];
-        $topVideosId = \DB::select('SELECT videoId, COUNT(id) as likeCount FROM videoFeedBacks WHERE commentId IS NULL AND `like` = 1 GROUP BY videoId ORDER BY likeCount DESC LIMIT 10');
+        $topVideosId = \DB::select('SELECT videoId, COUNT(id) as likeCount FROM videoFeedbacks WHERE commentId IS NULL AND `like` = 1 GROUP BY videoId ORDER BY likeCount DESC LIMIT 10');
         foreach ($topVideosId as $item)
             array_push($topId, $item->videoId);
 
