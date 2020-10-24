@@ -188,23 +188,26 @@
 .guestText{
     display: none;
 }
-.guestSection:hover .setMarginInGuestSection{
+.guestRow:hover{
+    z-index: 999999;
+}
+.guestRow:hover .setMarginInGuestSection{
     margin: 10px 0px;
     width: 150px;
 }
-.guestSection:hover .guestText{
+.guestRow:hover .guestText{
     display: block;
 }
-.guestSection:hover .guestSideSection{
+.guestRow:hover .guestSideSection{
     width: 300px;
     border: solid red 2px;
     padding: 8px;
     margin-left: 10px;
 }
-.guestSection:hover .guestName{
+.guestRow:hover .guestName{
     display: block;
 }
-.guestSection:hover .guestAction{
+.guestRow:hover .guestAction{
     display: block;
 }
 .guestNotPcSection{
@@ -251,10 +254,10 @@
         width: 150px;
         z-index: 9;
     }
-    .guestSection:hover .guestSideSection{
+    .guestRow:hover .guestSideSection{
         background-color: #3a3a3a;
     }
-    .guestSection:hover{
+    .guestRow:hover{
         z-index: 10;
     }
 }

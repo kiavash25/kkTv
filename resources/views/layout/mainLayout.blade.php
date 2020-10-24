@@ -25,7 +25,6 @@
     <meta property="og:image:height" content="367"/>
     <meta name="twitter:image" content="{{ asset('images/blank.jpg') }}"/>
 
-
 {{--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>--}}
 {{--    <script>--}}
 {{--        window.dataLayer = window.dataLayer || [];--}}

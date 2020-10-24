@@ -27,6 +27,10 @@
     content: '\E04A';
     font-family: Shazde_Regular2 !important;
 }
+.downArrowIconAfter:after{
+    content: '\E04A';
+    font-family: Shazde_Regular2 !important;
+}
 .LikeIconEmpty:before{
     content: '\E1F9';
     font-family: Shazde_Regular2 !important;

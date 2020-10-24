@@ -111,7 +111,7 @@
                 <div class="videoSuggestionSwiper swiper-container">
 
                     <div id="topVideosDiv" class="swiper-wrapper">
-                        {{--fill with js topVideoSuggenstion()--}}
+                        {{--fill with js createTopVideoSuggestion()--}}
                     </div>
 
                     <div class="swiper-button-next"></div>
@@ -178,6 +178,7 @@
     <script>
         let lastVideos = {!! $lastVideos !!};
         let videoCategory = {!! $videoCategory !!};
+        let topVideos = {!! $topVideos !!};
 
         createVideoSuggestionDiv(lastVideos, 'lastVideosDiv');
 
@@ -186,6 +187,11 @@
                 createVideoSuggestionDiv(videoCategory[j].video, 'catVideoDiv_' + videoCategory[j]['id']);
         }
         categoryVideoSuggestion();
+
+        function createTopVideoSuggestion(){
+            createVideoSuggestionDiv(topVideos, 'topVideosDiv')
+        }
+        createTopVideoSuggestion();
 
         var swipersuggestion = new Swiper('.videoSuggestionSwiper', {
             slidesPerGroup: 1,

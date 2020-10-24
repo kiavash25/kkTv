@@ -40,7 +40,16 @@ class MainController extends Controller
                 $catVid = $this->getVideoFullInfo($catVid, false);
         }
 
-        return view('mainPage', compact(['lastVideos', 'videoCategory']));
+        $topId = [];
+        $topVideosId = \DB::select('SELECT videoId, COUNT(id) as likeCount FROM videoFeedBacks WHERE commentId IS NULL AND `like` = 1 GROUP BY videoId ORDER BY likeCount DESC LIMIT 10');
+        foreach ($topVideosId as $item)
+            array_push($topId, $item->videoId);
+
+        $topVideos = Video::whereIn('id', $topId)->get();
+        foreach ($topVideos as $item)
+            $item = $this->getVideoFullInfo($item, false);
+
+        return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos']));
     }
 
     public function videoList($kind, $value){
@@ -172,27 +181,18 @@ class MainController extends Controller
             $video = $this->getVideoFullInfo($video, true);
 
             $userMoreVideo = Video::where('userId', $video->userId)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
-            foreach ($userMoreVideo as $vid)
-                $vid = $this->getVideoFullInfo($vid, false);
-
             $sameCategory = Video::where('categoryId', $video->categoryId)->where('id', '!=', $video->id)->take(7)->orderByDesc('created_at')->get();
-            foreach ($sameCategory as $vid)
-                $vid = $this->getVideoFullInfo($vid, false);
 
-            $thumbLoc = 'images/video/' . $video->userId;
-            if(is_file(__DIR__.'/../../../../assets/' . $thumbLoc . '/min_' . $video->thumbnail))
-                $thumbnail = \URL::asset($thumbLoc . '/min_' . $video->thumbnail);
-            else if(is_file(__DIR__.'/../../../../assets/' . $thumbLoc . '/' . $video->thumbnail))
-                $thumbnail = \URL::asset($thumbLoc . '/' . $video->thumbnail);
-            else
-                $thumbnail = \URL::asset('images/mainPics/vodLobo.png');
+            foreach ([$userMoreVideo, $sameCategory] as $categ)
+                foreach ($categ as $vid)
+                    $vid = $this->getVideoFullInfo($vid, false);
 
             if($video->userId == $uId && $video->link == null) {
                 $video->link = URL::asset('videos/' . $video->userId . '/' . $video->video);
                 $isLink = false;
             }
 
-            $localStorageData = ['title' => $video->title, 'pic' => $thumbnail , 'redirect' => route('video.show', ['code' => $video->code])];
+            $localStorageData = ['title' => $video->title, 'pic' => $video->pic , 'redirect' => route('video.show', ['code' => $video->code])];
 
             return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink']));
         }
@@ -456,7 +456,7 @@ class MainController extends Controller
     {
         $userLogin = auth()->check();
 
-        $loc = 'videos/' . $video->userId;
+        $loc = __DIR__.'/../../../../assets/_images/video/' . $video->userId;
         if(is_file($loc .'/min_'. $video->thumbnail))
             $video->pic = \URL::asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
         else
@@ -478,79 +478,12 @@ class MainController extends Controller
             $resultComment = [];
             $video->comments = $this->getVideoComments($video->id, 0);
 
-//            $activityId = Activity::whereName('نظر')->first()->id;
-//            $places = VideoPlaceRelation::where('videoId', $video->id)->get();
-//            $result = [];
-//            foreach ($places as $place) {
-//                if ($place->kindPlaceId > 0) {
-//                    $kindPlace = Place::find($place->kindPlaceId);
-//                    $place = \DB::table($kindPlace->tableName)->where('id', $place->placeId)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId'])->first();
-//                    if($place != null) {
-//                        $file = $kindPlace->fileName;
-//                        if (file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber)))
-//                            $place->placePic = \URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
-//                        else
-//                            $place->placePic = \URL::asset("_images/nopic/blank.jpg");
-//
-//                        $place->url = createUrl($kindPlace->id, $place->id, 0, 0);
-//                        $city = Cities::whereId($place->cityId);
-//                        $place->placeCity = $city->name;
-//                        $place->placeState = State::whereId($city->stateId)->name;
-//                        $place->placeRate = getRate($place->id, $kindPlace->id)[1];
-//                        $place->placeReviews = \DB::select('select count(*) as countNum from log, comment WHERE logId = log.id and status = 1 and placeId = ' . $place->id .
-//                            ' and kindPlaceId = ' . $kindPlace->id . ' and activityId = ' . $activityId)[0]->countNum;
-//
-//                        $place->kindPlaceId = $kindPlace->id;
-//
-//                        array_push($result, $place);
-//                    }
-//                }
-//                else {
-//                    if($place->kindPlaceId == -1){
-//                        $place = State::find($place->placeId);
-//                        if($place != null){
-//                            $place->placePic = null;
-//                            $cities = Cities::where('stateId', $place->id)->get();
-//                            foreach ($cities as $city){
-//                                $p = getCityPic($city->id);
-//                                if($p != null){
-//                                    $place->placePic = $p;
-//                                    break;
-//                                }
-//                            }
-//                            if($place->placePic == null)
-//                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
-//
-//                            $place->kindPlaceId = -1;
-//                            $place->url = route('cityPage', ['kind' => 'state', 'city' => $place->name]);
-//                            $place->name = 'استان '  . $place->name;
-//                            array_push($result, $place);
-//                        }
-//                    }
-//                    else{
-//                        $place = Cities::find($place->placeId);
-//                        if($place != null){
-//                            $place->placePic = getCityPic($place->id);
-//                            if($place->placePic == null)
-//                                $place->placePic = URL::asset('_images/nopic/blank.jpg');
-//
-//                            $place->placeState = State::find($place->stateId)->name;
-//                            $place->kindPlaceId = 0;
-//                            $place->url = route('cityPage', ['kind' => 'city', 'city' => $place->name]);
-//                            $place->name = 'شهر '  . $place->name;
-//                            array_push($result, $place);
-//                        }
-//                    }
-//                }
-//            }
-//            $video->places = $result;
-        }
-
-        $video->uLike = 0;
-        if($userLogin){
-            $uLike = VideoFeedback::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
-            if($uLike != null)
-                $video->uLike = $uLike->like;
+            $video->uLike = 0;
+            if($userLogin){
+                $uLike = VideoFeedback::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
+                if($uLike != null)
+                    $video->uLike = $uLike->like;
+            }
         }
 
         return $video;
@@ -639,32 +572,40 @@ class MainController extends Controller
             'disLike' => 0,
             'haveVideo' => false
         ];
+        $hasVideo = false;
+
         if($room != null){
             $video = Live::where('code', $room)->where('isLive', 1)->first();
             $today = Carbon::now()->format('Y-m-d');
             $nowTime = Carbon::now()->format('H:i');
             if($video != null){
-                $data['title'] = $video->title;
-                $data['desc'] = $video->description;
                 $user = User::find($video->userId);
                 $user->pic = getUserPic($user->id);
-                $data['user'] = $user;
-                $data['haveVideo'] = true;
+                $video->user = $user;
+                $hasVideo = true;
 
-                $data['likeCount'] = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
-                $data['disLikeCount'] = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
+                $video->likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
+                $video->disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
-                $data['chats'] = LiveChat::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
-                $uniqueUser = LiveChat::where('videoId', $video->id)->get()->groupBy('userId');
-                $data['uniqueUser'] = count($uniqueUser);
-                $data['guest'] = LiveGuest::where('videoId', $video->id)->get();
-                foreach ($data['guest'] as $guest)
+                $video->chats = LiveChat::where('videoId', $video->id)->select(['id', 'text', 'username', 'userPic'])->get();
+                $video->uniqueUser = LiveChat::where('videoId', $video->id)->get()->groupBy('userId')->count();
+                $video->guest = LiveGuest::where('videoId', $video->id)->get();
+                foreach ($video->guest as $guest)
                     $guest->pic = URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
+
+                $video->youLike = 0;
+                if(auth()->check()){
+                    $yl = LiveFeedBack::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
+                    if($yl != null)
+                        $video->youLike = $yl->like;
+                }
+
             }
             else
                 $room = '';
         }
-        return view('streamingLive', compact(['room', 'data']));
+
+        return view('streamingLive', compact(['room', 'video', 'hasVideo']));
     }
 
     public function sendBroadcastMsg(Request $request)
@@ -710,14 +651,12 @@ class MainController extends Controller
                 $likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
                 $disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
 
-                echo json_encode(['status' => 'ok', 'like' => $likeCount, 'disLike' => $disLikeCount]);
+                return response()->json(['status' => 'ok', 'like' => $likeCount, 'disLike' => $disLikeCount, 'youLike' => $like->like]);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 }

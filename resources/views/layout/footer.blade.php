@@ -127,11 +127,13 @@ if(auth()->check()){
 
     <div class="modal" id="otherPossibilities">
         <div class="mainPopUp leftPopUp">
-            <div>
-                <a href="https://koochitatv.com/getLive/2" class="headerNavTitle" style="color:black;">
-                    <img src="{{URL::asset('images/mainPics/anten.png')}}" class="antenIcon1">
-                    نمایش زنده
-                </a>
+            <div style="display: flex; flex-direction: column;">
+                @if($hasLive)
+                    <a href="{{route('streaming.live', ['room' => $hasLive])}}" class="headerNavTitle" style="color:black;">
+                        <img src="{{URL::asset('images/mainPics/anten.png')}}" class="antenIcon1">
+                        نمایش زنده
+                    </a>
+                @endif
                 <div class="headerNavTitle " onclick="openCategoryMenu()">دسته بندی ها</div>
                 <div class="headerNavTitle">فراخوان</div>
                 <div class="headerNavTitle">همکاری با ما</div>

@@ -789,6 +789,7 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                 type: 'post',
                 url: mainLoginDir,
                 data: {
+                    _token: '{{csrf_token()}}',
                     username: username,
                     password: password
                 },
