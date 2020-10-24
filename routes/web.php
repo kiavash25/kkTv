@@ -42,10 +42,10 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
 
-    Route::get('streaming/getChats', 'StreamingController@updateLiveVideoChat')->name('streaming.getChats');
+    Route::get('streaming/getChats/{room}', 'MainController@updateLiveVideoChat')->name('streaming.getChats');
 
     Route::middleware(['auth'])->group(function () {
-        Route::post('streaming/storeLiveChat', 'StreamingController@storeLiveChat')->name('streaming.storeLiveChat');
+        Route::post('streaming/storeLiveChat', 'MainController@storeLiveChat')->name('streaming.storeLiveChat');
 
         Route::get('video/uploadPage', 'MainController@uploadVideoPage')->name('video.uploadPage');
 

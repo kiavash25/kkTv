@@ -590,6 +590,13 @@ class MainController extends Controller
 
                 $video->chats = LiveChat::where('roomId', $room)->select(['id', 'text', 'username', 'userPic'])->get();
                 $video->uniqueUser = LiveChat::where('roomId', $room)->get()->groupBy('userId')->count();
+
+                $lastChatId = LiveChat::where('roomId', $room)->orderByDesc('id')->first();
+                if($lastChatId == null)
+                    $lastChatId = 0;
+                else
+                    $lastChatId = $lastChatId->id;
+
                 $video->guest = LiveGuest::where('videoId', $video->id)->get();
                 foreach ($video->guest as $guest)
                     $guest->pic = URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
@@ -612,7 +619,7 @@ class MainController extends Controller
             }
         }
 
-        return view('streamingLive', compact(['room', 'video', 'hasVideo', 'user']));
+        return view('streamingLive', compact(['room', 'video', 'hasVideo', 'user', 'lastChatId']));
     }
 
     public function storeLiveChat(Request $request)
@@ -621,7 +628,7 @@ class MainController extends Controller
             $chat = new LiveChat();
             $chat->text = $request->text;
             $chat->userId = \auth()->user()->id;
-            $chat->roomId = $request->roomId;
+            $chat->roomId = $request->room;
             $chat->username = \auth()->user()->username;
             $chat->userPic = $request->userPic;
             $chat->save();
@@ -632,9 +639,16 @@ class MainController extends Controller
             return response()->json(['status' => 'notAuth']);
     }
 
-    public function updateLiveVideoChat()
+    public function updateLiveVideoChat($room)
     {
+        $chats = LiveChat::where('roomId', $room)->where('id', '>', $_GET['lastId'])->select(['id', 'text', 'username', 'userPic'])->get();
+        $lastChatId = LiveChat::where('roomId', $room)->orderByDesc('id')->first();
+        if($lastChatId == null)
+            $lastChatId = 0;
+        else
+            $lastChatId = $lastChatId->id;
 
+        return response()->json(['status' => 'ok', 'chats' => $chats, 'lastChatId' => $lastChatId]);
     }
 
     public function sendBroadcastMsg(Request $request)

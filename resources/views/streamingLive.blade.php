@@ -65,14 +65,14 @@
             flex-direction: column;
             padding: 0px 5px;
         }
-        .inputYouChat .userInfo{
+        .userInfo{
             display: flex;
             align-items: center;
             color: white;
             font-size: 15px;
             margin-bottom: 10px;
         }
-        .inputYouChat .userInfo .pic{
+        .userInfo .pic{
             width: 30px;
             height: 30px;
             display: flex;
@@ -81,7 +81,7 @@
             overflow: hidden;
             border-radius: 50%;
         }
-        .inputYouChat .userInfo .userName{
+        .userInfo .userName{
             margin-right: 10px;
         }
         .inputYouChat .inputRow{
@@ -114,7 +114,7 @@
             height: 400px;
             padding: 10px;
         }
-        .liveInfosAndComments .title{
+        .liveInfosAndComments .title, .liveChatSec .title{
             font-size: 20px;
             color: var(--koochita-yellow);
             text-align: center;
@@ -144,46 +144,9 @@
         <div class="container mainShowBase hideOnSmall" style="width: 320px">
             @if($hasVideo)
                 <div class="liveInfosAndComments">
-                    <div class="videoInfos">
-{{--                        <div class="videoInfosVideoName">--}}
-{{--                            {{$video->title}}--}}
-{{--                            <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">--}}
-{{--                        </div>--}}
-
-{{--                        <div class="row mainUserPicSection">--}}
-{{--                            <div class="userPicDiv">--}}
-{{--                                <img src="{{$video->user->pic}}" alt="koochita">--}}
-{{--                            </div>--}}
-{{--                            <div class="mainUserInfos">--}}
-{{--                                <div class="mainUseruserName">--}}
-{{--                                    {{isset($video->user) && $video->user != '' ? $video->user->username : ''}}--}}
-{{--                                </div>--}}
-{{--                                <div class="videoUploadTime">--}}
-{{--                                    هم اکنون--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-                    </div>
-
                     <div class="liveChatSec open">
                         <div class="row title downArrowIconAfter" style="cursor: pointer" onclick="closeLiveChatSection()"> گفتگو زنده </div>
-                        <div class="lastChats">
-                            @for($i = 0; $i < 20; $i++)
-                                <div class="chatRow">
-                                    <div class="userName">کیاوش:</div>
-                                    <div class="text">سلام به همگی</div>
-                                </div>
-                                <div class="chatRow">
-                                    <div class="userName">علی:</div>
-                                    <div class="text">سلام دوستان. دوستان برای شما هم کیفیت تصویر پایینه ؟ من با اینترنت 4g وصل شدم اما کیفیتم پایینه. نکنه این فیلم ضبط شده باشه؟</div>
-                                </div>
-                                <div class="chatRow">
-                                    <div class="userName">عادلی:</div>
-                                    <div class="text">موضوع برنامه چیه؟</div>
-                                </div>
-                            @endfor
-                        </div>
+                        <div class="lastChats"></div>
                         <div class="inputYouChat">
                             @if($user != null)
                                 <div class="userInfo">
@@ -194,8 +157,8 @@
                                 </div>
                             @endif
                             <div class="inputRow">
-                                <input type="text" id="liveChatInputPc" placeholder="تو گفتگو شرکت کن..." onfocus="checkLogin()" >
-                                <div class="submitChat sendIcon" onclick="sendLiveChat(this)"></div>
+                                <input type="text" class="liveChatInput" placeholder="تو گفتگو شرکت کن..." onfocus="checkLogin()" >
+                                <div class="submitChat sendIcon" onclick="sendLiveChat($(this).prev().val())"></div>
                             </div>
                         </div>
                     </div>
@@ -329,7 +292,6 @@
                     <div class="toolSectionButtons">
                         <div class="iconButton LikeIconEmptyAfter likeVideoButton {{$video->youLike == 1 ? 'fill' : ''}}" onclick="setFeedback(1)">{{$video->likeCount}}</div>
                         <div class="iconButton DisLikeIconEmptyAfter disLikeVideoButton {{$video->youLike == -1 ? 'fill' : ''}}" onclick="setFeedback(-1)">{{$video->disLikeCount}}</div>
-{{--                        <div class="iconButton CommentIconAfter">{{$video->commentsCount}}</div>--}}
                     </div>
                     <div class="toolSectionInfos">
                         <div class="iconButton shareIcon share_pic">
@@ -343,58 +305,23 @@
                 </div>
             </div>
 
-
-            <div class="liveInfosAndComments hideOnWide">
-{{--                <div class="videoInfos">--}}
-{{--                    <div class="videoInfosVideoName">--}}
-{{--                        {{$video->title}}--}}
-{{--                        <img class="float-left" src="{{URL::asset('images/streaming/live.png')}}">--}}
-{{--                    </div>--}}
-{{--                    <div class="row mainUserPicSection">--}}
-{{--                        <div class="userPicDiv">--}}
-{{--                            <img src="{{$data['userPic']}}" alt="koochita">--}}
-{{--                        </div>--}}
-{{--                        <div class="mainUserInfos">--}}
-{{--                            <div class="mainUseruserName">--}}
-{{--                                {{isset($video->user) && $video->user != '' ? $video->user->username : ''}}--}}
-{{--                            </div>--}}
-{{--                            <div class="videoUploadTime">--}}
-{{--                                هم اکنون--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="liveComments">--}}
-{{--                    <div class="liveCommentsFirstLine">--}}
-{{--                        <div class="liveCommentsTitle">--}}
-{{--                            در گفتگو شرکت کنید--}}
-{{--                        </div>--}}
-{{--                        <div class="liveCommentStatistics">--}}
-{{--                            <div class="liveCommentsQuantity liveCommentStatisticsDivs">--}}
-{{--                                <div class="liveCommentsNums chatCount">{{count($video->chats)}}</div>--}}
-{{--                                <div class="liveCommentsQuantityIcon"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="liveCommentWriters liveCommentStatisticsDivs">--}}
-{{--                                <div class="liveCommentsNums uniqueUserChat">{{$video->uniqueUser}}</div>--}}
-{{--                                <div class="liveCommentsWriterIcon "></div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="liveCommentsMainDiv"></div>--}}
-{{--                    @if(auth()->check())--}}
-{{--                        <div class="commentInputSection">--}}
-{{--                            <div class="userPicDiv">--}}
-{{--                                <img src="{{$userPicture}}" alt="koochita">--}}
-{{--                            </div>--}}
-{{--                            <textarea class="commentInput" name="comment" id="comment" placeholder="شما چه نظری دارید؟" rows="1"></textarea>--}}
-{{--                            <div class="commentInputSendButton" onclick="sendMsg(this)">ارسال</div>--}}
-{{--                        </div>--}}
-{{--                    @else--}}
-{{--                        <div class="commentInputSection">--}}
-{{--                            <div class="commentInputSendButton login-button">ورود</div>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-{{--                </div>--}}
+            <div class="liveChatSec open hideOnWide" style="margin-top: 20px;">
+                <div class="row title downArrowIconAfter" style="cursor: pointer" onclick="closeLiveChatSection()"> گفتگو زنده </div>
+                <div class="lastChats"></div>
+                <div class="inputYouChat">
+                    @if($user != null)
+                        <div class="userInfo">
+                            <div class="pic">
+                                <img src="{{$user->pic}}" style="width: 100%">
+                            </div>
+                            <div class="userName">{{$user['username']}}</div>
+                        </div>
+                    @endif
+                    <div class="inputRow">
+                        <input type="text" class="liveChatInput" placeholder="تو گفتگو شرکت کن..." onfocus="checkLogin()" >
+                        <div class="submitChat sendIcon" onclick="sendLiveChat($(this).prev().val())"></div>
+                    </div>
+                </div>
             </div>
 
             @if($video->description != '')
@@ -402,7 +329,6 @@
                     {{$video->title}}
                     <img class="float-left" src="{{URL::asset('images/mainPics/live.png')}}">
                 </div>
-
                 <div class="descriptionSection">
                     <div class="headerWithLine">
                         <div class="headerWithLineText">
@@ -413,7 +339,6 @@
                     <div class="descriptionSectionBody">
                         {{$video->description}}
                     </div>
-    {{--                <div class="moreBtn">بیشتر</div>--}}
                 </div>
             @endif
 
@@ -455,40 +380,7 @@
                     @endforeach
                 </div>
             </div>
-
         </div>
-
-{{--        <div class="container mainShowBase lestSideLiveVideo">--}}
-{{--            <div class="row" style="color:white; text-align: center">--}}
-{{--                مهمانان برنامه--}}
-{{--            </div>--}}
-{{--            @foreach($video->guest as $item)--}}
-{{--                <div class="row guestRow">--}}
-{{--                    <div class="guestSection">--}}
-{{--                        <div class="guestMainSection {{$item->text != null ? 'setMarginInGuestSection' : ''}}">--}}
-{{--                            <div class="col-md-12" style="display: flex; justify-content: center; padding: 0px">--}}
-{{--                                <div class="guestPicSection">--}}
-{{--                                    <img src="{{$item->pic}}" style="width: 100%;">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-12 guestName">--}}
-{{--                                {{$item->name}}--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-12 guestAction" >--}}
-{{--                                {{$item->action}}--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        @if($item->text != null)--}}
-{{--                            <div class="guestSideSection setMarginInGuestSection">--}}
-{{--                                <div class="guestText">--}}
-{{--                                    {{$item->text}}--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
-{{--        </div>--}}
     </div>
 
 @endsection
@@ -531,27 +423,49 @@
     <script src="{{URL::asset('js/app.js')}}"></script>
 
     <script>
+        let setBottom = true;
+        let lastChatId = {{$lastChatId}};
+        let updateChatTimeOut;
         let videoData = {!! json_encode($video) !!};
         let lastChats = videoData.chats;
+        let room = '{{$room}}';
 
         @if(auth()->check())
             window.userPic = '{{$user->pic}}';
-            let room = '{{$room}}';
 
-            $('.commentInput').keydown(function (e) {
-                if (e.keyCode == 13){
-                    let msg = this.value;
-                    if(msg.trim().length > 0) {
-                        $('.commentInput').val('');
-                        ajaxMsg(msg);
-                    }
-                }
+            $('.liveChatInput').keydown(e => {
+                if(e.keyCode == 13)
+                    sendLiveChat($(e.target).val());
             });
+
+            function sendLiveChat(_text){
+                if (!checkLogin)
+                    return;
+                if(_text.trim().length > 0){
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route('streaming.storeLiveChat')}}',
+                        data: {
+                            _token: '{{csrf_token()}}',
+                            room: '{{$room}}',
+                            text: _text,
+                            userPic: window.userPic,
+                        },
+                        success: response => {
+                            if(response.status == 'ok') {
+                                $('.liveChatInput').val('');
+                                clearTimeout(updateChatTimeOut);
+                                updateLiveChat();
+                            }
+                        },
+                        error: err => console.log(err)
+                    })
+                }
+            }
+
         @endif
 
-        let setBottom = true;
-
-        $('.liveCommentsMainDiv').on('scroll', function(e){
+        $('.lastChats').on('scroll', function(e){
             if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight)
                 setBottom = true;
             else
@@ -595,66 +509,47 @@
             $('.liveChatSec').toggleClass('open');
         }
 
-        $(window).resize(function(){
-            if($(window).width() > 991) {
-                let height = $('#video_1_html5_api').height();
-                $('.liveCommentsMainDiv').css('max-height', height - 200);
-            }
-            else
-                $('.liveCommentsMainDiv').css('max-height', 200);
-        });
-
-        $(document).ready(function(){
-            var videotag = $('.playads');
-
-            if($(window).width() > 991) {
-                let height = $('#video_1_html5_api').height();
-                $('.liveCommentsMainDiv').css('max-height', height - 200);
-            }
-
-            // $(".liveCommentsOnFS").appendTo($('#video_1'));
-            //
-            // myPlayer.on('fullscreenchange', function() {
-            //     $('.liveCommentsOnFS').toggle();
-            // });
-        });
-
         function updateLiveChat(){
             $.ajax({
                 type: 'get',
-                url: '{{route("streaming.getChats")}}',
+                url: '{{route("streaming.getChats", ['room' => $room])}}?lastId='+lastChatId,
                 success: response => {
-                    console.log(response)
+                    if(response.status == 'ok'){
+                        lastChatId = response.lastChatId;
+                        createChatRow(response.chats);
+                    }
+                    updateChatTimeOut = setTimeout(updateLiveChat, 2000);
                 },
-                error: err => console.log(err),
+                error: err =>{
+                    updateChatTimeOut = setTimeout(updateLiveChat, 2000);
+                    console.log(err);
+                },
             })
         }
 
-        function sendLiveChat(_element){
-            if (!checkLogin)
-                return;
+        function createChatRow(_chats){
+            let text = '';
+            _chats.map(item => {
+                text += '<div class="chatRow">\n' +
+                        '   <div class="userInfo">\n' +
+                        '       <div class="pic" style="width: 20px; height: 20px;">\n' +
+                        `           <img src="${item.userPic}" style="width: 100%">\n` +
+                        '       </div>\n' +
+                        `       <div class="userName" style="margin-right: 5px">${item.username}:</div>\n` +
+                        '   </div>\n' +
+                        `   <div class="text">${item.text}</div>\n` +
+                        '</div>';
+            });
 
-            let text = $(_element).val();
-            if(text.trim().length > 0){
-                $.ajax({
-                    type: 'post',
-                    url: '{{route('streaming.storeLiveChat')}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        room: '{{$room}}',
-                        text: text,
-                        userPic: window.userPic,
-                    },
-                    success: response => {
-                        console.log(response);
-                    },
-                    error: err => {
-                        console.log(err);
-                    }
-                })
+            $('.lastChats').append(text);
+
+            if(setBottom) {
+                for (let i = 0; i < $('.lastChats').length; i++)
+                    $($('.lastChats')[i]).scrollTop($('.lastChats')[i].scrollHeight);
             }
         }
-
+        createChatRow({!! $video->chats !!});
+        updateLiveChat();
     </script>
 
 @endsection
