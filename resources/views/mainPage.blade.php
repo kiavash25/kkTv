@@ -15,6 +15,23 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .playSliderIcon{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            background: #00000066;
+            display: none;
+        }
+        .playSliderIcon img{
+            width: 80px;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .playSliderIcon:hover img{
+            transform: scale(1.1);
+        }
         @media (max-width: 771px) {
             .commonSoundIcon{
                 font-size: 25px;
@@ -29,30 +46,53 @@
     <div class="container mainShowBase">
         <div class="mainSlider">
             <div id="mainSlider" class="swiper-container backgroundColorForSlider" style="display: flex; justify-content: center; align-items: center;">
-                <video id="mainVideo" src="#" autoplay muted loop></video>
-                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>
-                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>
+{{--                <video id="mainVideo" src="#" autoplay muted loop></video>--}}
+{{--                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>--}}
+{{--                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>--}}
 
-{{--                <div class="swiper-wrapper">--}}
-{{--                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">--}}
-{{--                        <img src="{{URL::asset('images/mainPics/liveBanner.jpg')}}" class="resizeImgClass">--}}
-{{--                        <div class="nowSeeThisVideoDiv">--}}
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">
+                        <img src="{{URL::asset('images/notImportant/banner.jpg')}}" class="resizeImgClass" onload="showThisVideoSugg(this)" style="width: 100%">
+                        <div class="nowSeeThisVideoDiv" style="color: white; font-size: 35px; flex-direction: column; align-items: flex-end;">
+                            <div id="timeToStart"></div>
+                            <div style="color: #f4c15b; font-size: 19px;">مانده به شروع پخش زنده</div>
 {{--                            <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">--}}
-{{--                            <a href="#" class="nowSeeThisVideoButton">--}}
-{{--                                همین حالا ببینید--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                        <div class="nowSeeThisVideoNameDiv">--}}
-{{--                            <a href="#" class="nowSeeThisVideoName">--}}
-{{--                                گفتگوی زنده--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+{{--                            <a href="#" class="nowSeeThisVideoButton"> همین حالا ببینید </a>--}}
+                        </div>
+                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $hasLive])}}" class="playSliderIcon">
+                            <img src="{{URL::asset('images/mainPics/play.png')}}">
+                        </a>
+                    </div>
+                </div>
 {{--                <div class="swiper-pagination"></div>--}}
 {{--                <div class="swiper-button-next"></div>--}}
 {{--                <div class="swiper-button-prev"></div>--}}
             </div>
+
+            <script>
+                let countDownDate  = new Date("Oct 25, 2020 20:00:00").getTime();
+                var x = setInterval(function() {
+                    var now = new Date().getTime();
+                    var distance = countDownDate - now;
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    if(hours < 10)
+                        hours = '0'+hours;
+                    if(minutes < 10)
+                        minutes = '0'+minutes;
+                    if(seconds < 10)
+                        seconds = '0'+seconds;
+
+                    document.getElementById("timeToStart").innerHTML = hours + ":" + minutes + ":" + seconds;
+                    if (distance < 0) {
+                        clearInterval(x);
+                        $('#timeToStart').parent().hide();
+                        $('#playSliderIcon').css('display', 'flex');
+                    }
+                }, 1000);
+            </script>
 
 
         </div>
@@ -188,9 +228,7 @@
         }
         categoryVideoSuggestion();
 
-        function createTopVideoSuggestion(){
-            createVideoSuggestionDiv(topVideos, 'topVideosDiv')
-        }
+        const createTopVideoSuggestion = () => createVideoSuggestionDiv(topVideos, 'topVideosDiv');
         createTopVideoSuggestion();
 
         var swipersuggestion = new Swiper('.videoSuggestionSwiper', {

@@ -550,6 +550,31 @@
         }
         createChatRow({!! $video->chats !!});
         updateLiveChat();
+
+        window.seenPageLogId = 0;
+        window.isMobile =  0;
+
+        function sendSeenPageLog(){
+            $.ajax({
+                type: 'post',
+                url: '{{route('log.storeSeen')}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    seenPageLogId: window.seenPageLogId,
+                    isMobile: window.isMobile,
+                    width: $(window).width(),
+                    height: $(window).height(),
+                    url: document.location.href
+                },
+                success: response => {
+                    if(response.status == 'ok')
+                        window.seenPageLogId = response.seenPageLogId;
+                    setTimeout(sendSeenPageLog, 5000);
+                },
+                error: err => setTimeout(sendSeenPageLog, 5000)
+            })
+        }
+        sendSeenPageLog();
     </script>
 
 @endsection

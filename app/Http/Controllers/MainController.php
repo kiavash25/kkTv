@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\UserSeenLog;
 use App\models\Video;
 use App\models\VideoCategory;
 use App\models\VideoComment;
@@ -619,7 +620,49 @@ class MainController extends Controller
             }
         }
 
+
         return view('streamingLive', compact(['room', 'video', 'hasVideo', 'user', 'lastChatId']));
+    }
+
+    public function storeSeenLog(Request $request)
+    {
+        $nowDate = '1399-08-04';
+        if(!isset($_COOKIE['userCodeTV'])){
+            $userCode = generateRandomString(10);
+            while(UserSeenLog::where('userCode', $userCode)->count() > 0)
+                $userCode = generateRandomString(10);
+
+            setcookie('userCodeTV', $userCode, time()+(86400*30));
+        }
+        else
+            $userCode = $_COOKIE['userCodeTV'];
+
+        $url = $request->url;
+        $seenLog = UserSeenLog::where('url', $url)->where('userCode', $userCode)->first();
+        if($seenLog == null){
+            $seenLog = UserSeenLog::create([
+                'userCode' => $userCode,
+                'url' => $request->url,
+                'seenTime' => 0,
+                'date' => $nowDate,
+                'isMobile' => $request->isMobile,
+                'width' => $request->width,
+                'height' => $request->height,
+                'relatedId' => 0,
+            ]);
+        }
+        else{
+            $seenLog->seenTime = $seenLog->seenTime+5;
+            $seenLog->save();
+        }
+
+        if(\auth()->check() && $seenLog->userId == null){
+            $seenLog->userId = \auth()->user()->id;
+            $seenLog->save();
+        }
+
+
+        return response()->json(['status' => 'ok', 'seenPageLogId' => $seenLog->id]);
     }
 
     public function storeLiveChat(Request $request)

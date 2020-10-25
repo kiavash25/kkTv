@@ -28,6 +28,8 @@ Route::get("pyGetLive/{code}", function ($code) {
     return view('getLive2', ['url' => $code]);
 });
 
+Route::post('log/storeSeenLog', 'MainController@storeSeenLog')->name('log.storeSeen');
+
 Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('/', 'MainController@indexStreaming')->name('index');
