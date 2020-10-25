@@ -128,23 +128,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
 Route::post('getTags', 'AjaxController@getTags')->name('getTags');
 
-Route::get('randomSeenForVideo', function (){
-   $tvVideo = \App\models\Video::where('userId', 68)->get();
-   $youVideo = \App\models\Video::where('userId', 1)->get();
-
-   foreach ($tvVideo as $video ){
-       $video->seen = random_int(1000, 9999);
-       $video->save();
-   }
-   foreach ($youVideo as $video ){
-       $video->seen = random_int(100, 999);
-       $video->save();
-   }
-
-   dd('done');
-
-});
-
 Auth::routes();
 
 

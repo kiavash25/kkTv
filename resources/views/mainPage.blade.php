@@ -4,6 +4,8 @@
 @section('head')
     <link rel="stylesheet" type='text/css' href='{{URL::asset('css/pages/mainPage.css')}}'>
     <style>
+
+
         .commonSoundIcon{
             position: absolute;
             left: 10px;

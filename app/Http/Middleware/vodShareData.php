@@ -54,7 +54,7 @@ class vodShareData
         }
 
 
-        $fileVersion = 3;
+        $fileVersion = 4;
 
         View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'timeToLiveCode' => $timeToLiveCode, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 
