@@ -182,8 +182,8 @@ class MainController extends Controller
             }
             $video = $this->getVideoFullInfo($video, true);
 
-            $userMoreVideo = Video::where('userId', $video->userId)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
-            $sameCategory = Video::where('categoryId', $video->categoryId)->where('id', '!=', $video->id)->take(7)->orderByDesc('created_at')->get();
+            $userMoreVideo = Video::where('userId', $video->userId)->where('confirm', 1)->where('state', 1)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
+            $sameCategory = Video::where('categoryId', $video->categoryId)->where('confirm', 1)->where('state', 1)->where('id', '!=', $video->id)->take(7)->orderByDesc('created_at')->get();
 
             foreach ([$userMoreVideo, $sameCategory] as $categ)
                 foreach ($categ as $vid)
@@ -691,7 +691,9 @@ class MainController extends Controller
         else
             $lastChatId = $lastChatId->id;
 
-        return response()->json(['status' => 'ok', 'chats' => $chats, 'lastChatId' => $lastChatId]);
+        $userSeen = 18333 + random_int(0, 200);
+
+        return response()->json(['status' => 'ok', 'chats' => $chats, 'lastChatId' => $lastChatId, 'userSeen' => $userSeen]);
     }
 
     public function sendBroadcastMsg(Request $request)

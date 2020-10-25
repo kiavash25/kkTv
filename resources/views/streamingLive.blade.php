@@ -298,7 +298,7 @@
                             @include('component.shareBox')
                         </div>
                         <div class="toolSectionInfosTab">
-                            <span class="toolSectionInfosTabNumber">0</span>
+                            <span id="nowUserSeen" class="toolSectionInfosTabNumber"></span>
                             <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
                         </div>
                     </div>
@@ -509,6 +509,7 @@
             $('.liveChatSec').toggleClass('open');
         }
 
+        let userSeenTimer = 0;
         function updateLiveChat(){
             $.ajax({
                 type: 'get',
@@ -516,6 +517,13 @@
                 success: response => {
                     if(response.status == 'ok'){
                         lastChatId = response.lastChatId;
+                        if(userSeenTimer == 5){
+                            userSeenTimer = 0;
+                            $('#nowUserSeen').text(response.userSeen);
+                        }
+                        else
+                            userSeenTimer++;
+
                         createChatRow(response.chats);
                     }
                     updateChatTimeOut = setTimeout(updateLiveChat, 2000);

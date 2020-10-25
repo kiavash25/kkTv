@@ -38,19 +38,25 @@ class vodShareData
 
         $today = Carbon::now()->format('Y-m-d');
         $nowTime = Carbon::now()->format('H:i');
+
         $timeToLive = null;
         $hasLive = false;
+        $timeToLiveCode = false;
 
         $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
-        if($lives != null && ($lives->sDate < $today || ($lives->sDate == $today && $lives->sTime <= $nowTime)))
+        if($lives != null && ($lives->sDate < $today || ($lives->sDate == $today && $lives->sTime <= $nowTime))) {
             $hasLive = $lives->code;
-        else if($lives != null && $lives->sDate == $today)
-            $timeToLive = $lives->sTime.':00';
+            $timeToLiveCode = $lives->code;
+        }
+        else if($lives != null && $lives->sDate == $today) {
+            $timeToLive = $lives->sTime . ':00';
+            $timeToLiveCode = $lives->code;
+        }
 
 
         $fileVersion = 3;
 
-        View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
+        View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'timeToLiveCode' => $timeToLiveCode, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 
         return $next($request);
     }

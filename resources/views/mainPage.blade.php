@@ -23,6 +23,7 @@
             align-items: center;
             background: #00000066;
             display: none;
+            flex-direction: column;
         }
         .playSliderIcon img{
             width: 80px;
@@ -59,8 +60,9 @@
 {{--                            <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">--}}
 {{--                            <a href="#" class="nowSeeThisVideoButton"> همین حالا ببینید </a>--}}
                         </div>
-                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $hasLive])}}" class="playSliderIcon">
+                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $timeToLiveCode])}}" class="playSliderIcon">
                             <img src="{{URL::asset('images/mainPics/play.png')}}">
+                            <div style="color: white; font-size: 32px;">همین حالا ببینید</div>
                         </a>
                     </div>
                 </div>
