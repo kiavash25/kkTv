@@ -51,7 +51,7 @@
 {{--                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>--}}
 
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden">
+                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden; justify-content: start;">
                         <img src="{{URL::asset('images/notImportant/banner.jpg')}}" class="resizeImgClass" onload="showThisVideoSugg(this)" style="width: 100%">
                         <div class="nowSeeThisVideoDiv" style="color: white; font-size: 35px; flex-direction: column; align-items: flex-end;">
                             <div id="timeToStart"></div>
@@ -69,8 +69,9 @@
 {{--                <div class="swiper-button-prev"></div>--}}
             </div>
 
+
             <script>
-                let countDownDate  = new Date("Oct 25, 2020 20:00:00").getTime();
+                let countDownDate  = new Date("Oct 25, 2020 {{$timeToLive}}").getTime();
                 var x = setInterval(function() {
                     var now = new Date().getTime();
                     var distance = countDownDate - now;
