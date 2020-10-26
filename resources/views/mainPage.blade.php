@@ -2,7 +2,7 @@
 
 
 @section('head')
-    <link rel="stylesheet" type='text/css' href='{{URL::asset('css/pages/mainPage.css')}}'>
+    <link rel="stylesheet" type='text/css' href='{{URL::asset('css/pages/mainPage.css?v='.$fileVersion)}}'>
     <style>
 
 
@@ -49,25 +49,23 @@
     <div class="container mainShowBase">
         <div class="mainSlider">
             <div id="mainSlider" class="swiper-container backgroundColorForSlider" style="display: flex; justify-content: center; align-items: center;">
-{{--                <video id="mainVideo" src="#" autoplay muted loop></video>--}}
-{{--                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>--}}
-{{--                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>--}}
+                <video id="mainVideo" src="#" autoplay muted loop></video>
+                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>
+                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>
 
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden; justify-content: start;">
-                        <img src="{{URL::asset('images/notImportant/banner.jpg')}}" class="resizeImgClass" onload="showThisVideoSugg(this)" style="width: 100%">
-                        <div class="nowSeeThisVideoDiv" style="color: white; font-size: 35px; flex-direction: column; align-items: flex-end;">
-                            <div id="timeToStart"></div>
-                            <div style="color: #f4c15b; font-size: 19px;">مانده به شروع پخش زنده</div>
-{{--                            <img src="{{URL::asset('images/mainPics/playb.png')}}" class="nowSeeThisVideoButtonImage">--}}
-{{--                            <a href="#" class="nowSeeThisVideoButton"> همین حالا ببینید </a>--}}
-                        </div>
-                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $timeToLiveCode])}}" class="playSliderIcon">
-                            <img src="{{URL::asset('images/mainPics/play.png')}}">
-                            <div style="color: white; font-size: 32px;">همین حالا ببینید</div>
-                        </a>
-                    </div>
-                </div>
+{{--                <div class="swiper-wrapper">--}}
+{{--                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden; justify-content: start;">--}}
+{{--                        <img src="{{URL::asset('images/notImportant/banner.jpg')}}" class="resizeImgClass" onload="showThisVideoSugg(this)" style="width: 100%">--}}
+{{--                        <div class="nowSeeThisVideoDiv" style="color: white; font-size: 35px; flex-direction: column; align-items: flex-end;">--}}
+{{--                            <div id="timeToStart"></div>--}}
+{{--                            <div style="color: #f4c15b; font-size: 19px;">مانده به شروع پخش زنده</div>--}}
+{{--                        </div>--}}
+{{--                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $timeToLiveCode])}}" class="playSliderIcon">--}}
+{{--                            <img src="{{URL::asset('images/mainPics/play.png')}}">--}}
+{{--                            <div style="color: white; font-size: 32px;">همین حالا ببینید</div>--}}
+{{--                        </a>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 {{--                <div class="swiper-pagination"></div>--}}
 {{--                <div class="swiper-button-next"></div>--}}
 {{--                <div class="swiper-button-prev"></div>--}}
@@ -75,28 +73,28 @@
 
 
             <script>
-                let countDownDate  = new Date("Oct 25, 2020 {{$timeToLive}}").getTime();
-                var x = setInterval(function() {
-                    var now = new Date().getTime();
-                    var distance = countDownDate - now;
-                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                {{--let countDownDate  = new Date("Oct 25, 2020 {{$timeToLive}}").getTime();--}}
+                {{--var x = setInterval(function() {--}}
+                {{--    var now = new Date().getTime();--}}
+                {{--    var distance = countDownDate - now;--}}
+                {{--    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));--}}
+                {{--    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));--}}
+                {{--    var seconds = Math.floor((distance % (1000 * 60)) / 1000);--}}
 
-                    if(hours < 10)
-                        hours = '0'+hours;
-                    if(minutes < 10)
-                        minutes = '0'+minutes;
-                    if(seconds < 10)
-                        seconds = '0'+seconds;
+                {{--    if(hours < 10)--}}
+                {{--        hours = '0'+hours;--}}
+                {{--    if(minutes < 10)--}}
+                {{--        minutes = '0'+minutes;--}}
+                {{--    if(seconds < 10)--}}
+                {{--        seconds = '0'+seconds;--}}
 
-                    document.getElementById("timeToStart").innerHTML = hours + ":" + minutes + ":" + seconds;
-                    if (distance < 0) {
-                        clearInterval(x);
-                        $('#timeToStart').parent().hide();
-                        $('#playSliderIcon').css('display', 'flex');
-                    }
-                }, 1000);
+                {{--    document.getElementById("timeToStart").innerHTML = hours + ":" + minutes + ":" + seconds;--}}
+                {{--    if (distance < 0) {--}}
+                {{--        clearInterval(x);--}}
+                {{--        $('#timeToStart').parent().hide();--}}
+                {{--        $('#playSliderIcon').css('display', 'flex');--}}
+                {{--    }--}}
+                {{--}, 1000);--}}
             </script>
 
 
