@@ -107,7 +107,11 @@ class AjaxController extends Controller
         }
 
         foreach ($kindPlaces as $kind){
-            $pl = \DB::table($kind->tableName)->where('name', 'LIKE', '%'.$value.'%')->select(['id', 'name', 'cityId'])->get();
+            $pl = \DB::connection('koochitaConnection')
+                    ->table($kind->tableName)
+                    ->where('name', 'LIKE', '%'.$value.'%')
+                    ->select(['id', 'name', 'cityId'])
+                    ->get();
             foreach ($pl as $item) {
                 $city = Cities::find($item->cityId);
                 array_push($searchResult, [
