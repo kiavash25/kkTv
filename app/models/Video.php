@@ -90,7 +90,7 @@ class Video extends Model
         if($httpcode == 200)
             return ['status' => 'ok', 'result' => json_decode($response)];
         else
-            return ['status' => 'nok', 'result' => $httpcode];
+            return ['status' => 'nok', 'result' => [$httpcode, $response]];
 
 //        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
 //            'time' => $time,
