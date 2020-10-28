@@ -31,8 +31,39 @@
     content: '\E04A';
     font-family: Shazde_Regular2 !important;
 }
+.arrowCss {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.arrowCss.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+.arrowCss.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+.arrowCss.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+.arrowCss.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
 .sendIcon:before{
     content: "\E01B";
+    font-family: 'Shazde_Regular' !important;
+}
+.plusIcon:before{
+    content: "\E02F";
+    font-family: 'Shazde_Regular' !important;
+}
+.plusIconAfter:after{
+    content: "\E02F";
     font-family: 'Shazde_Regular' !important;
 }
 .LikeIconEmpty:before{

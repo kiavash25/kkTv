@@ -4,10 +4,9 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tags extends Model
+class VideoCategoryRelation extends Model
 {
     protected $guarded = [];
-    protected $table = 'tag';
-    protected $connection = 'koochitaConnection';
+    protected $table = 'videoCategoryRelations';
     public $timestamps = false;
 }

@@ -221,9 +221,6 @@
 .descriptionSection{
     width: 100% !important;
 }
-.headerWithLine{
-    margin-top: 30px;
-}
 @media (max-width: 1300px){
     .lestSideLiveVideo{
         display: none;

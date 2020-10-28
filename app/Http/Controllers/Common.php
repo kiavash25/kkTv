@@ -31,6 +31,27 @@ function getUserPic($id = 0){
     return $uPic;
 }
 
+function uploadLargeFile($_direction, $_file_data){
+    $file_data = decode_chunk($_file_data);
+    if ($file_data === false)
+        return false;
+    else
+        file_put_contents($_direction, $file_data, FILE_APPEND);
+
+    return true;
+}
+
+function decode_chunk( $data ) {
+    $data = explode( ';base64,', $data );
+    if ( !is_array($data) || !isset($data[1]))
+        return false;
+    $data = base64_decode( $data[1] );
+    if (!$data)
+        return false;
+    return $data;
+}
+
+
 function makeValidInput($input) {
     $input = addslashes($input);
     $input = trim($input);
@@ -46,20 +67,6 @@ function createCode() {
         if(ActivationCode::whereCode($str)->count() == 0)
             return $str;
     }
-}
-
-
-function storeNewTag($tag){
-    $check = Tags::where('tag', $tag)->first();
-    if($check == null){
-        $newTag = new Tags();
-        $newTag->tag = $tag;
-        $newTag->save();
-
-        return $newTag->id;
-    }
-    else
-        return false;
 }
 
 

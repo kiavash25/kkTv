@@ -45,6 +45,8 @@ class User extends Authenticatable{
 
     protected $table = 'users';
     protected $primaryKey = 'id';
+    protected $connection = 'koochitaConnection';
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -192,13 +194,4 @@ class User extends Authenticatable{
         return $uPic;
     }
 
-    public function deleteUser(){
-//        $uId = \Auth::user()->id;
-//        ActivationCode::where('userId', $uId)->delete();
-//        BannerPics::where('userId', $uId)->update(['userId' => 0]);
-//        $logs = LogModel::where('visitorId', $uId)->get();
-//        foreach ($logs as $item){
-//
-//        }
-    }
 }

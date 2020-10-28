@@ -1,101 +1,117 @@
-let storeVideoAjax;
+let videoDropZone = $('#uploadVideoDiv');
 
-$('#videoTags').dropdown({
-    apiSettings: {
-        url: getTagsURL,
-        method: 'POST',
-        cache: false,
-        beforeXHR: (xhr) => {
-            xhr.setRequestHeader('Content-Type', 'application/json');
-        },
-        beforeSend: (settings) => {
-            settings.data = JSON.stringify({
-                tag: settings.urlData.query,
-            });
-            return settings
-        },
-        onResponse: (response) => {
-            let result = [];
-            if(response.same == 0) {
-                result = [{
-                    "name": response.send,
-                    "value": 'new_' + response.send,
-                    "text": response.send
-                }]
-            }
-            else{
-                result = [{
-                    "name": response.same.name,
-                    "value": 'new_' + response.same.id,
-                    "text": response.same.name
-                }]
-            }
-            if(response.tags.length != 0){
-                for(let i = 0; i < response.tags.length; i++){
-                    result.push({
-                        "name" : response.tags[i].name,
-                        "value" : 'old_' + response.tags[i].id,
-                        "text" : response.tags[i].name
-                    })
+let thumbnail = '';
+let newThumbnailCrop;
+let canvas = 0;
+var uploadFileName = null;
+var uploadState = null;
+
+videoDropZone.on('dragover', function() {
+    videoDropZone.addClass('hover');
+    return false;
+});
+videoDropZone.on('dragleave', function() {
+    videoDropZone.removeClass('hover');
+    return false;
+});
+videoDropZone.on('drop', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    var files = e.originalEvent.dataTransfer.files;
+    if(files[0]['type'].includes('video/'))
+        storeVideo(files[0]);
+});
+
+
+function toggleAddAbleSelectList(_id){
+    $(`#${_id}`).find('.list').toggleClass('show');
+}
+
+function openAddAbleSelectList(){
+    $('#userVideoCategory').find('.list').addClass('show');
+}
+
+function closeAddAbleSelectList(_id){
+    $(`#${_id}`).find('.list').removeClass('show');
+}
+
+function chooseAddAbleSelect(_element, _id){
+    $(`#${_id}`).attr('data-value', $(_element).attr('data-value'));
+    $(`#${_id}`).find('.choosed').text($(_element).text());
+    $(`#${_id}`).find('.selected').removeClass('selected');
+    $(_element).addClass('selected');
+    closeAddAbleSelectList(_id);
+}
+
+function storeNewYourCategory(_element) {
+    var value = $('#newYourCategoryInput').val();
+    if(value.trim().length > 0 && !$(_element).hasClass('loading')){
+        $(_element).addClass('loading');
+        $.ajax({
+            type: 'post',
+            url: newCategoryUrl,
+            data: {
+                _token: window.csrfTokenGlobal,
+                text: value
+            },
+            success: response =>{
+                $(_element).removeClass('loading');
+                if(response.status == 'ok'){
+                    showSuccessNotifi('دسته بندی با موفقیت ثبت شد', 'left', 'var(--koochita-blue)');
+                    $('#userVideoCategory').find('.yourCat').append(`<div class="cats" data-value="${response.result.id}" onclick="chooseAddAbleSelect(this, 'userVideoCategory')">${response.result.name}</div>`);
+                    $('#newYourCategoryInput').val('');
                 }
+                else if(response.status == 'duplicate')
+                    showSuccessNotifi('نام دسته بندی تکراری است', 'left', 'red');
+            },
+            error: err => {
+                $(_element).removeClass('loading');
+                showSuccessNotifi('مشکلی در ثبت دسته بندی پیش امده', 'left', 'red');
+                console.log(err);
             }
-            response = {
-                "success": true,
-                "results": result
-            };
-            // Modify your JSON response into the format SUI wants
-            return response
-        }
+        })
     }
-});
+}
 
-$('#videoPlaceRel').dropdown({
-    apiSettings: {
-        url: totalSearchURL,
-        method: 'POST',
-        cache: false,
-        beforeXHR: (xhr) => {
-            xhr.setRequestHeader('Content-Type', 'application/json');
-        },
-        beforeSend: (settings) => {
-            settings.data = JSON.stringify({
-                kindPlaceId: 0,
-                key: settings.urlData.query,
-                _token: csrfToken
-            });
-            return settings
-        },
-        onResponse: (response) => {
-            let result = [];
-            let success = false;
-            for(let i = 0; i < response[1].length; i++){
-                success = true;
-                let name;
-                let place = response[1][i];
-                if(place['mode'] == 'state')
-                    name = ' استان ' + place['targetName'];
-                else if(place['mode'] == 'city')
-                    name = ' شهر ' + place['targetName'] + ' در ' + place['stateName'];
-                else
-                    name = place['targetName'] + ' در ' + place["cityName"];
-
-                result.push({
-                    "name" : name,
-                    "value" : place['kindPlaceId'] + '_' + place['id'],
-                    "text" : name,
-                })
+function storeNewPlayList(_element){
+    var value = $('#newPlayListInput').val();
+    if(value.trim().length > 0 && !$(_element).hasClass('loading')){
+        $(_element).addClass('loading');
+        $.ajax({
+            type: 'post',
+            url: newPlayListUrl,
+            data: {
+                _token: window.csrfTokenGlobal,
+                text: value
+            },
+            success: response =>{
+                $(_element).removeClass('loading');
+                if(response.status == 'ok'){
+                    showSuccessNotifi('لیست پخش با موفقیت ثبت شد', 'left', 'var(--koochita-blue)');
+                    $('#userPlayList').find('.yourCat').append(`<div class="cats" data-value="${response.result.id}" onclick="chooseAddAbleSelect(this, 'userPlayList')">${response.result.name}</div>`);
+                    $('#newPlayListInput').val('');
+                }
+                else if(response.status == 'duplicate')
+                    showSuccessNotifi('نام لیست پخش تکراری است', 'left', 'red');
+            },
+            error: err => {
+                $(_element).removeClass('loading');
+                showSuccessNotifi('مشکلی در ثبت لیست پخش پیش امده', 'left', 'red');
+                console.log(err);
             }
-            response = {
-                "success": success,
-                "results": result
-            };
-            // Modify your JSON response into the format SUI wants
-            return response
-        }
+        })
     }
-});
+}
+
+function inputVideo(_input){
+    if(_input.files[0]['type'].includes('video/'))
+        storeVideo(_input.files[0]);
+}
 
 function storeVideo(_file){
+    $('#uploadVideoDiv').hide();
+    $('#videoSetting').show();
+
     window.URL = window.URL || window.webkitURL;
 
     var video = document.createElement('video');
@@ -103,7 +119,6 @@ function storeVideo(_file){
     video.src = URL.createObjectURL(_file);
     $('#thumbnailVideoVideo').attr('src', URL.createObjectURL(_file));
 
-    var file = _file;
     var fileReader = new FileReader();
     fileReader.onload = function() {
         var blob = new Blob([fileReader.result], {type: _file.type});
@@ -112,6 +127,7 @@ function storeVideo(_file){
         video.addEventListener('loadeddata', function() {
 
             if(snapImage('showThumbnailMain')){
+                $('#duration').val(video.duration);
                 video.currentTime = video.duration/3;
                 setTimeout(function(){
                     if(snapImage('showThumbnail1')){
@@ -157,144 +173,65 @@ function storeVideo(_file){
     };
     fileReader.readAsArrayBuffer(_file);
 
-    $('#uploadVideoDiv').hide();
-    $('#videoSetting').show();
+    uploadLargeFile(storeVideoURL, _file, [], updateUploadStatus);
+}
 
-    let formData = new FormData();
-    formData.append('video', _file);
-    formData.append('code', videoCode);
-    formData.append('kind', 'video');
-    formData.append('_token', csrfToken);
+function updateUploadStatus(_percent, _fileName = ''){
+    if(_percent == 'done'){
+        $('#progressText').text('100%');
+        $('#progressColor').css('width', '100%');
+        $('#progressStatus').text('ویدیوی شما با موفقیت بارگزاری شد');
+        uploadFileName = _fileName;
+        uploadState = 'done';
+    }
+    else if(_percent == 'error'){
+        $('#progressStatus').text('در بارگزاری ویدیو مشکلی پیش امده لطفا دوباره تلاش نمایید.');
+        uploadState = 'error';
+    }
+    else if(_percent == 'cancelUpload'){
+        openErrorAlert('بارگزاری ویدیو متوقف شد.');
+        $('#progressText').text('0%');
+        $('#videoFile').val('');
+        $('#uploadVideoDiv').show();
+        $('#videoSetting').hide();
+        uploadState = null;
+    }
+    else {
+        uploadState = 'process';
+        $('#progressText').text(_percent + '%');
+        $('#progressColor').css('width', _percent + '%');
+    }
+}
 
-    storeVideoAjax = $.ajax({
-        type: 'post',
-        url: storeVideoURL,
-        data: formData,
-        processData: false,
-        contentType: false,
-        xhr: function () {
-            let xhr = new XMLHttpRequest();
-            xhr.upload.onprogress = function (e) {
-                var percent = '0';
-                var percentage = '0%';
+function cancelUploadVideo(){
+    $('#progressStatus').text('ویدیوی شما در حال حذف می باشد');
+    if(uploadState == 'process')
+        cancelLargeUploadedFile(); // in uploadLargFile.js
+    else if(uploadState == 'done')
+        deleteUploadedFile();
+}
 
-                if (e.lengthComputable) {
-                    percent = Math.round((e.loaded / e.total) * 100);
-                    percentage = percent + '%';
-                    $('#progressText').text(percentage);
-                    $('#progressColor').css('width', percentage);
+function deleteUploadedFile(){
 
-                }
-            };
-
-            return xhr;
+    $.ajax({
+        type: 'delete',
+        url: deleteUploadedVideoUrl,
+        data: {
+            _token: window.csrfTokenGlobal,
+            fileName: uploadFileName,
         },
-        success: function(response){
-            try{
-                response = JSON.parse(response);
-                if(response['status'] == 'ok') {
-                    $('#progressStatus').text('ویدیوی شما با موفقیت بارگزاری شد');
-                    $('#duration').val(response['duration']);
-                    uploadCompleted = true;
-                }
-                else
-                    errorUploadVideo();
-            }
-            catch (e) {
-                console.log(e);
-                errorUploadVideo();
+        success: response => {
+            if(response.status == 'ok'){
+                openErrorAlert('بارگزاری ویدیو متوقف شد.');
+                $('#progressText').text('0%');
+                $('#videoFile').val('');
+                $('#uploadVideoDiv').show();
+                $('#videoSetting').hide();
+                uploadState = null;
             }
         },
-        error: function(err){
-            console.log(err);
-            errorUploadVideo();
-        }
+        error: err => console.log(err)
     })
-}
-
-function errorUploadVideo(){
-    $('#uploadVideoDiv').show();
-    $('#videoSetting').hide();
-
-    openErrorAlert('بارگزاری ویدیو با مشکلی مواجه شد لطفا دوباره تلاش کنید');
-}
-
-function storeInfoVideos(_state){
-    let name = $('#videoName').val();
-    let categoryId = $('#videoSubCategory').val();
-    let description = $('#videoText').val();
-    let tags = $('#videoTags').val();
-    let places = $('#videoPlaceRel').val();
-    let duration = $('#duration').val();
-    let kind = 'setting';
-    let error = false;
-    let errorText = '<ul style="list-style: none">';
-
-    if(name.trim().length == 0){
-        error = true;
-        errorText += '<li style="margin-bottom: 10px">برای ویدیو خود یک نام انتخاب کنید</li>';
-    }
-
-    if(categoryId == 0){
-        error = true;
-        errorText += '<li>لطفا زیر دسته بندی ویدیوی خود را مشخص کنید</li>';
-    }
-
-    if(!uploadCompleted){
-        error = true;
-        errorText += '<li>ویدیوی شما بارگذاری نشده است. لطفا تا بارگذاری کامل صبر کنید.</li>';
-    }
-
-    if(error){
-        errorText += '</ul>';
-        openWarning(errorText);
-        return;
-    }
-    else{
-        let settingFormData = new FormData();
-        settingFormData.append('_token', csrfToken);
-        settingFormData.append('code', videoCode);
-        settingFormData.append('name', name);
-        settingFormData.append('kind', kind);
-        settingFormData.append('places', places);
-        settingFormData.append('categoryId', categoryId);
-        settingFormData.append('description', description);
-        settingFormData.append('tags', tags);
-        settingFormData.append('duration', duration);
-        settingFormData.append('state', _state);
-        settingFormData.append('thumbnail', thumbnail);
-
-        openLoading();
-        $.ajax({
-            type: 'post',
-            url: storeVideoInfoURL,
-            data: settingFormData,
-            processData: false,
-            contentType: false,
-            success: function(response){
-                try{
-                    response = JSON.parse(response);
-                    if(response['status'] == 'ok')
-                        location.href = response['url'];
-                    else{
-                        console.log(response);
-                        closeLoading();
-                        errorUploadSettingVideo();
-                    }
-                }
-                catch(e){
-                    console.log(e);
-                    closeLoading();
-                    errorUploadSettingVideo();
-                }
-            },
-            error: function(err){
-                console.log(err);
-                closeLoading();
-                errorUploadSettingVideo();
-            }
-        })
-    }
 }
 
 function selectNewThumbnail(_num, _element){
@@ -326,21 +263,113 @@ function setCropThumbnail(){
     $('#creatCropThumbnailDiv').addClass('thumbnailSelectImgChoose');
 
     $('#newThumbnailModal').css('display', 'none');
+    resizeFitImg('resizeImgClass');
 }
 
-function errorUploadSettingVideo(){
-    openErrorAlert('ثبت ویدیو با مشکلی مواجه شد لطفا دوباره تلاش کنید');
+function uploadThumbnailPic(_input){
+    if(_input.files && _input.files[0]){
+        cleanImgMetaData(_input, (imgDataURL, _file) => {
+            $('.showThumbnailMain').attr('src', imgDataURL);
+            thumbnail = imgDataURL;
+            resizeFitImg('resizeImgClass');
+        })
+    }
 }
 
-function inputVideo(_input){
-    if(_input.files[0]['type'].includes('video/'))
-        storeVideo(_input.files[0]);
-}
+$('#videoTags').dropdown({
+    apiSettings: {
+        url: getTagsURL,
+        method: 'get',
+        cache: false,
+        beforeXHR: (xhr) => {
+            xhr.setRequestHeader('Content-Type', 'application/json');
+        },
+        beforeSend: (settings) => {
+            settings.data = {
+                tag: settings.urlData.query,
+            };
+            return settings
+        },
+        onResponse: (response) => {
+            let result = [];
+            if(response.same == 0) {
+                result = [{
+                    "name" : response.send,
+                    "value": response.send,
+                    "text" : response.send
+                }]
+            }
+            else{
+                result = [{
+                    "name" : response.same.name,
+                    "value": response.same.name,
+                    "text" : response.same.name
+                }]
+            }
+            if(response.tags.length != 0){
+                for(let i = 0; i < response.tags.length; i++){
+                    result.push({
+                        "name"  : response.tags[i].name,
+                        "value" : response.tags[i].name,
+                        "text"  : response.tags[i].name
+                    })
+                }
+            }
+            response = {
+                "success": true,
+                "results": result
+            };
+            // Modify your JSON response into the format SUI wants
+            return response
+        }
+    }
+});
 
-function cancelUploadVideo(){
-    storeVideoAjax.abort();
-    $('#videoFile').val('');
+$('#videoPlaceRel').dropdown({
+    apiSettings: {
+        url: totalSearchURL,
+        method: 'get',
+        cache: false,
+        beforeXHR: (xhr) => {
+            xhr.setRequestHeader('Content-Type', 'application/json');
+        },
+        beforeSend: (settings) => {
+            settings.data = {
+                value: settings.urlData.query,
+                filter: {
+                    kindPlaceId : 1,
+                    state : 1,
+                    city : 1,
+                }
+            };
+            return settings
+        },
+        onResponse: (response) => {
+            let result = [];
+            let success = false;
+            if(response.status == 'ok')
+                response.result.map(item =>{
+                    success = true;
+                    let name;
+                    if(item.kind == 'state')
+                        name = ' استان ' + item.name;
+                    else if(item.kind == 'city')
+                        name = ' شهر ' + item.name + ' در ' + item.state;
+                    else
+                        name = item.name + ' در ' + item.city;
 
-    $('#uploadVideoDiv').show();
-    $('#videoSetting').hide();
-}
+                    result.push({
+                        "name" : name,
+                        "value" : item.kindPlaceId + '_' + item.id,
+                        "text" : name,
+                    })
+                });
+
+            response = {
+                "success": true,
+                "results": result
+            };
+            return response;
+        }
+    }
+});

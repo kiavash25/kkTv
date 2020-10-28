@@ -12,6 +12,7 @@
     color: red;
     font-family: 'Shazde_Regular2' !important;
     content: '\E00B';
+    margin-right: 5px;
 }
 .uploadBase{
     background: #3a3a3a;
@@ -54,10 +55,13 @@
     border-radius: 10px 10px 0px 0px;
 }
 .videoProgressPicDiv{
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    width: 240px;
+    height: 165px;
+    border-radius: 10px;
 }
 .progressDiv{
     height: 150px;
@@ -92,7 +96,7 @@
     position: absolute;
     background-color: #fcc156;
     top: 0px;
-    right: 0px;
+    left: 0px;
     width: 0%;
     height: 100%;
     border-radius: 10px;
@@ -111,9 +115,10 @@
     border-radius: 0px 0px 10px 10px;
 }
 .inputVideoLabel{
-    color: white;
+    color: #e6e6e6;
     font-weight: 400;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
+    font-size: 12px;
 }
 .rtlMultiSelect{
     direction: rtl;
@@ -174,9 +179,6 @@
     cursor: pointer;
     height: 140px;
 }
-.thumbnailSelectImgChoose{
-    border: solid 8px #2e9087 !important;
-}
 .newThumbnailChoose{
     color: white;
     border-radius: 10px;
@@ -196,6 +198,7 @@
     opacity: 1 !important;
 }
 .closeDivVideoSection{
+    color: red;
     position: absolute;
     left: 10px;
     top: 10px;
@@ -212,11 +215,12 @@
     font-size: 40px;
 }
 .selectThumbnailDiv{
-    background: white;
+    background: #3a3a3a;
     border-radius: 10px;
     opacity: 1;
     width: 438px;
-    max-width: 100%;
+    max-width: 95%;
+    max-height: 95vh;
 }
 .selectThumbnailDivVideoSection{
     display: flex;
@@ -227,11 +231,143 @@
     padding: 20px;
 }
 .resultThumbnail{
-    padding: 20px;
+    height: 200px;
+    width: auto;
+}
+
+.submitCropButton{
+    margin-top: 10px;
+    background: var(--koochita-green);
+    color: white;
+    border: none;
+    padding: 7px 70px;
+    border-radius: 10px;
+}
+.cropButton{
+    margin-top: 5px;
+    background: var(--koochita-yellow);
+    color: white;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 30px;
+}
+.uploadLaw{
+    margin-top: 10px;
+    background: #3a3a3a;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    text-align: justify;
+    padding: 50px 15px;
+}
+.menu .header{
+    text-align: right;
+}
+.ui.dropdown .menu > .item:hover{
+    background: red;
+    color: white;
+}
+
+.thumbnailButton{
+    margin-top: 10px
+}
+.thumbnailButton > button, .thumbnailButton > label{
+    background: var(--koochita-blue);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'IRANSansWeb';
+}
+.chooseUserCategoryInput{
+    position: relative;
+}
+.chooseUserCategoryInput .choosed{
     width: 100%;
+    height: 35px;
+    background: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    color: #232323;
+    padding: 0px 10px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.chooseUserCategoryInput .list{
+    position: absolute;
+    z-index: 99;
+    background: #dedede;
+    width: 100%;
+    top: calc(100% - 5px);
+    border-top: none !important;
+    border-radius: 0px 0px 5px 5px;
+    transition: .3s;
+    max-height: 0px;
+    overflow: hidden;
+}
+.chooseUserCategoryInput .list.show{
+    padding: 5px 0px;
+    border: solid 1px gray;
+    max-height: 260px;
+}
+.chooseUserCategoryInput .yourCat{
+    padding: 0px 10px;
+    max-height: 180px;
+    overflow: auto;
+}
+.chooseUserCategoryInput .list .cats{
+    cursor: pointer;
+    padding: 7px 5px;
+    margin: 3px 0px;
+    color: #3a3a3a;
+    border-bottom: solid 1px #d4d4d4;
+    transition: .3s;
+}
+.chooseUserCategoryInput .list .cats:hover{
+    background: #cacaca;
+    border-radius: 5px;
+}
+.chooseUserCategoryInput .list .cats.selected{
+    cursor: not-allowed;
+    color: #b7b7b7;
+}
+.chooseUserCategoryInput .list .newCat{
+    display: flex;
+    padding: 7px 10px;
+}
+.chooseUserCategoryInput .newCat > input{
+    width: 100%;
+    border: none;
+    margin: 0px 5px;
+    border-radius: 3px;
+    height: 30px;
+    padding: 0px 5px;
+    font-family: IRANSans;
+}
+.chooseUserCategoryInput .newCat > button{
+    border: none;
+    color: white;
+    background: var(--koochita-blue);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.chooseUserCategoryInput .newCat > button > img{
+    display: none;
+}
+.chooseUserCategoryInput .newCat > button.loading:before{
+    display: none;
 }
 @media (min-width: 992px){
-    .videoSetting .col-md-6, .col-md-8, .col-md-4{
+    .videoSetting .col-md-6, .col-md-8, .col-md-4, .col-md-3{
         float: right;
     }
 }

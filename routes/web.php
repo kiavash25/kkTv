@@ -49,12 +49,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
     Route::middleware(['auth'])->group(function () {
         Route::post('streaming/storeLiveChat', 'MainController@storeLiveChat')->name('streaming.storeLiveChat');
 
-        Route::get('video/uploadPage', 'MainController@uploadVideoPage')->name('video.uploadPage');
-
-        Route::post('video/storeVideo', 'MainController@storeVideo')->name('video.storeVideo');
-
-        Route::post('video/storeVideoInfo', 'MainController@storeVideoInfo')->name('video.storeVideoInfo');
-
         Route::post('video/setVideoFeedback', 'MainController@setVideoFeedback')->name('video.setVideoFeedback');
 
         Route::post('video/setVideoComment', 'MainController@setVideoComment')->name('video.setVideoComment');
@@ -62,6 +56,21 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
         Route::post('streaming/live/sendBroadcastMsg', 'MainController@sendBroadcastMsg')->name('sendBroadcastMsg');
 
         Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
+    });
+
+//    upload video
+    Route::middleware(['auth'])->group(function(){
+        Route::post('video/yourCategory/store', 'VideoController@newYourCategory')->name('video.yourCategory.new');
+
+        Route::post('video/playList/store', 'VideoController@newPlayList')->name('video.playList.new');
+
+        Route::get('video/uploadPage', 'VideoController@uploadVideoPage')->name('video.uploadPage');
+
+        Route::post('video/storeVideo', 'VideoController@uploadVideoFile')->name('video.uploadVideoFile');
+
+        Route::delete('video/uploadedFile/delete', 'VideoController@deleteUploadedFile')->name('video.uploadFile.delete');
+
+        Route::post('video/storeVideoInfo', 'VideoController@storeVideoInfo')->name('video.storeVideoInfo');
     });
 
 //authenticated controller
@@ -112,21 +121,34 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
 
 
-
-    Route::get('profile', function(){
-        dd('profile');
-    })->name('profile');
-
     Route::get('/importVideoToDB', 'StreamingController@importVideoToDB');
 
     Route::get('/setVideoDuration', 'StreamingController@setVideoDuration');
 
-    Route::get('policies', function(){
-        dd('policies');
-    })->name('policies');
+    Route::get('policies', function(){ dd('policies'); })->name('policies');
+    Route::get('profile', function(){ dd('profile'); })->name('profile');
 });
 
-Route::post('getTags', 'AjaxController@getTags')->name('getTags');
+Route::middleware(['web'])->group(function(){
+    Route::get('ajax/getVideoPlaces', 'AjaxController@getVideoPlaces')->name('ajax.getVideoPlaces');
+
+    Route::get('ajax/totalPlaceSearch', 'AjaxController@totalPlaceSearch')->name('ajax.totalPlaceSearch');
+
+    Route::get('ajax/getTags', 'AjaxController@getTags')->name('ajax.getTags');
+});
+
+Route::get('updateMainCategories', function (){
+    $videos = \App\models\Video::all();
+    foreach ($videos as $item){
+        \App\models\VideoCategoryRelation::firstOrCreate([
+           'videoId' => $item->id,
+            'categoryId' => $item->categoryId,
+            'isMain' => 1
+        ]);
+    }
+});
+
+
 
 Auth::routes();
 

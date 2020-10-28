@@ -106,8 +106,6 @@
                 <div class="headerWithLineText">
                    آخرین ویدیو ها
                 </div>
-                <div class="headerWithLineLine"></div>
-
             </div>
             <div class="otherSectionBody">
                 <div class="videoSuggestionSwiper swiper-container">
@@ -148,7 +146,6 @@
                 <div class="headerWithLineText">
                     محبوب ها
                 </div>
-                <div class="headerWithLineLine"></div>
             </div>
             <div class="otherSectionBody">
                 <div class="videoSuggestionSwiper swiper-container">
@@ -170,8 +167,6 @@
                         <div class="headerWithLineText">
                             {{$cat->name}}
                         </div>
-                        <div class="headerWithLineLine"></div>
-
                         <a href="{{route('video.list', ['kind' => 'category', 'value' => $cat->id])}}" class="allVideoButton">
                             مشاهده همه
                         </a>

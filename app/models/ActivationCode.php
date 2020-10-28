@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 
 class ActivationCode extends Model {
+    protected $connection = 'koochitaConnection';
     protected $table = 'activationCode';
     public $timestamps = false;
 }

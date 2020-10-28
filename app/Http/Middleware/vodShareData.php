@@ -3,10 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\models\Live;
+use App\models\UserPlayList;
+use App\models\UserVideoCategory;
 use App\models\VideoCategory;
 use App\models\VideoLive;
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
 
 class vodShareData
@@ -53,8 +56,7 @@ class vodShareData
             $timeToLiveCode = $lives->code;
         }
 
-
-        $fileVersion = 4;
+        $fileVersion = 5;
 
         View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'timeToLiveCode' => $timeToLiveCode, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 
