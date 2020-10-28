@@ -137,19 +137,6 @@ Route::middleware(['web'])->group(function(){
     Route::get('ajax/getTags', 'AjaxController@getTags')->name('ajax.getTags');
 });
 
-Route::get('updateMainCategories', function (){
-    $videos = \App\models\Video::all();
-    foreach ($videos as $item){
-        \App\models\VideoCategoryRelation::firstOrCreate([
-           'videoId' => $item->id,
-            'categoryId' => $item->categoryId,
-            'isMain' => 1
-        ]);
-    }
-});
-
-
-
 Auth::routes();
 
 
