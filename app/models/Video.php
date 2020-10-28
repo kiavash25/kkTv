@@ -70,6 +70,7 @@ class Video extends Model
             'places' => json_encode($places)
         ]);
 
+dd($response->status());
         if($response->status() == 200)
             return ['status' => 'ok', 'result' => json_decode($response->body())];
         else
