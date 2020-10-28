@@ -85,12 +85,13 @@ class Video extends Model
         ));
         $response = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
         curl_close($curl);
 
         if($httpcode == 200)
             return ['status' => 'ok', 'result' => json_decode($response)];
         else
-            return ['status' => 'nok', 'result' => $httpcode];
+            return ['status' => 'nok', 'result' => [$httpcode, $response]];
 
 //        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
 //            'time' => $time,
