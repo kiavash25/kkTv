@@ -62,7 +62,7 @@ class Video extends Model
                 ]);
             }
         }
-        $response = Http::get('http://localhost/kouchita/public/api/getPlacesForKoochitaTv', [
+        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
             'time' => $time,
             'code' => $hash,
             'state' => json_encode($states),
