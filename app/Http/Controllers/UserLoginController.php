@@ -230,7 +230,7 @@ class UserLoginController extends Controller
 
         if (isset($_POST["captcha"])) {
             $response = $_POST["captcha"];
-            $privatekey = "6LfiELsUAAAAALYmxpnjNQHcEPlhQdbGKpNpl7k4";
+            $privatekey = env('GOOGLE_RECAPTCHA_PRIVATEKEY');
 
             $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$privatekey}&response={$response}");
             $captcha_success = json_decode($verify);

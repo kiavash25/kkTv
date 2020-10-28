@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="overPicSug seenOverPic">
-                    <span>##seen##</span>
+                    <span style="direction: ltr">##seen##</span>
                     <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass">
                 </div>
                 <div class="playIconDiv">
@@ -74,25 +74,6 @@
         $(_element).parent().parent().css('display', 'block');
         $(_element).parent().parent().next().remove();
         resizeThisImg(_element);
-    }
-
-    function resizeThisImg(_element){
-        var img = $(_element);
-        var imgW = img.width();
-        var imgH = img.height();
-
-        var secW = img.parent().width();
-        var secH = img.parent().height();
-
-        if(imgH < secH){
-            img.css('height', '100%');
-            img.css('width', 'auto');
-        }
-        else if(imgW < secW){
-            img.css('width', '100%');
-            img.css('height', 'auto');
-        }
-
     }
 
     function createVideoSuggestionDiv(_pack, _destId, _callBack = '', _append = false){

@@ -194,199 +194,25 @@ class MainController extends Controller
                 $isLink = false;
             }
 
+            $playList = $video->playList;
+            if($playList != null) {
+                $playList->videoList = $playList->videos;
+                foreach ($playList->videoList as $item)
+                    $item = $this->getVideoFullInfo($item, false);
+            }
             $localStorageData = ['title' => $video->title, 'pic' => $video->pic , 'redirect' => route('video.show', ['code' => $video->code])];
 
-            return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink']));
+            $hasPlace = VideoPlaceRelation::where('videoId', $video->id)->count();
+            if($hasPlace > 0)
+                $video->hasPlace = true;
+            else
+                $video->hasPlace = false;
+
+            return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink', 'playList']));
         }
 
         return redirect(route('index'));
 
-    }
-
-    public function uploadVideoPage()
-    {
-        $this->deleteLimbo();
-
-        $categories = VideoCategory::where('parent', 0)->get();
-        foreach ($categories as $item)
-            $item->sub = VideoCategory::where('parent', $item->id)->get();
-
-        while (true) {
-            $code = random_int(10000, 99999);
-            $check = VideoLimbo::where('code', $code)->first();
-            if ($check == null) {
-                $newLimbo = new VideoLimbo();
-                $newLimbo->code = $code;
-                $newLimbo->userId = auth()->user()->id;
-                $newLimbo->save();
-                break;
-            }
-        }
-
-        return view('page.videoUpload', compact(['categories', 'code']));
-    }
-
-    private function deleteLimbo()
-    {
-        $limbos = VideoLimbo::all();
-        foreach ($limbos as $item) {
-            $diff = Carbon::now()->diffInHours($item->created_at);
-            if ($diff > 3) {
-                $location = __DIR__ . '/../../../../assets/_images/video/limbo/' . $item->video;
-                if (is_file($location))
-                    unlink($location);
-                $item->delete();
-            }
-        }
-
-        return;
-    }
-
-    public function storeVideo(Request $request)
-    {
-        $user = auth()->user();
-        if (isset($_FILES['video']) && isset($request->code) && $_FILES['video']['error'] == 0) {
-            $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
-            if ($limbo != null) {
-                $videoName = time() . $_FILES['video']['name'];
-                $location = __DIR__ . '/../../../../assets/_images/video';
-//                $location ='videos';
-                if (!is_dir($location))
-                    mkdir($location);
-
-                $location .= '/limbo';
-                if (!is_dir($location))
-                    mkdir($location);
-                $location .= '/' . $videoName;
-
-                if (move_uploaded_file($_FILES['video']['tmp_name'], $location)) {
-                    $limbo->video = $videoName;
-                    $limbo->save();
-
-                    try {
-                        $ffprobe = \FFMpeg\FFProbe::create();
-                        $duration = (int)$ffprobe->format($location)->get('duration');
-                        $second = $duration % 60;
-                        $duration = (int)($duration / 60);
-                        $min = $duration % 60;
-                        $duration = (int)($duration / 60);
-
-                        if ($second < 10)
-                            $second = '0' . $second;
-                        if ($min < 10)
-                            $min = '0' . $min;
-                        $duration = $duration . ':' . $min . ':' . $second;
-                    } catch (Throwable $e) {
-                        $duration = '01:00:00';
-                    }
-
-
-                    echo json_encode(['status' => 'ok', 'duration' => $duration]);
-                } else
-                    echo json_encode(['status' => 'nok2']);
-            } else
-                echo json_encode(['status' => 'nok1']);
-        }
-        else
-            echo json_encode(['status' => 'nok']);
-
-        return;
-    }
-
-    public function storeVideoInfo(Request $request)
-    {
-        $user = auth()->user();
-        if (isset($request->name) && isset($request->code) && isset($request->categoryId)) {
-
-            $limbo = VideoLimbo::where('code', $request->code)->where('userId', $user->id)->first();
-            if ($limbo != null) {
-                $location = __DIR__ . '/../../../../assets/_images/video';
-                $nLoc = $location . '/' . $user->id;
-                if (!is_dir($nLoc))
-                    mkdir($nLoc);
-
-                $img = $_POST['thumbnail'];
-                $img = str_replace('data:image/png;base64,', '', $img);
-                $img = str_replace(' ', '+', $img);
-                $data = base64_decode($img);
-                $thumbanil = time() . rand(100, 999) . '.jpg';
-
-                $file = $nLoc . '/' . $thumbanil;
-                $success = file_put_contents($file, $data);
-
-                $img = \Image::make($file);
-                $img->resize(400, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($nLoc . '/min_' . $thumbanil);
-
-                while (true) {
-                    $sCode = generateRandomString(10);
-                    $check = Video::where('code', $sCode)->first();
-                    if ($check == null)
-                        break;
-                }
-
-                $newVideo = new Video();
-                $newVideo->userId = $user->id;
-                $newVideo->code = $sCode;
-                $newVideo->title = $request->name;
-                $newVideo->description = $request->description;
-                $newVideo->video = $limbo->video;
-                $newVideo->categoryId = $request->categoryId;
-                $newVideo->duration = $request->duration;
-                $newVideo->thumbnail = $thumbanil;
-                $newVideo->seen = 0;
-                $newVideo->confirm = 1;
-                $newVideo->state = $request->state;
-                $newVideo->save();
-
-                $limboLoc = $location . '/limbo/' . $limbo->video;
-                $nLoc .= '/' . $limbo->video;
-                rename($limboLoc, $nLoc);
-
-                if (isset($request->places) && $request->places != null) {
-                    $places = explode(',', $request->places);
-                    foreach ($places as $place) {
-                        $p = explode('_', $place);
-                        $check = VideoPlaceRelation::where('videoId', $newVideo->id)
-                            ->where('kindPlaceId', $p[0])
-                            ->where('placeId', $p[1])
-                            ->first();
-                        if ($check == null) {
-                            $newRel = new VideoPlaceRelation();
-                            $newRel->videoId = $newVideo->id;
-                            $newRel->kindPlaceId = (int)$p[0];
-                            $newRel->placeId = (int)$p[1];
-                            $newRel->save();
-                        }
-                    }
-                }
-
-                if (isset($request->tags) && $request->tags != null) {
-                    $tags = explode(',', $request->tags);
-                    foreach ($tags as $tag) {
-                        $t = explode('_', $tag);
-                        if ($t[0] == 'old')
-                            $tagId = $t[1];
-                        else
-                            $tagId = storeNewTag($t[1]);
-
-                        $newTagRel = new VideoTagRelation();
-                        $newTagRel->videoId = $newVideo->id;
-                        $newTagRel->tagId = $tagId;
-                        $newTagRel->save();
-                    }
-                }
-
-                $url = route('video.show', ['code' => $newVideo->code]);
-
-                echo json_encode(['status' => 'ok', 'url' => $url]);
-            } else
-                echo json_encode(['status' => 'nok1']);
-        } else
-            echo json_encode(['status' => 'nok']);
-
-        return;
     }
 
     public function setVideoFeedback(Request $request)
@@ -464,6 +290,7 @@ class MainController extends Controller
         else
             $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
 
+        $video->categoryName = $video->mainCategory[0]->name;
         $video->url = route('video.show', ['code' => $video->code]);
         $video->username = User::find($video->userId)->username;
         $video->userPic = getUserPic($video->userId);
@@ -474,6 +301,9 @@ class MainController extends Controller
         $video->commentsCount = VideoComment::where('videoId', $video->id)->count();
         $video->comments = [];
         $video->places = [];
+
+        if($video->seen > 1000)
+            $video->seen = (floor($video->seen/100)/10) . ' K';
 
         if($main){
             $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);

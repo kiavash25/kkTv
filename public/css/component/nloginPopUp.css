@@ -240,7 +240,7 @@ textarea, input, select, button, a {
     height: 100%;
     top: 0px;
     left: 0px;
-    backdrop-filter: blur(2px);
+    /*backdrop-filter: blur(2px);*/
     background-color: #000000bf;
     display: flex;
     justify-content: center;

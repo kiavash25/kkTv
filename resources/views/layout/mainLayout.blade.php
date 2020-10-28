@@ -58,9 +58,42 @@
         });
     </script>
 
-
-
     @yield('head')
+
+    <script>
+        function checkLogin(){
+            if (!hasLogin) {
+                showLoginPrompt('{{Request::url()}}');
+                return false;
+            }
+            else
+                return true;
+        }
+
+        function resizeFitImg(_class) {
+            var imgs = $('.' + _class);
+            for(i = 0; i < imgs.length; i++)
+                resizeThisImg($(imgs[i]))
+        }
+
+        function resizeThisImg(_element){
+            var img = $(_element);
+            var imgW = img.width();
+            var imgH = img.height();
+
+            var secW = img.parent().width();
+            var secH = img.parent().height();
+
+            if(imgH < secH){
+                img.css('height', '100%');
+                img.css('width', 'auto');
+            }
+            else if(imgW < secW){
+                img.css('width', '100%');
+                img.css('height', 'auto');
+            }
+        }
+    </script>
 
 </head>
 
@@ -92,8 +125,44 @@
 
 </body>
 
+
+<script src="{{URL::asset('js/default/load-image.all.min.js')}}"></script>
+
 <script>
     var hasLogin = {{auth()->check() ? 1 : 0}};
+    window.csrfTokenGlobal = '{{csrf_token()}}';
+
+    function cleanImgMetaData(_input, _callBack){
+        options = { canvas: true };
+        loadImage.parseMetaData(_input.files[0], function(data) {
+            if (data.exif)
+                options.orientation = data.exif.get('Orientation');
+
+            loadImage(
+                _input.files[0],
+                function(canvas) {
+                    var imgDataURL = canvas.toDataURL();
+                    if(typeof _callBack === 'function') {
+                        blob = dataURItoBlob(imgDataURL);
+                        _callBack(imgDataURL, blob);
+                    }
+                },
+                options
+            );
+        });
+    }
+
+    function dataURItoBlob(dataURI) {
+        var byteString = atob(dataURI.split(',')[1]);
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++)
+            ia[i] = byteString.charCodeAt(i);
+
+        var blob = new Blob([ab], {type: mimeString});
+        return blob;
+    }
 
     function isNumber(evt) {
         evt = (evt) ? evt : window.event;
@@ -102,36 +171,6 @@
             return false;
         }
         return true;
-    }
-
-    function checkLogin(){
-        if (!hasLogin) {
-            showLoginPrompt('{{Request::url()}}');
-            return false;
-        }
-        else
-            return true;
-    }
-
-    function resizeFitImg(_class) {
-        var imgs = $('.' + _class);
-        for(i = 0; i < imgs.length; i++){
-            var img = $(imgs[i]);
-            var imgW = img.width();
-            var imgH = img.height();
-
-            var secW = img.parent().width();
-            var secH = img.parent().height();
-
-            if(imgH < secH){
-                img.css('height', '100%');
-                img.css('width', 'auto');
-            }
-            else if(imgW < secW){
-                img.css('width', '100%');
-                img.css('height', 'auto');
-            }
-        }
     }
 
     function resizeRows(_class){
@@ -159,6 +198,31 @@
         $(".dark").hide();
         $("#" + _element).addClass('hidden');
     }
+
+    window.seenPageLogId = 0;
+    window.isMobile =  0;
+
+    function sendSeenPageLog(){
+        $.ajax({
+            type: 'post',
+            url: '{{route('log.storeSeen')}}',
+            data: {
+                _token: '{{csrf_token()}}',
+                seenPageLogId: window.seenPageLogId,
+                isMobile: window.isMobile,
+                width: $(window).width(),
+                height: $(window).height(),
+                url: document.location.pathname
+            },
+            success: response => {
+                if(response.status == 'ok')
+                    window.seenPageLogId = response.seenPageLogId;
+                setTimeout(sendSeenPageLog, 5000);
+            },
+            error: err => setTimeout(sendSeenPageLog, 5000)
+        })
+    }
+    sendSeenPageLog();
 
 </script>
 

@@ -17,6 +17,7 @@ class DefaultPic extends Model {
 
     protected $table = 'defaultPic';
     public $timestamps = false;
+    protected $connection = 'koochitaConnection';
 
 
     public static function whereId($value) {

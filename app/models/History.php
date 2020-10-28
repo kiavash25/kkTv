@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 
 class History extends Model {
+    protected $connection = 'koochitaConnection';
 
     protected $table = 'history';
     public $timestamps = false;

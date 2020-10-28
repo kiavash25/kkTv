@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 
 class RetrievePas extends Model {
+    protected $connection = 'koochitaConnection';
 
     protected $table = 'retrievePas';
     public $timestamps = false;

@@ -331,27 +331,29 @@ input{
 }
 .headerWithLineText{
     font-size: 22px;
-    position: absolute;
     background-color: #3a3a3a;
     padding-left: 10px;
-    bottom: -10px;
     cursor: context-menu;
+    position: relative;
+    display: inline-block;
 }
-.headerWithLineLine{
+
+.headerWithLine:before{
+    content: '';
     background: red;
     height: 5px;
     border-radius: 20px;
     width: 100%;
+    position: absolute;
+    bottom: 10px;
 }
 .allVideoButton{
     z-index: 1;
-    position: absolute;
-    left: -2px;
-    top: -20px;
-    padding: 10px;
+    padding: 0px 10px;
     background-color: #3a3a3a;
     cursor: pointer;
     color: #fcc156;
+    margin-right: auto;
 }
 .descriptionSectionBody{
     font-size: 14px;

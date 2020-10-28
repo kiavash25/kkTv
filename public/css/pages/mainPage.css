@@ -1,14 +1,4 @@
 
-.allVideoButton{
-    z-index: 1;
-    position: absolute;
-    left: -2px;
-    top: -20px;
-    padding: 10px;
-    background-color: #3a3a3a;
-    cursor: pointer;
-    color: #fcc156;
-}
 .otherSection{
     margin-top: 35px;
 }
