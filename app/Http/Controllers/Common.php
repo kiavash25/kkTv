@@ -27,7 +27,6 @@ function getUserPic($id = 0){
     else
         $uPic = URL::asset('images/blank.jpg');
 
-//    dd($uPic);
     return $uPic;
 }
 
