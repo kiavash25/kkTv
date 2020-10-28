@@ -62,17 +62,47 @@ class Video extends Model
                 ]);
             }
         }
-        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
-            'time' => $time,
-            'code' => $hash,
-            'state' => json_encode($states),
-            'city' => json_encode($cities),
-            'places' => json_encode($places)
-        ]);
 
-        if($response->status() == 200)
-            return ['status' => 'ok', 'result' => json_decode($response->body())];
+        $url = env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv';
+        $url .= '?time='.$time;
+        $url .= '&code='.$hash;
+        $url .= '&state='.json_encode($states);
+        $url .= '&city='.json_encode($cities);
+        $url .= '&places='.json_encode($places);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "Cookie: laravel_session=Tpy5eTuUWC1yFLm7cVX9LdSANMNIqrujveo1wZTD"
+            ),
+        ));
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if($httpcode == 200)
+            return ['status' => 'ok', 'result' => json_decode($response)];
         else
-            return ['status' => 'nok', 'result' => $response->status()];
+            return ['status' => 'nok', 'result' => $httpcode];
+
+//        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
+//            'time' => $time,
+//            'code' => $hash,
+//            'state' => json_encode($states),
+//            'city' => json_encode($cities),
+//            'places' => json_encode($places)
+//        ]);
+//
+//        if($response->status() == 200)
+//            return ['status' => 'ok', 'result' => json_decode($response->body())];
+//        else
+//            return ['status' => 'nok', 'result' => $response->status()];
     }
 }
