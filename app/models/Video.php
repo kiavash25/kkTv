@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 
 class Video extends Model
 {
+    protected $connection = 'mysql';
     protected $table = 'videos';
 
     public static function whereId($target) {

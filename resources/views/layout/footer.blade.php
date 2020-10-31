@@ -210,7 +210,7 @@ if(auth()->check()){
                             </div>
                         </div>
                         <div class="profileBtnActionMobile">
-                            <a type="button" class="btn btn-warning pp_btns" href="{{route('profile')}}">صفحه پروفایل</a>
+                            <a type="button" class="btn btn-warning pp_btns" href="{{route('profile.show', ['user' => auth()->user()->username])}}">صفحه پروفایل</a>
                             <a type="button" class="btn btn-primary pp_btns">صفحه من</a>
                             <a type="button" class="btn btn-danger pp_btns" href="{{route('logout')}}">خروج</a>
                         </div>

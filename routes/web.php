@@ -34,6 +34,8 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('/', 'MainController@indexStreaming')->name('index');
 
+    Route::get('profile/page/{user:username}', 'ProfileController@showProfile')->name('profile.show');
+
     Route::post('video/search', 'MainController@search')->name('video.search');
 
     Route::get('list/{kind}/{value}', 'MainController@videoList')->name('video.list');
@@ -47,6 +49,8 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
     Route::get('streaming/getChats/{room}', 'MainController@updateLiveVideoChat')->name('streaming.getChats');
 
     Route::middleware(['auth'])->group(function () {
+        Route::post('video/addToBookMark', 'ProfileController@addToBookMark')->name('profile.addToBookMark');
+
         Route::post('streaming/storeLiveChat', 'MainController@storeLiveChat')->name('streaming.storeLiveChat');
 
         Route::post('video/setVideoFeedback', 'MainController@setVideoFeedback')->name('video.setVideoFeedback');

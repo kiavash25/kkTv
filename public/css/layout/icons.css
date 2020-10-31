@@ -23,6 +23,10 @@
     content: "\E0DE" !important;
     font-family: Shazde_Regular2 !important;
 }
+.BookMarkEmptyIcon:before{
+    content: "\e0dd" !important;
+    font-family: Shazde_Regular2 !important;
+}
 .downArrowIcon:before{
     content: '\E04A';
     font-family: Shazde_Regular2 !important;

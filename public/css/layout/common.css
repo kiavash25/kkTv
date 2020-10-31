@@ -328,6 +328,7 @@ input{
     color: white;
     position: relative;
     margin: 15px 0px;
+    display: flex;
 }
 .headerWithLineText{
     font-size: 22px;
@@ -354,6 +355,8 @@ input{
     cursor: pointer;
     color: #fcc156;
     margin-right: auto;
+    display: flex;
+    align-items: center;
 }
 .descriptionSectionBody{
     font-size: 14px;

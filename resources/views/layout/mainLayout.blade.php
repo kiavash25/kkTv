@@ -93,6 +93,18 @@
                 img.css('height', 'auto');
             }
         }
+
+        function resizeRows(_class){
+            let content = $($('.' + _class)[0]);
+            let parent = content.parent();
+            let margin = parseInt(content.css('margin-left').replace('px', ''));
+            let width = parseInt(content.css('width').replace('px', '')) + (2 * margin);
+            let sourceWidth = parseInt(parent.parent().css('width').replace('px', ''));
+
+            let newWidth = sourceWidth - (sourceWidth % width);
+            parent.css('width', newWidth);
+        }
+
     </script>
 
 </head>
@@ -110,6 +122,8 @@
     @include('component.searchPan')
 
     @include('component.categoryTable')
+
+    @include('component.playListObj')
 
     @if(!Auth::check())
         @include('component.nloginPopup')
@@ -173,18 +187,6 @@
         return true;
     }
 
-    function resizeRows(_class){
-        let content = $($('.' + _class)[0]);
-        let parent = content.parent();
-        let margin = parseInt(content.css('margin-left').replace('px', ''));
-        let width = parseInt(content.css('width').replace('px', '')) + (2 * margin);
-        let sourceWidth = parseInt(parent.parent().css('width').replace('px', ''));
-
-        let newWidth = sourceWidth - (sourceWidth % width);
-        parent.css('width', newWidth);
-
-    }
-
     $(document).ready(function(){
         resizeFitImg('resizeImgClass');
     });
@@ -223,6 +225,10 @@
         })
     }
     sendSeenPageLog();
+
+    $(window).resize(function(){
+        resizeRows('videoInList')
+    });
 
 </script>
 

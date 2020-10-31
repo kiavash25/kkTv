@@ -1,4 +1,15 @@
 
+.videoInList{
+    margin: 5px 2px ;
+}
+
+.allVideoList{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0px;
+    margin: 0 auto;
+}
+
 .iconButton{
     font-size: 30px;
     line-height: 25px;
@@ -61,6 +72,18 @@
     font-size: .8em;
     padding-bottom: 5px;
 }
+.iconButton.BookMarkEmptyIcon{
+    font-size: 1em;
+}
+.iconButton.BookMarkEmptyIcon.fill:before{
+    content: '\E0DE' !important;
+    color: var(--koochita-yellow);
+    font-family: Shazde_Regular2 !important;
+}
+/*.iconButton.BookMarkEmptyIcon:after{*/
+/*    content: '\e0dd';*/
+/*    font-family: Shazde_Regular2 !important;*/
+/*}*/
 
 .iconButton .shareBoxClass{
     left: 0px;
@@ -294,5 +317,16 @@
     }
     .guestSection:hover .guestSideSection{
         width: 150px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .allVideoList{
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .videoInList{
+        width: calc(49% - 4px) !important;
     }
 }
