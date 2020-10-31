@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\models\UserSeenLog;
 use App\models\Video;
+use App\models\VideoBookMark;
 use App\models\VideoCategory;
 use App\models\VideoComment;
 use App\models\VideoFeedback;
@@ -32,14 +33,14 @@ class MainController extends Controller
                             ->get();
 
         foreach ($lastVideos as $lvid)
-            $lvid = $this->getVideoFullInfo($lvid, false);
+            $lvid = getVideoFullInfo($lvid, false);
 
         $videoCategory = VideoCategory::where('parent', 0)->get();
         foreach ($videoCategory as $vic) {
             $catId = VideoCategory::where('parent', $vic->id)->pluck('id')->toArray();
             $vic->video = Video::where($confirmContidition)->whereIn('categoryId', $catId)->take(10)->orderByDesc('created_at')->get();
             foreach ($vic->video as $catVid)
-                $catVid = $this->getVideoFullInfo($catVid, false);
+                $catVid = getVideoFullInfo($catVid, false);
         }
 
         $topId = [];
@@ -49,7 +50,7 @@ class MainController extends Controller
 
         $topVideos = Video::whereIn('id', $topId)->get();
         foreach ($topVideos as $item)
-            $item = $this->getVideoFullInfo($item, false);
+            $item = getVideoFullInfo($item, false);
 
         return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos']));
     }
@@ -70,13 +71,13 @@ class MainController extends Controller
                     $subsId = VideoCategory::where('parent', $category->id)->pluck('id')->toArray();
                     $category->lastVideo = Video::where($confirmContidition)->whereIn('categoryId', $subsId)->take(10)->orderByDesc('created_at')->get();
                     foreach ($category->lastVideo  as $catVid)
-                        $catVid = $this->getVideoFullInfo($catVid, false);
+                        $catVid = getVideoFullInfo($catVid, false);
 
                     foreach ($category->subs as $item){
                         $item->video = Video::where($confirmContidition)->where('categoryId', $item->id)->take(10)->orderByDesc('created_at')->get();
                         $item->totalCount = Video::where($confirmContidition)->where('categoryId', $item->id)->count();
                         foreach ($item->video as $catVid)
-                            $catVid = $this->getVideoFullInfo($catVid, false);
+                            $catVid = getVideoFullInfo($catVid, false);
                     }
 
                     if($category->onIcon != null)
@@ -130,7 +131,7 @@ class MainController extends Controller
 
                 $videos = Video::where($confirmContidition)->whereIn('categoryId', $catId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
                 foreach ($videos as $item)
-                    $item = $this->getVideoFullInfo($item, false);
+                    $item = getVideoFullInfo($item, false);
 
                 echo json_encode(['status' => 'ok', 'videos' => $videos]);
             }
@@ -168,8 +169,9 @@ class MainController extends Controller
             return redirect(route('index'));
 
         $uId = 0;
-        if (auth()->check())
+        if (auth()->check()) {
             $uId = auth()->user()->id;
+        }
 
         $isLink = true;
 
@@ -180,14 +182,14 @@ class MainController extends Controller
                 $video->seen++;
                 $video->save();
             }
-            $video = $this->getVideoFullInfo($video, true);
+            $video = getVideoFullInfo($video, true);
 
             $userMoreVideo = Video::where('userId', $video->userId)->where('confirm', 1)->where('state', 1)->where('id', '!=', $video->id)->take(4)->orderByDesc('created_at')->get();
             $sameCategory = Video::where('categoryId', $video->categoryId)->where('confirm', 1)->where('state', 1)->where('id', '!=', $video->id)->take(7)->orderByDesc('created_at')->get();
 
             foreach ([$userMoreVideo, $sameCategory] as $categ)
                 foreach ($categ as $vid)
-                    $vid = $this->getVideoFullInfo($vid, false);
+                    $vid = getVideoFullInfo($vid, false);
 
             if($video->userId == $uId && $video->link == null) {
                 $video->link = URL::asset('videos/' . $video->userId . '/' . $video->video);
@@ -198,7 +200,7 @@ class MainController extends Controller
             if($playList != null) {
                 $playList->videoList = $playList->videos;
                 foreach ($playList->videoList as $item)
-                    $item = $this->getVideoFullInfo($item, false);
+                    $item = getVideoFullInfo($item, false);
             }
             $localStorageData = ['title' => $video->title, 'pic' => $video->pic , 'redirect' => route('video.show', ['code' => $video->code])];
 
@@ -207,6 +209,11 @@ class MainController extends Controller
                 $video->hasPlace = true;
             else
                 $video->hasPlace = false;
+
+
+            $video->bookMark = 0;
+            if($uId != 0)
+                $video->bookMark = VideoBookMark::where('userId', $uId)->where('videoId', $video->id)->count();
 
             return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink', 'playList']));
         }
@@ -270,7 +277,7 @@ class MainController extends Controller
                 else
                     return response()->json(['status' => 'nok2']);
 
-                $fullInfo = $this->getVideoFullInfo($video, false);
+                $fullInfo = getVideoFullInfo($video, false);
                 return response()->json(['status' => 'ok', 'like' => $fullInfo->like, 'disLike' => $fullInfo->disLike, 'commentsCount' => $fullInfo->commentsCount]);
             }
             else
@@ -278,89 +285,6 @@ class MainController extends Controller
         }
         else
             return response()->json(['status' => 'nok']);
-    }
-
-    private function getVideoFullInfo($video, $main = false)
-    {
-        $userLogin = auth()->check();
-
-        $loc = __DIR__.'/../../../../assets/_images/video/' . $video->userId;
-        if(is_file($loc .'/min_'. $video->thumbnail))
-            $video->pic = \URL::asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
-        else
-            $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
-
-        $video->categoryName = $video->mainCategory[0]->name;
-        $video->url = route('video.show', ['code' => $video->code]);
-        $video->username = User::find($video->userId)->username;
-        $video->userPic = getUserPic($video->userId);
-        $video->time = getDifferenceTimeString($video->created_at);
-
-        $video->like = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', 1)->count();
-        $video->disLike = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', -1)->count();
-        $video->commentsCount = VideoComment::where('videoId', $video->id)->count();
-        $video->comments = [];
-        $video->places = [];
-
-        if($video->seen > 1000)
-            $video->seen = (floor($video->seen/100)/10) . ' K';
-
-        if($main){
-            $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
-            $resultComment = [];
-            $video->comments = $this->getVideoComments($video->id, 0);
-
-            $video->uLike = 0;
-            if($userLogin){
-                $uLike = VideoFeedback::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
-                if($uLike != null)
-                    $video->uLike = $uLike->like;
-            }
-        }
-
-        return $video;
-    }
-
-    private function getVideoComments($videoId, $parent){
-        $comments = VideoComment::where('videoId', $videoId)
-            ->where(function ($query) {
-                $uId = 0;
-                if(auth()->check())
-                    $uId = auth()->user()->id;
-
-                $query->where('confirm', 1)
-                    ->orWhere('userId', $uId);
-            })
-            ->where('parent', $parent)
-            ->orderBy('created_at')->get();
-
-        foreach ($comments as $comment)
-            $comment = $this->getVideoCommentInfos($comment);
-
-        return $comments;
-    }
-
-    private function getVideoCommentInfos($_comment){
-        $comment = $_comment;
-        $ucomment = User::find($comment->userId);
-        if ($ucomment != null) {
-            $comment->username = $ucomment->username;
-            $comment->userPic = getUserPic($ucomment->id);
-            $comment->like = VideoFeedback::where('videoId', $comment->videoId)->where('commentId', $comment->id)->where('like', 1)->count();
-            $comment->disLike = VideoFeedback::where('videoId', $comment->videoId)->where('commentId', $comment->id)->where('like', -1)->count();
-            $comment->time = getDifferenceTimeString($comment->created_at);
-
-            if($comment->haveAns == 1)
-                $comment->comments = $this->getVideoComments($comment->videoId, $comment->id);
-            else
-                $comment->comments = [];
-
-            if($comment->parent != 0)
-                $comment->ansToUsername = User::find(VideoComment::find($comment->parent)->userId)->username;
-            $comment->ansCount = count($comment->comments);
-        }
-
-        return $comment;
     }
 
     public function setVideoComment(Request $request)
@@ -381,7 +305,7 @@ class MainController extends Controller
                 $parent->save();
             }
 
-            $comment = $this->getVideoCommentInfos($newComment);
+            $comment = getVideoCommentInfos($newComment);
 
             echo json_encode(['status' => 'ok', 'comment' => $comment]);
         }

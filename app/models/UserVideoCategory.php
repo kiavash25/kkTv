@@ -9,6 +9,6 @@ class UserVideoCategory extends Model
     protected $table = 'userVideoCategories';
 
     public function videos(){
-        return $this->belongsToMany(Video::class, 'userVideoCategoryRelations', 'categoryId', 'videoId');
+        return $this->hasMany(Video::class, 'userCategoryId', 'id');
     }
 }

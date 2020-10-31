@@ -28,24 +28,8 @@
         .overMainPicText{
             color: white;
         }
-        .allVideoList{
-            display: flex;
-            flex-wrap: wrap;
-            padding: 10px 0px;
-            margin: 0 auto;
-        }
-        .videoInList{
-            margin: 5px 2px ;
-        }
 
         @media (max-width: 700px) {
-            .videoInList{
-                width: calc(49% - 4px) !important;
-            }
-            .allVideoList{
-                width: 100% !important;
-                margin: 0 !important;
-            }
             .overMainPicDiv{
                 justify-content: center;
                 margin-right: 0px;
@@ -123,57 +107,57 @@
 
         @if(isset($content->subs))
             @foreach($content->subs as $cont)
-            @if(count($cont->video) > 0)
-                <div class="otherSection">
-                    <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            @if(isset($cont->icon))
-                                <img src="{{$cont->icon}}" style="width: 30px;">
-                            @endif
-                            {{$cont->name}}
+                @if(count($cont->video) > 0)
+                    <div class="otherSection">
+                        <div class="headerWithLine">
+                            <div class="headerWithLineText">
+                                @if(isset($cont->icon))
+                                    <img src="{{$cont->icon}}" style="width: 30px;">
+                                @endif
+                                {{$cont->name}}
+                            </div>
+                            <div class="headerWithLineLine"></div>
+
+                            <a href="{{route('video.list', ['kind' => 'category', 'value' => $cont->id])}}" class="allVideoButton">
+                                مشاهده همه
+                            </a>
                         </div>
-                        <div class="headerWithLineLine"></div>
+                        <div class="otherSectionBody">
+                            <div id="swiperCategory_{{$cont->id}}" class="videoSuggestionSwiper swiper-container">
 
-                        <a href="{{route('video.list', ['kind' => 'category', 'value' => $cont->id])}}" class="allVideoButton">
-                            مشاهده همه
-                        </a>
-                    </div>
-                    <div class="otherSectionBody">
-                        <div id="swiperCategory_{{$cont->id}}" class="videoSuggestionSwiper swiper-container">
+                                <div id="catVideoDiv_{{$cont->id}}" class="swiper-wrapper">
+                                    {{--fill with js topVideoSuggenstion()--}}
 
-                            <div id="catVideoDiv_{{$cont->id}}" class="swiper-wrapper">
-                                {{--fill with js topVideoSuggenstion()--}}
+                                    {{--this bellow code only for not empty in begining and auto deleted--}}
+                                    <div class="swiper-slide videoSuggestion">
+                                        <div class="videoSuggPlaceHolderDiv" style=" width: 100%;">
+                                            <div class="videoSugPicSection placeHolderAnime"></div>
+                                            <div class="videoSugInfo">
+                                                <div class="videoSugUserInfo videoSugUserInfoPlaceHolder">
+                                                    <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 15px"></div>
+                                                </div>
 
-                                {{--this bellow code only for not empty in begining and auto deleted--}}
-                                <div class="swiper-slide videoSuggestion">
-                                    <div class="videoSuggPlaceHolderDiv" style=" width: 100%;">
-                                        <div class="videoSugPicSection placeHolderAnime"></div>
-                                        <div class="videoSugInfo">
-                                            <div class="videoSugUserInfo videoSugUserInfoPlaceHolder">
-                                                <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 15px"></div>
-                                            </div>
-
-                                            <div class="videoSugUserPic">
-                                                <div class="videoSugUserPicDiv placeHolderAnime"></div>
-                                                <div class="videoUserInfoName">
-                                                    <div class="videoSugUserName videoSuggNamePlaceHolder placeHolderAnime" style="margin-bottom: 5px"></div>
-                                                    <div class="videoSugTime videoSuggNamePlaceHolder placeHolderAnime"></div>
+                                                <div class="videoSugUserPic">
+                                                    <div class="videoSugUserPicDiv placeHolderAnime"></div>
+                                                    <div class="videoUserInfoName">
+                                                        <div class="videoSugUserName videoSuggNamePlaceHolder placeHolderAnime" style="margin-bottom: 5px"></div>
+                                                        <div class="videoSugTime videoSuggNamePlaceHolder placeHolderAnime"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div id="navigationCategoryDiv_{{$cont->id}}">
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-button-prev"></div>
+                                <div id="navigationCategoryDiv_{{$cont->id}}">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
         @endif
 
         <div id="allVideoDiv">
@@ -335,10 +319,6 @@
             }
         }
         getVideo();
-
-        $(window).resize(function(){
-            resizeRows('videoInList')
-        });
 
         function loadMoreCheck(){
             let allVideoElem = document.getElementById('allVideo').getBoundingClientRect();

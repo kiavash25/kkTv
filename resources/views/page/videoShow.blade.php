@@ -217,6 +217,7 @@
                         <div class="iconButton shareIcon share_pic">
                             @include('component.shareBox')
                         </div>
+                        <div class="iconButton BookMarkEmptyIcon {{$video->bookMark == 1 ? 'fill' : ''}}" onclick="setBookMark()"></div>
                         <div class="toolSectionInfosTab">
                             <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
                             <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
@@ -234,9 +235,9 @@
                         <img src="{{$video->userPic}}" alt="koochita">
                     </div>
                     <div class="mainUserInfos">
-                        <div class="mainUseruserName">
+                        <a href="{{route('profile.show', ['user' => $video->username])}}" class="mainUseruserName">
                             {{$video->username}}
-                        </div>
+                        </a>
                         <div class="videoUploadTime">
                             {{$video->time}}
                         </div>
@@ -381,7 +382,7 @@
 
         @if(isset($sameCategory) && count($sameCategory) > 0)
             sameCategory = {!! $sameCategory !!};
-        createVideoSuggestionDiv(sameCategory, 'maybeInterestedVideo');
+            createVideoSuggestionDiv(sameCategory, 'maybeInterestedVideo');
         @endif
 
             @if(isset($userMoreVideo) && count($userMoreVideo) > 0)
@@ -456,6 +457,38 @@
                     }
                 },
             });
+
+        function setBookMark(){
+            if (!hasLogin) {
+                showLoginPrompt();
+                return;
+            }
+
+            $.ajax({
+                type: 'post',
+                url: '{{route("profile.addToBookMark")}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    id: {{$video->id}}
+                },
+                success: response => {
+                    if(response.status == 'create') {
+                        $('.BookMarkEmptyIcon').addClass('fill');
+                        showSuccessNotifi('ویدیو به نشان کرده ها اضافه شد', 'left', 'var(--koochita-blue)');
+                    }
+                    else if(response.status == 'delete') {
+                        $('.BookMarkEmptyIcon').removeClass('fill');
+                        showSuccessNotifi('ویدیو از نشان کرده ها حذف شد', 'left', 'var(--koochita-blue)');
+                    }
+                    else
+                        showSuccessNotifi('مشکلی در نشان کردن پیش امده', 'right', 'red');
+                },
+                error: err => {
+                    console.log(err);
+                    showSuccessNotifi('مشکلی در نشان کردن پیش امده', 'right', 'red');
+                }
+            })
+        }
 
         function setFeedback(_value){
             if (!hasLogin) {

@@ -194,4 +194,9 @@ class User extends Authenticatable{
         return $uPic;
     }
 
+
+    public function bookMarkVideos()
+    {
+        return $this->belongsToMany(Video::class, 'videoBookMarks', 'userId', 'videoId');
+    }
 }

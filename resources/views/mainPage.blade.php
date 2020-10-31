@@ -112,27 +112,8 @@
 
                     <div id="lastVideosDiv" class="swiper-wrapper">
 {{--                        fill with js lastVideoSuggestion()--}}
-{{--                        streaming.videoSuggestion--}}
-
-                        {{--this bellow code only for not empty in begining and auto deleted--}}
-                        <div class="swiper-slide videoSuggestion">
-                            <div class="videoSuggPlaceHolderDiv" style=" width: 100%;">
-                                <div class="videoSugPicSection placeHolderAnime"></div>
-                                <div class="videoSugInfo">
-                                    <div class="videoSugUserInfo videoSugUserInfoPlaceHolder">
-                                        <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 15px"></div>
-                                    </div>
-
-                                    <div class="videoSugUserPic">
-                                        <div class="videoSugUserPicDiv placeHolderAnime"></div>
-                                        <div class="videoUserInfoName">
-                                            <div class="videoSugUserName videoSuggNamePlaceHolder placeHolderAnime" style="margin-bottom: 5px"></div>
-                                            <div class="videoSugTime videoSuggNamePlaceHolder placeHolderAnime"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+{{--                        component.videoSuggestionPack.blade.php--}}
+                        <div class="videoSuggestion"></div>
                     </div>
 
                     <div class="swiper-button-next"></div>
@@ -152,6 +133,7 @@
 
                     <div id="topVideosDiv" class="swiper-wrapper">
                         {{--fill with js createTopVideoSuggestion()--}}
+                        <div class="videoSuggestion"></div>
                     </div>
 
                     <div class="swiper-button-next"></div>
@@ -176,26 +158,7 @@
 
                             <div id="catVideoDiv_{{$cat->id}}" class="swiper-wrapper">
                                 {{--fill with js topVideoSuggenstion()--}}
-
-                                {{--this bellow code only for not empty in begining and auto deleted--}}
-                                <div class="swiper-slide videoSuggestion">
-                                    <div class="videoSuggPlaceHolderDiv" style=" width: 100%;">
-                                        <div class="videoSugPicSection placeHolderAnime"></div>
-                                        <div class="videoSugInfo">
-                                            <div class="videoSugUserInfo videoSugUserInfoPlaceHolder">
-                                                <div class="videoSugName videoSuggNamePlaceHolder placeHolderAnime" style="height: 15px"></div>
-                                            </div>
-
-                                            <div class="videoSugUserPic">
-                                                <div class="videoSugUserPicDiv placeHolderAnime"></div>
-                                                <div class="videoUserInfoName">
-                                                    <div class="videoSugUserName videoSuggNamePlaceHolder placeHolderAnime" style="margin-bottom: 5px"></div>
-                                                    <div class="videoSugTime videoSuggNamePlaceHolder placeHolderAnime"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="videoSuggestion"></div>
                             </div>
 
                             <div class="swiper-button-next"></div>
@@ -207,13 +170,13 @@
         @endforeach
 
     </div>
-
 @endsection
 
 @section('script')
-    <!-- Swiper JS -->
 
     <script>
+        $('.videoSuggestion').html(returnVideoSuggPlaceHolder() /**in videoSuggestionPack.blade.php**/);
+
         let lastVideos = {!! $lastVideos !!};
         let videoCategory = {!! $videoCategory !!};
         let topVideos = {!! $topVideos !!};

@@ -3,6 +3,8 @@
 use App\models\ActivationCode;
 use App\models\DefaultPic;
 use App\models\Tags;
+use App\models\VideoComment;
+use App\models\VideoFeedback;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -223,4 +225,83 @@ function sendEmail($text, $subject, $to){
     catch (Exception $e) {
         return false;
     }
+}
+
+function getVideoFullInfo($video, $main = false)
+{
+    $userLogin = auth()->check();
+
+    $loc = __DIR__.'/../../../../assets/_images/video/' . $video->userId;
+    if(is_file($loc .'/min_'. $video->thumbnail))
+        $video->pic = \URL::asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
+    else
+        $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
+
+    $video->categoryName = $video->mainCategory[0]->name;
+    $video->url = route('video.show', ['code' => $video->code]);
+    $video->username = User::find($video->userId)->username;
+    $video->userPic = getUserPic($video->userId);
+    $video->time = getDifferenceTimeString($video->created_at);
+
+    $video->like = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', 1)->count();
+    $video->disLike = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', -1)->count();
+    $video->commentsCount = VideoComment::where('videoId', $video->id)->count();
+    $video->comments = [];
+    $video->places = [];
+
+    if($video->seen > 1000)
+        $video->seen = (floor($video->seen/100)/10) . ' K';
+
+    if($main){
+        $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
+        $resultComment = [];
+        $video->comments = getVideoComments($video->id, 0);
+
+        $video->uLike = 0;
+        if($userLogin){
+            $uLike = VideoFeedback::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
+            if($uLike != null)
+                $video->uLike = $uLike->like;
+        }
+    }
+
+    return $video;
+}
+
+function getVideoComments($videoId, $parent){
+    $comments = VideoComment::where('videoId', $videoId)
+        ->where(function ($query) {
+            $uId = 0;
+            if(auth()->check())
+                $uId = auth()->user()->id;
+
+            $query->where('confirm', 1)
+                ->orWhere('userId', $uId);
+        })
+        ->where('parent', $parent)
+        ->orderBy('created_at')->get();
+
+    foreach ($comments as $comment)
+        $comment = getVideoCommentInfos($comment);
+
+    return $comments;
+}
+
+function getVideoCommentInfos($_comment){
+    $comment = $_comment;
+    $ucomment = User::find($comment->userId);
+    if ($ucomment != null) {
+        $comment->username = $ucomment->username;
+        $comment->userPic = getUserPic($ucomment->id);
+        $comment->like = VideoFeedback::where('videoId', $comment->videoId)->where('commentId', $comment->id)->where('like', 1)->count();
+        $comment->disLike = VideoFeedback::where('videoId', $comment->videoId)->where('commentId', $comment->id)->where('like', -1)->count();
+        $comment->time = getDifferenceTimeString($comment->created_at);
+        $comment->comments =$comment->haveAns == 1 ? getVideoComments($comment->videoId, $comment->id) : [];
+
+        if($comment->parent != 0)
+            $comment->ansToUsername = User::find(VideoComment::find($comment->parent)->userId)->username;
+        $comment->ansCount = count($comment->comments);
+    }
+
+    return $comment;
 }
