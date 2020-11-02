@@ -164,9 +164,11 @@
                 <div class="showVideo">
                     <video id="video_1"
                            class="playads embed-responsive-item video-js vjs-default-skin vjs-16-9"
-                           controls
-                           data-setup='{"fluid": true, "preload": "none", "auto-play": false }'
+                           data-setup='{"fluid": true, "preload": "auto", "auto-play": true }'
                            poster="{{$video->pic}}"
+                           autoplay
+                           preload="auto"
+                           controls
                            style="width: 100%; direction: ltr;"></video>
                 </div>
                 <div class="toolSection">
@@ -326,6 +328,33 @@
             player.src({ src: '{{$video->link}}'});
         @endif
 
+        var supportsOrientationChange = "onorientationchange" in window,
+            orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
+
+        window.addEventListener(orientationEvent, () => {
+            if(window.mobileCheck()){
+                if(window.innerHeight > window.innerWidth){
+                    var elem = document.getElementById("video_1");
+                    if (elem.requestFullscreen)
+                        elem.requestFullscreen();
+                    else if (elem.mozRequestFullScreen)
+                        elem.mozRequestFullScreen();
+                    else if (elem.webkitRequestFullscreen)
+                        elem.webkitRequestFullscreen();
+                    else if (elem.msRequestFullscreen)
+                        elem.msRequestFullscreen();
+                }
+                else{
+                if (document.exitFullscreen)
+                    document.exitFullscreen();
+                else if (document.webkitExitFullscreen)/* Safari */
+                    document.webkitExitFullscreen();
+                else if (document.msExitFullscreen)  /* IE11 */
+                    document.msExitFullscreen();
+
+            }
+            }
+        }, false);
     </script>
 
     <script src="{{URL::asset('js/default/autosize.min.js')}}"></script>
