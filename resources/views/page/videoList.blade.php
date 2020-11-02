@@ -342,6 +342,7 @@
                 loadMoreCheck();
         });
 
+        $(window).resize(() => resizeRows('videoInList'));
 
     </script>
 @endsection
