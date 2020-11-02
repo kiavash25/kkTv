@@ -3,129 +3,17 @@
 
 @section('head')
 
-    <style>
-        /*.streamBody{*/
-        /*    padding: 0px !important;*/
-        /*}*/
-        .profileTopSection{
-            width: 100%;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .bannerSec {
-            width: 100%;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        .userMainPicSec{
-            position: absolute;
-            right: 50px;
-            bottom: -50px;
-            display: flex;
-            align-items: center;
-            background: #232323;
-            /*background: #3a3a3a;*/
-            border-radius: 35px 50px 50px 35px;
-            padding: 5px;
-            padding-left: 40px;
-            box-shadow: 3px 7px 6px 0px #000000;
-        }
-        .userMainPicSec .uPic{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-        .userMainPicSec .uName{
-            margin-right: 20px;
-        }
-        .uName .name{
-            color: white;
-            font-size: 18px;
-        }
-        .uName .follower{
-            color: gray;
-            font-size: 10px;
-        }
-
-        .profilePageHeader{
-            width: 100%;
-            border-radius: 0px;
-            padding-bottom: 0;
-            padding-top: 80px;
-        }
-        .profilePageHeader .hTab{
-            display: flex;
-            color: white;
-        }
-        .profilePageHeader .hTab .tab{
-            width: 150px;
-            text-align: center;
-            padding: 0px 0px 10px 0px;
-            font-size: 20px;
-            color: #8a8a8a;
-            transition: .3s;
-            cursor: pointer;
-        }
-        .profilePageHeader .hTab .tab.selected{
-            border-bottom: solid;
-            color: white;
-        }
-        .profilePageHeader .hTab .tab:hover{
-            color: white !important;
-        }
-
-        .tabBody{
-            padding: 25px;
-            width: 100%;
-        }
-        .changeHeaderColor .headerWithLineText{
-            background: #232323 !important;
-        }
-
-        @media (max-width: 767px) {
-            .userIntroRow{
-                flex-direction: column;
-                max-height: 2000px !important;
-            }
-            .userIntroRow .videoSec{
-                width: 100% !important;
-            }
-            .userIntroRow .infoSec{
-                width: 100% !important;
-            }
-            .userMainPicSec{
-                flex-direction: column;
-                padding-left: 5px;
-                border-radius: 50px 50px 35px 35px;
-                right: auto;
-                left: auto;
-            }
-            .userMainPicSec .uPic{
-                margin-bottom: 10px;
-            }
-            .userMainPicSec .uName{
-                margin: 0;
-            }
-        }
-    </style>
 @endsection
 
 
 @section('body')
     <div class="profileTopSection">
         <div class="bannerSec">
-            <img src="https://static.koochita.com/_images/video/category/1594566080BANNER4.jpg" class="resizeImgClass" onload="resizeThisImg(this)">
+            @if($yourPage == 1)
+                <label for="bannerInput" class="editBannerButton editPicIcon"></label>
+                <input id="bannerInput" type="file" onchange="editProfileBannerPic(this)" style="display: none;">
+            @endif
+            <img id="bannerPic" src="{{$user->bannerPic}}" class="resizeImgClass" onload="resizeThisImg(this)">
         </div>
         <div class="userMainPicSec">
             <div class="uPic">
@@ -133,7 +21,7 @@
             </div>
             <div class="uName">
                 <div class="name">{{$user->username}}</div>
-                <div class="follower">0 دنبال کننده</div>
+{{--                <div class="follower">0 دنبال کننده</div>--}}
             </div>
         </div>
     </div>
@@ -151,10 +39,10 @@
     </div>
 
     <div class="changeHeaderColor" style="width: 100%">
-        <div id="homeTab" class="tabBody">
+        <div id="homeTab" class="profilePage tabBody">
             @include('page.profile.mainProfileInner.innerProfileHome')
         </div>
-        <div id="videosTab" class="tabBody hidden">
+        <div id="videosTab" class="profilePage tabBody hidden">
             <div class="headerWithLine">
                 <div class="headerWithLineText">
                     تمامی ویدیو ها
@@ -162,16 +50,19 @@
             </div>
             <div id="allVideo" class="allVideoList"></div>
         </div>
-        <div id="playListTab" class="tabBody hidden">
+        <div id="playListTab" class="profilePage tabBody hidden">
+            @if($yourPage == 1)
+                <button class="bigBlueButtonNonCorner plusIcon" onclick="openPlayListEditModal()">ویرایش لیست های پخش</button>
+            @endif
             <div class="headerWithLine">
                 <div class="headerWithLineText">
-                    لیست پخش ها
+                    لیست های پخش
                 </div>
             </div>
             <div id="allPlayListDiv" class="allVideoList"></div>
         </div>
         @if($yourPage == 1)
-            <div id="bookMarkTab" class="tabBody hidden">
+            <div id="bookMarkTab" class="profilePage tabBody hidden">
                 <div class="headerWithLine">
                     <div class="headerWithLineText">
                         نشان کرده ها
@@ -180,33 +71,75 @@
                 <div id="allBookMarkedVideo" class="allVideoList"></div>
             </div>
         @endif
-        {{--        <div id="categoryTab" class="tabBody hidden">--}}
-        {{--            @include('page.profile.mainProfileInner.innerProfileCategory')--}}
-        {{--        </div>--}}
-{{--        @include('page.profile.mainProfileInner.innerProfileHome')--}}
     </div>
+
+    <div id="playListEditModal" class="myModal">
+        <div class="myBody">
+            <div class="myExit closeIcon closeThisMyModal"></div>
+            <div class="title">
+                لیست های پخش
+                <button class="addButton plusIcon" onclick="openMyModal('addNewPlayListModal')"></button>
+            </div>
+            <div id="playListEditBodyModal" class="playListEditBodyModal content"></div>
+            <div class="footer">
+                <button class="footerBtn closeB closeThisMyModal">بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="allVideoModal" class="myModal">
+        <div class="myBody">
+            <div class="myExit closeIcon closeThisMyModal"></div>
+            <div class="title"></div>
+            <div class="topVideoModal content">
+                <div class="searchBar">
+                    <input id="inputForSearchInAllVideos" type="text" placeholder="نام ویدیو را برای جستجو وارد کنید..." onkeyup="searchForVideoInAllVideosModal(this.value)">
+                </div>
+                <div id="bodyForAllVideoModalSearch" class="resultSearch"></div>
+            </div>
+            <div class="footer">
+                <button class="footerBtn submit" onclick="submitAllVideoModal()">تایید</button>
+                <button class="footerBtn closeB closeThisMyModal">بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addNewPlayListModal" class="myModal">
+        <div class="myBody" style="width: 400px;">
+            <div class="myExit closeIcon closeThisMyModal"></div>
+            <div class="title">ایجاد لیست پخش جدید</div>
+            <div class="topVideoModal content">
+                <input id="newPlayListNameInput" class="newPlayListNameInput" type="text" placeholder="نام لیست پخش را وارد نمایید">
+            </div>
+            <div class="footer">
+                <button class="footerBtn submit" onclick="submitNewPlayListName()">تایید</button>
+                <button class="footerBtn closeB closeThisMyModal">بستن</button>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 
 @section('script')
     <script>
-        var allUserPlayList = {!! json_encode($playListsVideos) !!};
+        var submitAllVideoModalCallBack = null;
+        var selectedTypeInAllVideoModal = 'single';
+        var allUserPlayList = {!! json_encode($allPlayList) !!};
+        var showAblePlayList = {!! json_encode($playListsVideos) !!};
         var allUserVideos = {!! $allVideos !!};
         var allVideoBookMark = {!! $bookMarked !!};
+        var selectVideoForPlayListId = 0;
+        var deletedPlayListId = 0;
 
-        createVideoSuggestionDiv(allUserVideos, 'allVideo', () => $('#allVideo').find('.videoSuggestion').addClass('videoInList'), true);
-        createVideoSuggestionDiv(allVideoBookMark, 'allBookMarkedVideo', () => $('#allBookMarkedVideo').find('.videoSuggestion').addClass('videoInList'), true);
-        $('#allPlayListDiv').html(createPlayListObjGroups(allUserPlayList) /**in playListObj.blade.php**/);
-
-        function changeTab(_element, _tab){
-            $('.hTab').find('.tab').removeClass('selected');
-            $(_element).addClass('selected');
-
-            $('.tabBody').addClass('hidden');
-            $(`#${_tab}Tab`).removeClass('hidden');
-
-            resizeFitImg('resizeImgClass');
-            resizeRows('videoInList');
-        }
+        window.deletePlayListUrl = '{{route("playList.delete")}}';
+        window.editVideoListInPlayList = '{{route("playList.edit.videoList")}}';
+        window.editPlayListNameUrl = '{{route('playList.edit.name')}}';
+        window.editPlayListVideoSortUrl = '{{route("playList.edit.updateVideoSort")}}';
+        window.deleteVideoFromPlayListUrl = '{{route("playList.edit.deleteVideo")}}';
+        window.newPlayListStoreUrl = '{{route("playList.new")}}';
+        window.updateProfileBannerPic = '{{route('profile.updateBanner')}}';
     </script>
+
+    <script src="{{URL::asset('js/pages/mainProfile.js?v='.$fileVersion)}}"></script>
 @endsection

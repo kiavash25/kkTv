@@ -1,6 +1,32 @@
 @extends('layout.mainLayout')
 
 @section('head')
+    <meta content="article" property="og:type"/>
+    <meta property="og:title" content="{{$video->title}}"/>
+    <meta property="title" content="{{$video->title}}"/>
+    <meta name="twitter:title" content="{{$video->title}}"/>
+    <meta name="twitter:card" content="{{$video->description}}"/>
+    <meta name="twitter:description" content="{{$video->description}}"/>
+    <meta property="og:description" content="{{$video->description}}"/>
+    <meta property="article:section" content="video"/>
+    <meta property="article:author " content="کوچیتا تی وی"/>
+    <meta name="keywords" content="{{$video->title}}">
+    <meta property="og:url" content="{{Request::url()}}"/>
+
+    @if(isset($video->pic))
+        <meta property="og:image" content="{{$video->pic}}"/>
+        <meta property="og:image:secure_url" content="{{$video->pic}}"/>
+        <meta name="twitter:image" content="{{$video->pic}}"/>
+        <meta property="og:image:width" content="550"/>
+        <meta property="og:image:height" content="367"/>
+    @endif
+
+    @foreach($video->tags as $item)
+        <meta property="article:tag" content="{{$item}}"/>
+    @endforeach
+
+    <title>{{$video->title}}</title>
+
     <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css?v='.$fileVersion)}}">
 
     <link href="https://vjs.zencdn.net/5.19.2/video-js.css" rel="stylesheet">
@@ -118,64 +144,6 @@
                         <div class="footer" onclick="$(this).parent().toggleClass('open')">
                             <i class="arrowCss down"></i>
                         </div>
-                    </div>
-                </div>
-            @endif
-
-            @if(isset($video->places) && count($video->places) > 0)
-                <div class="moreInfoMainDiv">
-                    <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            اطلاعات بیشتر
-                        </div>
-                    </div>
-                    <div id="pcVideoPlace" class="videoPlaces">
-                        @for($i = 0; $i < count($video->places); $i++)
-                            <div class="moreInfoEachItem {{$i >= 4 ? 'notShowPlace' : ''}}">
-                                <a href="{{$video->places[$i]->url}}" target="_blank" class="mainDivImgMoreInfoItems">
-                                    <img src="{{$video->places[$i]->placePic}}" style="width: 100%">
-                                </a>
-                                <div class="moreInfoItemsDetails">
-                                    <a href="{{$video->places[$i]->url}}" target="_blank" class="placeName">
-                                        {{$video->places[$i]->name}}
-                                    </a>
-                                    @if($video->places[$i]->kindPlaceId > 0)
-                                        <div class="placeRates">
-                                            <div class="rating_and_popularity">
-                                                    <span class="header_rating">
-                                                       <div class="rs rating" rel="v:rating">
-                                                           <div class="prw_rup prw_common_bubble_rating overallBubbleRating float-left">
-                                                               <span class="ui_bubble_rating bubble_{{$video->places[$i]->placeRate}}0 font-size-16" property="ratingValue"></span>
-                                                           </div>
-                                                       </div>
-                                                    </span>
-                                                <span class="header_popularity popIndexValidation" id="scoreSpanHeader">
-                                                    <a>
-                                                        {{$video->places[$i]->placeReviews}}
-                                                        نقد
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($video->places[$i]->kindPlaceId > -1)
-                                        <div class="placeState">استان:
-                                            <span>{{$video->places[$i]->placeState}}</span>
-                                        </div>
-                                    @endif
-                                    @if($video->places[$i]->kindPlaceId > 0)
-                                        <div class="placeCity">شهر:
-                                            <span>{{$video->places[$i]->placeCity}}</span>
-                                        </div>
-                                    @endif
-
-                                </div>
-                            </div>
-                        @endfor
-
-                        @if(count($video->places) > 4)
-                            <div id="pcMoreBtn" class="moreBtn" onclick="openMorePlace(this)">بیشتر</div>
-                        @endif
                     </div>
                 </div>
             @endif
@@ -349,17 +317,9 @@
 @endsection
 
 @section('script')
-
-	<script src="https://vjs.zencdn.net/5.19.2/video.js"></script>
-	<script src="{{URL::asset('js/video/hls.min.js?v=v0.9.1')}}"></script>
-    <script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
-    <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
-
     <script>
         var player = videojs('video_1');
-
         player.qualityPickerPlugin();
-
         @if($isLink)
             player.src({ src: '{{$video->link}}', type: 'application/x-mpegURL' });
         @else

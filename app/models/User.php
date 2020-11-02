@@ -199,4 +199,9 @@ class User extends Authenticatable{
     {
         return $this->belongsToMany(Video::class, 'videoBookMarks', 'userId', 'videoId');
     }
+
+    public function tvInfos()
+    {
+        return $this->belongsTo(UserTvInfo::class, 'id', 'userId');
+    }
 }

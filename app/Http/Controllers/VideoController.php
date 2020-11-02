@@ -37,27 +37,6 @@ class VideoController extends Controller
         return view('page.videoUpload', compact(['categories', 'userCategories', 'userPlayList']));
     }
 
-    public function newPlayList(Request $request)
-    {
-        if(isset($request->text)){
-            $upl = UserPlayList::where('userId', auth()->user()->id)
-                ->where('name', $request->text)
-                ->first();
-            if($upl == null){
-                $upl = new UserPlayList();
-                $upl->userId = auth()->user()->id;
-                $upl->name = $request->text;
-                $upl->save();
-
-                return response()->json(['status' => 'ok', 'result' => $upl]);
-            }
-            else
-                return response()->json(['status' => 'duplicate']);
-        }
-        else
-            return response()->json(['status' => 'nok']);
-    }
-
     public function newYourCategory(Request $request)
     {
         if(isset($request->text)){

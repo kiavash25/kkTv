@@ -244,6 +244,327 @@
 .descriptionSection{
     width: 100% !important;
 }
+
+
+
+/*.streamBody{*/
+/*    padding: 0px !important;*/
+/*}*/
+.profileTopSection{
+    width: 100%;
+    max-height: 300px;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.profileTopSection .bannerSec {
+    width: 100%;
+    max-height: 300px;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profileTopSection .userMainPicSec{
+    position: absolute;
+    right: 50px;
+    bottom: -50px;
+    display: flex;
+    align-items: center;
+    background: #232323;
+    /*background: #3a3a3a;*/
+    border-radius: 35px 50px 50px 35px;
+    padding: 5px;
+    padding-left: 40px;
+    box-shadow: 3px 7px 6px 0px #000000;
+}
+.profileTopSection .userMainPicSec .uPic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profileTopSection .userMainPicSec .uName{
+    margin-right: 20px;
+}
+.profileTopSection .userMainPicSec .uName .name{
+    color: white;
+    font-size: 18px;
+}
+.profileTopSection .userMainPicSec .uName .follower{
+    color: gray;
+    font-size: 10px;
+}
+
+.profilePageHeader{
+    width: 100%;
+    border-radius: 0px;
+    padding-bottom: 0;
+    padding-top: 80px;
+}
+.profilePageHeader .hTab{
+    display: flex;
+    color: white;
+}
+.profilePageHeader .hTab .tab{
+    width: 150px;
+    text-align: center;
+    padding: 0px 0px 10px 0px;
+    font-size: 20px;
+    color: #8a8a8a;
+    transition: .3s;
+    cursor: pointer;
+}
+.profilePageHeader .hTab .tab.selected{
+    border-bottom: solid;
+    color: white;
+}
+.profilePageHeader .hTab .tab:hover{
+    color: white !important;
+}
+.profilePage.tabBody{
+    padding: 25px;
+    width: 100%;
+}
+.changeHeaderColor .headerWithLineText{
+    background: #232323 !important;
+}
+
+
+.profilePage .userIntroRow{
+    padding: 0px 0px;
+    display: flex;
+    max-height: 230px;
+    overflow: hidden;
+}
+.profilePage .userIntroRow .videoSec{
+    width: 30%;
+}
+.profilePage .userIntroRow .infoSec{
+    width: 69%;
+    color: white;
+    padding: 5px 15px;
+    display: flex;
+    flex-direction: column;
+}
+.profilePage .userIntroRow .infoSec .name{
+    font-size: 20px;
+}
+.profilePage .userIntroRow .infoSec .description{
+    margin-top: 10px;
+    color: #868686;
+    font-size: 15px;
+}
+
+.bigBlueButtonNonCorner{
+    border: none;
+    background: var(--koochita-blue);
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 12px;
+}
+.topVideoModal .searchBar > input{
+    width: 50%;
+    padding: 3px;
+    padding-bottom: 5px;
+    background: #3a3a3a;
+    border: none;
+    color: white;
+    border-bottom: solid 1px #dadada;
+}
+.topVideoModal .resultSearch{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.topVideoModal .videoResult{
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    margin: 10px 0px;
+    padding: 5px;
+    border-radius: 5px;
+}
+.topVideoModal .videoResult.selected{
+    background: var(--koochita-yellow);
+}
+.topVideoModal .videoResult .picSec{
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.topVideoModal .videoResult .picSec > img{
+    width: 100%;
+}
+.topVideoModal .videoResult .name{
+    color: white;
+    margin-top: 5px;
+}
+
+
+.addButton{
+    background: var(--koochita-green);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.playListEditModal .playListEditBodyModal{
+
+}
+.playListEditBodyModal .playListRowModal{
+    border-bottom: solid #4c4c4c 1px;
+}
+.playListEditBodyModal .playListRowModal .infos{
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+.playListEditBodyModal .playListRowModal .name{
+    font-size: 18px;
+}
+.playListEditBodyModal .playListRowModal .name .text{
+    width: 120px;
+}
+.playListEditBodyModal .playListRowModal .name input{
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px gray solid;
+    font-size: 15px;
+}
+.playListEditBodyModal .playListRowModal .bts{
+    margin-right: 20px;
+}
+.playListEditBodyModal .playListRowModal .bts .editesBtn{
+
+}
+.playListEditBodyModal .playListRowModal .bts .editesBtn .tickIcon{
+    color: white;
+    background: var(--koochita-green);
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.playListEditBodyModal .playListRowModal .bts .editesBtn .closeIcon{
+    color: white;
+    background: red;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.playListEditBodyModal .playListRowModal .bts .editesBtn .closeIcon:before{
+    color: white;
+    font-size: 17px;
+    line-height: unset;
+}
+.playListEditBodyModal .playListRowModal .bts .editIcon{
+    background: var(--koochita-blue);
+    cursor: pointer;
+    font-size: 20px;
+}
+.playListEditBodyModal .playListRowModal .mainEditIcons > div{
+    margin-right: 10px;
+}
+.playListEditBodyModal .playListRowModal .bts .trashIcon{
+    background: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+.playListEditBodyModal .playListRowModal .moreBtn{
+    margin-right: auto;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.playListEditBodyModal .playListRowModal .videos{
+    background: #565656;
+    border-radius: 7px;
+    padding: 0px;
+    max-height: 0px;
+    transition: .3s;
+    overflow: hidden;
+}
+.playListEditBodyModal .playListRowModal .videos.show{
+    padding: 5px 25px;
+    max-height: 1000px;
+}
+.playListEditBodyModal .playListRowModal .videos .vidRow{
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #636363;
+    background: #565656;
+}
+.playListEditBodyModal .playListRowModal .videos .vidRow .dragRow{
+    cursor: grab;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 9px;
+}
+.playListEditBodyModal .playListRowModal .videos .vidRow .dragRow .threeDotHorizontalIcon{
+    line-height: 5px;
+    color: #d4d4d4;
+}
+.playListEditBodyModal .playListRowModal .videos .vidRow .name{
+    color: white;
+    font-size: 14px;
+}
+.playListEditBodyModal .playListRowModal .videos .vidRow .closeIcon{
+    margin-right: auto;
+    cursor: pointer;
+}
+
+.newPlayListNameInput{
+    width: 100%;
+    margin: 10px 0px;
+    background: none;
+    border: none;
+    border-bottom: solid 2px #989898;
+    padding: 10px 5px;
+    color: white;
+}
+.editBannerButton{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: solid 2px;
+    color: #929292;
+    background: #232323;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 @media (max-width: 1300px){
     .lestSideLiveVideo{
         display: none;
@@ -317,6 +638,53 @@
     }
     .guestSection:hover .guestSideSection{
         width: 150px;
+    }
+
+    .profilePage .userIntroRow{
+        flex-direction: column;
+        max-height: 2000px !important;
+    }
+    .profilePage .userIntroRow .videoSec{
+        width: 100% !important;
+    }
+    .profilePage .userIntroRow .infoSec{
+        width: 100% !important;
+    }
+    .profileTopSection .userMainPicSec{
+        flex-direction: column;
+        padding-left: 5px;
+        border-radius: 50px 50px 35px 35px;
+        right: auto;
+        left: auto;
+    }
+    .profileTopSection .userMainPicSec .uPic{
+        margin-bottom: 10px;
+    }
+    .profileTopSection .userMainPicSec .uName{
+        margin: 0;
+    }
+
+    .topVideoModal .videoResult{
+        width: 150px;
+    }
+    .topVideoModal .videoResult .picSec{
+        height: 100px;
+    }
+    .topVideoModal .searchBar > input{
+        width: 100%;
+    }
+
+
+    .profilePageHeader{
+        overflow-x: auto;
+        width: 100% !important;
+    }
+    .profilePageHeader .hTab{
+        width: 400px;
+    }
+    .profilePageHeader .hTab .tab{
+        width: 100px;
+        font-size: 15px;
     }
 }
 

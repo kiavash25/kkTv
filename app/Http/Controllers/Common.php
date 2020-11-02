@@ -248,6 +248,11 @@ function getVideoFullInfo($video, $main = false)
     $video->comments = [];
     $video->places = [];
 
+    if($video->link == null)
+        $video->videoUrl = URL::asset('videos/' . $video->userId . '/' . $video->video);
+    else
+        $video->videoUrl = $video->link;
+
     if($video->seen > 1000)
         $video->seen = (floor($video->seen/100)/10) . ' K';
 

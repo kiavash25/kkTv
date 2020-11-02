@@ -281,7 +281,7 @@
         // $('#videoSetting').show();
 
         var newCategoryUrl = '{{route("video.yourCategory.new")}}';
-        var newPlayListUrl = '{{route("video.playList.new")}}';
+        var newPlayListUrl = '{{route("playList.new")}}';
         let totalSearchURL = "{{route('ajax.totalPlaceSearch')}}";
         let getTagsURL = "{{route('ajax.getTags')}}";
         let storeVideoURL = '{{route("video.uploadVideoFile")}}';

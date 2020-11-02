@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Tags;
 use App\models\UserSeenLog;
 use App\models\Video;
 use App\models\VideoBookMark;
@@ -169,9 +170,8 @@ class MainController extends Controller
             return redirect(route('index'));
 
         $uId = 0;
-        if (auth()->check()) {
+        if (auth()->check())
             $uId = auth()->user()->id;
-        }
 
         $isLink = true;
 
@@ -210,10 +210,14 @@ class MainController extends Controller
             else
                 $video->hasPlace = false;
 
-
             $video->bookMark = 0;
             if($uId != 0)
                 $video->bookMark = VideoBookMark::where('userId', $uId)->where('videoId', $video->id)->count();
+
+            $video->tags = [];
+            $videoTagRel = VideoTagRelation::where('videoId', $video->id)->pluck('tagId')->toArray();
+            if(count($videoTagRel) > 0)
+                $video->tags = Tags::whereIn('id', $videoTagRel)->pluck('name')->toArray();
 
             return view('page.videoShow', compact(['video', 'userMoreVideo', 'sameCategory', 'localStorageData', 'isLink', 'playList']));
         }

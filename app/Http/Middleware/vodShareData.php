@@ -56,7 +56,7 @@ class vodShareData
             $timeToLiveCode = $lives->code;
         }
 
-        $fileVersion = 5;
+        $fileVersion = 6;
 
         View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'timeToLiveCode' => $timeToLiveCode, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 
