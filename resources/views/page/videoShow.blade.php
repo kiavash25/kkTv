@@ -85,6 +85,22 @@
                 width: 100%;
             }
         }
+
+        @media (max-width: 767px){
+            .iconButton{
+                flex-direction: column-reverse;
+                margin: 5px;
+                width: 35px;
+            }
+            .iconButton > span{
+                line-height: 12px;
+                margin-top: 5px;
+                font-size: 18px;
+            }
+            .eyeClass{
+                width: 18px !important;
+            }
+        }
         .playList .body .item.played:after{
             content: '';
             background-image: url("{{URL::asset('images/mainPics/play.png')}}");
@@ -174,13 +190,13 @@
                 <div class="toolSection">
                     <div class="toolSectionButtons">
                         <div class="iconButton LikeIconEmptyAfter likeVideoButton {{$video->uLike == 1 ? 'fill' : ''}}" onclick="setFeedback(1)">
-                            {{$video->like}}
+                            <span>{{$video->like}}</span>
                         </div>
                         <div class="iconButton DisLikeIconEmptyAfter disLikeVideoButton {{$video->uLike == -1 ? 'fill' : ''}}" onclick="setFeedback(-1)">
-                            {{$video->disLike}}
+                            <span>{{$video->disLike}}</span>
                         </div>
                         <div class="iconButton CommentIconAfter">
-                            {{$video->commentsCount}}
+                            <span>{{$video->commentsCount}}</span>
                         </div>
                     </div>
                     <div class="toolSectionInfos">
@@ -188,7 +204,7 @@
                             @include('component.shareBox')
                         </div>
                         <div class="iconButton BookMarkEmptyIcon {{$video->bookMark == 1 ? 'fill' : ''}}" onclick="setBookMark()"></div>
-                        <div class="toolSectionInfosTab">
+                        <div class="iconButton toolSectionInfosTab">
                             <span class="toolSectionInfosTabNumber">{{$video->seen}}</span>
                             <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
                         </div>
@@ -331,28 +347,41 @@
         var supportsOrientationChange = "onorientationchange" in window,
             orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
 
+
+        var fullScreenVar;
         window.addEventListener(orientationEvent, () => {
             if(window.mobileCheck()){
                 if(window.innerHeight > window.innerWidth){
+                    console.log(document.fullscreenEnabled);
                     var elem = document.getElementById("video_1");
-                    if (elem.requestFullscreen)
-                        elem.requestFullscreen();
-                    else if (elem.mozRequestFullScreen)
-                        elem.mozRequestFullScreen();
-                    else if (elem.webkitRequestFullscreen)
-                        elem.webkitRequestFullscreen();
-                    else if (elem.msRequestFullscreen)
-                        elem.msRequestFullscreen();
+                    elem.requestFullscreen().then(res => {
+                        console.log('ok');
+                        console.log(res);
+                    }).catch(err => {
+                        console.log('error');
+                        // alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                    // if (elem.requestFullscreen)
+                    //     elem.requestFullscreen();
+                    // else if (elem.mozRequestFullScreen)
+                    //     elem.mozRequestFullScreen();
+                    // else if (elem.webkitRequestFullscreen)
+                    //     elem.webkitRequestFullscreen();
+                    // else if (elem.msRequestFullscreen)
+                    //     elem.msRequestFullscreen();
                 }
                 else{
-                if (document.exitFullscreen)
+                    console.log(document.fullscreenEnabled);
                     document.exitFullscreen();
-                else if (document.webkitExitFullscreen)/* Safari */
-                    document.webkitExitFullscreen();
-                else if (document.msExitFullscreen)  /* IE11 */
-                    document.msExitFullscreen();
-
-            }
+                    // if (document.exitFullscreen)
+                    //     document.exitFullscreen();
+                    // else if (document.webkitExitFullscreen)/* Safari */
+                    //     document.webkitExitFullscreen();
+                    // else if (document.msExitFullscreen)  /* IE11 */
+                    //     document.msExitFullscreen();
+                    // else
+                    //     document.exitFullscreen();
+                }
             }
         }, false);
     </script>
@@ -507,8 +536,8 @@
                         else if (_value == -1)
                             $('.disLikeVideoButton').toggleClass('fill');
 
-                        $('.likeVideoButton').text(response.like);
-                        $('.disLikeVideoButton').text(response.disLike);
+                        $('.likeVideoButton').find('span').text(response.like);
+                        $('.disLikeVideoButton').find('span').text(response.disLike);
                         uLike = _value;
                     }
                 }

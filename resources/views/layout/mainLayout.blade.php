@@ -221,10 +221,6 @@
     }
     sendSeenPageLog();
 
-    $(window).resize(function(){
-        resizeRows('videoInList')
-    });
-
     $('.closeThisMyModal').on('click', e => {
         let parent = $(e.target).parent();
         while(!parent.hasClass('myModal'))

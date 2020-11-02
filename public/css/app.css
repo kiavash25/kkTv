@@ -565,6 +565,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.video-js .vjs-big-play-button{
+    width: 75px !important;
+    left: calc(50% - 38px) !important;
+}
 @media (max-width: 1300px){
     .lestSideLiveVideo{
         display: none;
