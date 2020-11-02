@@ -2,6 +2,17 @@
 
 
 @section('head')
+    <title> صفحه {{$user->username}} </title>
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="website" />
+    <meta name="title" content="کوچیتا |  صفحه {{$user->username}} " />
+    <meta name='description' content=' صفحه {{$user->username}} ' />
+    <meta name='keywords' content='ک صفحه {{$user->username}} ' />
+    <meta property="og:image" content="{{ asset('images/blank.jpg') }}"/>
+    <meta property="og:image:secure_url" content="{{ asset('images/blank.jpg') }}"/>
+    <meta property="og:image:width" content="550"/>
+    <meta property="og:image:height" content="367"/>
+    <meta name="twitter:image" content="{{ asset('images/blank.jpg') }}"/>
 
 @endsection
 
