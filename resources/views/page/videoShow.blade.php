@@ -90,7 +90,7 @@
             .iconButton{
                 flex-direction: column-reverse;
                 margin: 5px;
-                width: 35px;
+                min-width: 35px;
             }
             .iconButton > span{
                 line-height: 12px;
@@ -98,7 +98,14 @@
                 font-size: 18px;
             }
             .eyeClass{
-                width: 18px !important;
+                width: 22px !important;
+            }
+            .iconButton.BookMarkEmptyIcon{
+                font-size: 1.5em;
+                margin-left: 10px;
+            }
+            .iconButton > span.toolSectionInfosTabNumber{
+                margin-top: 13px;
             }
         }
         .playList .body .item.played:after{
@@ -352,35 +359,42 @@
         window.addEventListener(orientationEvent, () => {
             if(window.mobileCheck()){
                 if(window.innerHeight > window.innerWidth){
-                    console.log(document.fullscreenEnabled);
-                    var elem = document.getElementById("video_1");
-                    elem.requestFullscreen().then(res => {
-                        console.log('ok');
-                        console.log(res);
-                    }).catch(err => {
-                        console.log('error');
-                        // alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                    });
-                    // if (elem.requestFullscreen)
-                    //     elem.requestFullscreen();
-                    // else if (elem.mozRequestFullScreen)
-                    //     elem.mozRequestFullScreen();
-                    // else if (elem.webkitRequestFullscreen)
-                    //     elem.webkitRequestFullscreen();
-                    // else if (elem.msRequestFullscreen)
-                    //     elem.msRequestFullscreen();
+
+                    // $('.vjs-user-inactive').removeClass('vjs-user-inactive')
+                    // $('.video-js').removeClass('vjs-user-active');
+                    // $('.vjs-fullscreen-control').click();
+                    if(document.fullscreenElement == null){
+                        var elem = document.getElementsByClassName("video-js")[0];
+                        if (elem.requestFullscreen)
+                            elem.requestFullscreen().catch(err =>{
+                                $('.vjs-fullscreen-control').click();
+                            });
+                        else if (elem.mozRequestFullScreen)
+                            elem.mozRequestFullScreen();
+                        else if (elem.webkitRequestFullscreen)
+                            elem.webkitRequestFullscreen();
+                        else if (elem.msRequestFullscreen)
+                            elem.msRequestFullscreen();
+                    }
+
                 }
                 else{
-                    console.log(document.fullscreenEnabled);
-                    document.exitFullscreen();
-                    // if (document.exitFullscreen)
-                    //     document.exitFullscreen();
-                    // else if (document.webkitExitFullscreen)/* Safari */
-                    //     document.webkitExitFullscreen();
-                    // else if (document.msExitFullscreen)  /* IE11 */
-                    //     document.msExitFullscreen();
-                    // else
-                    //     document.exitFullscreen();
+                    if(document.fullscreenElement != null) {
+                        // $('.vjs-user-inactive').removeClass('vjs-user-inactive');
+                        // $('.video-js').removeClass('vjs-user-active');
+                        // $('.vjs-fullscreen-control').click();
+
+                        console.log('close');
+                        document.exitFullscreen();
+                        if (document.exitFullscreen)
+                            document.exitFullscreen();
+                        else if (document.webkitExitFullscreen)/* Safari */
+                            document.webkitExitFullscreen();
+                        else if (document.msExitFullscreen)  /* IE11 */
+                            document.msExitFullscreen();
+                        else
+                            document.exitFullscreen();
+                    }
                 }
             }
         }, false);
