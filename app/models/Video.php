@@ -78,4 +78,5 @@ class Video extends Model
         else
             return ['status' => 'nok', 'result' => $response->status()];
     }
+
 }

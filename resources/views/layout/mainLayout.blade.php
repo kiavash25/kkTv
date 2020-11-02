@@ -13,17 +13,6 @@
     <meta property="og:url" content="{{Request::url()}}" />
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
 
-    <title> کوچیتا تی وی </title>
-    <meta property="og:locale" content="fa_IR" />
-    <meta property="og:type" content="website" />
-    <meta name="title" content="کوچیتا | سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران" />
-    <meta name='description' content='کوچیتا، سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران. اطلاعات اماکن و جاذبه ها، هتل ها، بوم گردی، ماجراجویی، آموزش سفر، فروشگاه صنایع‌دستی ، پادکست سفر' />
-    <meta name='keywords' content='کوچیتا، هتل، تور ، سفر ارزان، سفر در ایران، بلیط، تریپ، نقد و بررسی، سفرنامه، کمپینگ، ایران گردی، آموزش سفر، مجله گردشگری، مسافرت، مسافرت داخلی, ارزانترین قیمت هتل ، مقایسه قیمت ، بهترین رستوران‌ها ، بلیط ارزان ، تقویم تعطیلات' />
-    <meta property="og:image" content="{{ asset('images/blank.jpg') }}"/>
-    <meta property="og:image:secure_url" content="{{ asset('images/blank.jpg') }}"/>
-    <meta property="og:image:width" content="550"/>
-    <meta property="og:image:height" content="367"/>
-    <meta name="twitter:image" content="{{ asset('images/blank.jpg') }}"/>
 
 {{--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>--}}
 {{--    <script>--}}
@@ -44,7 +33,6 @@
     <link rel="stylesheet" href="{{ asset('css/layout/icons.css?v='.$fileVersion) }}">
     <link rel="stylesheet" href="{{ asset('css/app.css?v='.$fileVersion) }}">
 
-
     <script src="{{URL::asset('js/default/jquery-3.4.1.min.js')}}"></script>
     <script src="{{URL::asset('js/default/bootstrap.min.js')}}"></script>
     <script src="{{URL::asset('js/default/angular.js')}}"></script>
@@ -60,6 +48,18 @@
     </script>
 
     @yield('head')
+
+    <title> کوچیتا تی وی </title>
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="website" />
+    <meta name="title" content="کوچیتا | سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران" />
+    <meta name='description' content='کوچیتا، سامانه جامع گردشگری ایران و شبکه اجتماعی گردشگران. اطلاعات اماکن و جاذبه ها، هتل ها، بوم گردی، ماجراجویی، آموزش سفر، فروشگاه صنایع‌دستی ، پادکست سفر' />
+    <meta name='keywords' content='کوچیتا، هتل، تور ، سفر ارزان، سفر در ایران، بلیط، تریپ، نقد و بررسی، سفرنامه، کمپینگ، ایران گردی، آموزش سفر، مجله گردشگری، مسافرت، مسافرت داخلی, ارزانترین قیمت هتل ، مقایسه قیمت ، بهترین رستوران‌ها ، بلیط ارزان ، تقویم تعطیلات' />
+    <meta property="og:image" content="{{ asset('images/blank.jpg') }}"/>
+    <meta property="og:image:secure_url" content="{{ asset('images/blank.jpg') }}"/>
+    <meta property="og:image:width" content="550"/>
+    <meta property="og:image:height" content="367"/>
+    <meta name="twitter:image" content="{{ asset('images/blank.jpg') }}"/>
 
     <script>
         function checkLogin(){
