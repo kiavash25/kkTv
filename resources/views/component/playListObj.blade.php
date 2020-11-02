@@ -47,10 +47,6 @@
         text-align: right;
         width: 100%;
         padding: 0px 10px;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
         margin: 10px 0px;
         color: white;
     }
@@ -59,7 +55,7 @@
 <div id="playListSample" style="display: none;">
     <a href="##url##" class="playListObj">
         <div class="pic">
-            <img src="##thumbnail##" alt="">
+            <img src="##thumbnail##" class="resizeImgClass" onload="resizeThisImg(this)">
             <div class="countInfo">
                 ##videoCount##
                 ویدیو
@@ -68,7 +64,7 @@
                 پخش همه
             </div>
         </div>
-        <div class="name">
+        <div class="showLineOfText line_1 name">
             ##name##
         </div>
     </a>

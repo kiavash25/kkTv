@@ -49,6 +49,7 @@
     <script src="{{URL::asset('js/default/bootstrap.min.js')}}"></script>
     <script src="{{URL::asset('js/default/angular.js')}}"></script>
     <script src="{{URL::asset('js/default/swiper.min.js')}}"></script>
+    <script src="{{URL::asset('js/default/jquery-ui.js')}}"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({
@@ -140,6 +141,10 @@
 </body>
 
 
+<script src="https://vjs.zencdn.net/5.19.2/video.js"></script>
+<script src="{{URL::asset('js/video/hls.min.js?v=v0.9.1')}}"></script>
+<script src="{{URL::asset('js/video/videojs5-hlsjs-source-handler.min.js?v=0.3.1')}}"></script>
+<script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
 <script src="{{URL::asset('js/default/load-image.all.min.js')}}"></script>
 
 <script>
@@ -229,6 +234,16 @@
     $(window).resize(function(){
         resizeRows('videoInList')
     });
+
+    $('.closeThisMyModal').on('click', e => {
+        let parent = $(e.target).parent();
+        while(!parent.hasClass('myModal'))
+            parent = parent.parent();
+        parent.removeClass('show')
+    });
+
+    openMyModal = _id => $(`#${_id}`).addClass('show');
+    closeMyModal = _id => $(`#${_id}`).removeClass('show');
 
 </script>
 

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 
 class Video extends Model
 {
+    protected $guarded = [];
     protected $connection = 'mysql';
     protected $table = 'videos';
 

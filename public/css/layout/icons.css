@@ -31,6 +31,30 @@
     content: '\E04A';
     font-family: Shazde_Regular2 !important;
 }
+.editIcon:before{
+    content: '\E00E';
+    font-family: Shazde_Regular2 !important;
+}
+.tickIcon:before{
+    content: '\E02B';
+    font-family: Shazde_Regular2 !important;
+}
+.closeIcon:before{
+    content: '\E02C';
+    font-family: Shazde_Regular2 !important;
+}
+.threeDotHorizontalIcon:before{
+    content: '\E091';
+    font-family: Shazde_Regular2 !important;
+}
+.editPicIcon:before{
+    content: '\E0A4';
+    font-family: Shazde_Regular2 !important;
+}
+.trashIcon:before{
+    content: '\E073';
+    font-family: Shazde_Regular2 !important;
+}
 .downArrowIconAfter:after{
     content: '\E04A';
     font-family: Shazde_Regular2 !important;

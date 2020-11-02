@@ -323,7 +323,6 @@ input{
     width: calc(100% - 50px);
 }
 
-
 .headerWithLine{
     color: white;
     position: relative;
@@ -439,6 +438,91 @@ input{
     height: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+
+.myModal{
+    justify-content: center;
+    align-items: center;
+    background: #000000b8;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+}
+.myModal.show{
+    display: flex !important;
+}
+.myModal .myBody{
+    background: #3a3a3a;
+    max-width: 1100px;
+    width: 100%;
+    position: relative;
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 95vh;
+}
+.myModal .myBody .myExit{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    cursor: pointer;
+}
+.myModal .myBody .myExit:before{
+    font-size: 60px;
+}
+.myModal .myBody .title{
+    color: var(--koochita-yellow);
+    font-size: 23px;
+    margin-bottom: 15px;
+    border-bottom: solid 1px #4c4c4c;
+    padding-bottom: 10px;
+}
+.myModal .myBody .content{
+    max-height: calc(90vh - 100px);
+    overflow: auto;
+}
+.myModal .myBody .footer{
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.myModal .myBody .footer .footerBtn{
+    margin: 0px 5px;
+    border-radius: 3px;
+    border: none;
+    background: none;
+    color: white;
+    cursor: pointer;
+    font-size: 19px;
+    padding: 0px 30px;
+}
+.myModal .myBody .footer .footerBtn.submit{
+    background: var(--koochita-blue);
+}
+.myModal .myBody .footer .footerBtn.closeB{
+    color: white;
+}
+
+.showLineOfText{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.showLineOfText.line_1{
+    -webkit-line-clamp: 1;
+}
+.showLineOfText.line_2{
+    -webkit-line-clamp: 2;
+}
+.showLineOfText.line_3{
+    -webkit-line-clamp: 3;
+}
+.showLineOfText.line_4{
+    -webkit-line-clamp: 4;
 }
 
 @keyframes gradient {

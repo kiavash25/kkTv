@@ -169,9 +169,8 @@ class MainController extends Controller
             return redirect(route('index'));
 
         $uId = 0;
-        if (auth()->check()) {
+        if (auth()->check())
             $uId = auth()->user()->id;
-        }
 
         $isLink = true;
 
@@ -209,7 +208,6 @@ class MainController extends Controller
                 $video->hasPlace = true;
             else
                 $video->hasPlace = false;
-
 
             $video->bookMark = 0;
             if($uId != 0)

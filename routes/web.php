@@ -49,6 +49,25 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
     Route::get('streaming/getChats/{room}', 'MainController@updateLiveVideoChat')->name('streaming.getChats');
 
     Route::middleware(['auth'])->group(function () {
+
+        Route::post('video/updateTopVideo', 'ProfileController@updateTopVideo')->name('profile.updateTopVideo');
+
+        Route::prefix('video/playList')->group(function(){
+            Route::post('store', 'PlayListController@newPlayList')->name('playList.new');
+
+            Route::post('delete', 'PlayListController@deletePlayList')->name('playList.delete');
+
+            Route::post('edit/name', 'PlayListController@editPlayListName')->name('playList.edit.name');
+
+            Route::post('edit/videoList', 'PlayListController@updatePlayListVideos')->name('playList.edit.videoList');
+
+            Route::post('edit/updateVideoSort', 'PlayListController@editPlayListVideoSort')->name('playList.edit.updateVideoSort');
+
+            Route::post('edit/deleteVideo', 'PlayListController@deleteVideoFromPlayList')->name('playList.edit.deleteVideo');
+        });
+
+        Route::post('profile/updateBannerPic', 'ProfileController@updateBannerPic')->name('profile.updateBanner');
+
         Route::post('video/addToBookMark', 'ProfileController@addToBookMark')->name('profile.addToBookMark');
 
         Route::post('streaming/storeLiveChat', 'MainController@storeLiveChat')->name('streaming.storeLiveChat');
@@ -65,8 +84,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 //    upload video
     Route::middleware(['auth'])->group(function(){
         Route::post('video/yourCategory/store', 'VideoController@newYourCategory')->name('video.yourCategory.new');
-
-        Route::post('video/playList/store', 'VideoController@newPlayList')->name('video.playList.new');
 
         Route::get('video/uploadPage', 'VideoController@uploadVideoPage')->name('video.uploadPage');
 

@@ -1,41 +1,33 @@
-<style>
 
-    .userIntroRow{
-        padding: 0px 0px;
-        display: flex;
-        max-height: 230px;
-        overflow: hidden;
-    }
-    .userIntroRow .videoSec{
-        width: 30%;
-    }
-    .userIntroRow .infoSec{
-        width: 69%;
-        color: white;
-        padding: 5px 15px;
-        display: flex;
-        flex-direction: column;
-    }
-    .userIntroRow .infoSec .name{
-        font-size: 20px;
-    }
-    .userIntroRow .infoSec .description{
-        margin-top: 10px;
-        color: #868686;
-        font-size: 15px;
-    }
-</style>
-
-<div class="userIntroRow">
+@if($yourPage == 1)
+    <button class="bigBlueButtonNonCorner plusIcon" onclick="openChooseTopVideoModal()"> {{$topVideo == null ? 'انتخاب' : 'ویرایش'}} ویدیو شاخص</button>
+@endif
+<div id="topVideoSectionProfile" data-value="{{$topVideo == null ? 0 : $topVideo->id}}" class="profilePage userIntroRow {{$topVideo == null ? 'hidden' : ''}}">
     <div class="videoSec">
-        <video src="http://localhost/assets/_images/video/3/1603817656_3.mp4" controls style="width: 100%; max-height: 230px;"></video>
+        <video id="topVideoVideoTag"
+               src="{{$topVideo == null ? '#' : $topVideo->videoUrl}}"
+               controls
+               poster="{{$topVideo == null ? '' : $topVideo->pic}}"
+               style="width: 100%; direction: ltr; max-height: 230px;"></video>
     </div>
     <div class="infoSec">
-        <a href="#" class="name">محمد علی کشاورز</a>
+        <a href="{{$topVideo == null ? '#' : $topVideo->url}}" class="name">
+            {{$topVideo == null ? '' : $topVideo->title}}
+        </a>
         <div class="description">
-            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+            {{$topVideo == null ? '' : $topVideo->description}}
         </div>
     </div>
+    @if($topVideo != null && $topVideo->link != null)
+        <script>
+            $('#topVideoVideoTag').addClass('playads embed-responsive-item video-js vjs-default-skin vjs-16-9');
+            $('#topVideoVideoTag').attr('data-setup', '{"fluid": true, "preload": "none", "auto-play": false }');
+
+            var player = videojs('video_1');
+            player.qualityPickerPlugin();
+            player.src({ src: '{{$topVideo->link}}', type: 'application/x-mpegURL' });
+        </script>
+    @endif
 </div>
 
 <div class="row changeHeaderColor" style="width: 100%">
@@ -60,13 +52,12 @@
 
     </div>
 
-    <div class="col-md-12">
+    <div id="homePlayListSection" class="col-md-12 {{count($playListsVideos) == 0 ? 'hidden' : ''}}">
         <div class="headerWithLine">
             <div class="headerWithLineText">
                 لیست پخش
             </div>
         </div>
-
         <div class="otherSectionBody">
             <div class="videoSuggestionSwiper swiper-container">
 
@@ -78,7 +69,6 @@
                 <div class="swiper-button-prev"></div>
             </div>
         </div>
-
     </div>
 
     @foreach($userCategories as $uCat)
@@ -106,10 +96,11 @@
 </div>
 
 <script>
+    var homeShowPlayList = {!! json_encode($playListsVideos) !!};
     var userCategories = {!! $userCategories !!};
     var userTenLastVideo = {!! $lastVideos !!};
     var tenPlayList = [];
-    {!! json_encode($playListsVideos) !!}.map(item => tenPlayList.push(item));
+    homeShowPlayList.map(item => tenPlayList.push(item));
 
     $('.videoSuggestion').html(returnVideoSuggPlaceHolder() /**in videoSuggestionPack.blade.php**/);
     createVideoSuggestionDiv(userTenLastVideo, 'lastVideosDiv') /**in videoSuggestionPack.blade.php**/;
@@ -181,4 +172,70 @@
         },
     });
 
+    openChooseTopVideoModal = () => openAllVideoSelectModal('انتخاب ویدیوی شاخص',
+                                                            showTopVideo,
+                                                            'single',
+                                                            [$('#topVideoSectionProfile').attr('data-value')]);
+
+    function showTopVideo(_id) {
+        _id = _id[0];
+
+        var videoIndex = null;
+        for(var i = 0; i < allUserVideos.length; i++){
+            if(allUserVideos[i].id == _id){
+                videoIndex = i;
+                break;
+            }
+        }
+
+        if(videoIndex != null) {
+            openLoading();
+            $.ajax({
+                type: 'post',
+                url: '{{route('profile.updateTopVideo')}}',
+                data:{
+                    _token: '{{csrf_token()}}',
+                    id: allUserVideos[videoIndex].id
+                },
+                success: response =>{
+                    closeLoading();
+                    if(response.status == 'ok'){
+                        allUserVideos.map(item =>item.isTopVideo = 0);
+                        allUserVideos[videoIndex].isTopVideo = 1;
+                        var video = allUserVideos[videoIndex];
+
+                        $('#topVideoSectionProfile').removeClass('hidden');
+                        $('#topVideoSectionProfile').find('video').attr('poster', video.pic);
+                        $('#topVideoSectionProfile').find('a').attr('href', video.url);
+                        $('#topVideoSectionProfile').find('a').text(video.title);
+                        $('#topVideoSectionProfile').find('.description').text(video.description);
+
+                        $('#topVideoSectionProfile').find('video').attr('src', video.videoUrl);
+
+                        if(video.link == null){
+                            $('#topVideoVideoTag').removeClass('playads embed-responsive-item video-js vjs-default-skin vjs-16-9');
+                            $('#topVideoVideoTag').attr('data-setup', '');
+                        }
+                        else{
+                            $('#topVideoVideoTag').addClass('playads embed-responsive-item video-js vjs-default-skin vjs-16-9');
+                            $('#topVideoVideoTag').attr('data-setup', '{"fluid": true, "preload": "none", "auto-play": false }');
+
+                            var player = videojs('video_1');
+                            player.qualityPickerPlugin();
+                            player.src({ src: video.link, type: 'application/x-mpegURL' });
+                        }
+
+                        showSuccessNotifi('ویدویوی شاخص با موفقیت به روزرسانی شد', 'left', 'var(--koochita-blue)');
+                    }
+                    else
+                        showSuccessNotifi('مشکلی در بروز رسانی پیش امده', 'left', 'red');
+                },
+                error: err => {
+                    closeLoading();
+                    console.log(err);
+                    showSuccessNotifi('مشکلی در بروز رسانی پیش امده', 'left', 'red');
+                }
+            })
+        }
+    }
 </script>
