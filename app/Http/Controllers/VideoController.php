@@ -120,12 +120,12 @@ class VideoController extends Controller
                 $newVideo->state = $request->state;
                 $newVideo->save();
 
+                VideoCategoryRelation::create([
+                    'videoId' => $newVideo->id,
+                    'categoryId' => $request->mainCategory,
+                    'isMain' => 1,
+                ]);
                 if(isset($request->sideCategory)){
-                    VideoCategoryRelation::create([
-                        'videoId' => $newVideo->id,
-                        'categoryId' => $request->mainCategory,
-                        'isMain' => 1,
-                    ]);
                     $sides = explode(',', $request->sideCategory);
                     foreach ($sides as $cat){
                         $sideCate = VideoCategory::find($cat);
