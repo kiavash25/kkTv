@@ -173,12 +173,14 @@ class StreamingController extends Controller
     if(!file_exists($filepath))
         dd("file not found " . $filepath);
 
-    $cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
+    shell_exec('sshpass -p "ubuntu" scp ' . $filepath . ' root@185.141.169.171:/var/www/cs/rawFiles/' . $videos[$i]->video);
 
-    // Assign POST data
+//    $cfile = curl_file_create($filepath, 'application/octet-stream','1.mp4'); // try adding
+
     $time = time();
     $hash = hash("sha256", $this->sharedKey . $time);
-    $data = array('file' => $cfile, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
+//    $data = array('file' => $cfile, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
+    $data = array('file' => $videos[$i]->video, 'time' => $time, 'digest' => $hash, 'videoId' => $videos[$i]->id);
     $data += ["first_res" => ($videos[$i]->first_res) ? "ok" : "nok"];
     $data += ["second_res" => ($videos[$i]->second_res) ? "ok" : "nok"];
     $data += ["third_res" => ($videos[$i]->third_res) ? "ok" : "nok"];
@@ -186,10 +188,10 @@ class StreamingController extends Controller
     $data += ["fifth_res" => ($videos[$i]->fifth_res) ? "ok" : "nok"];
     $data += ["sixth_res" => ($videos[$i]->sixth_res) ? "ok" : "nok"];
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_URL, 'http://' . $serverIP . '/uploadFile.php');
+    curl_setopt($ch, CURLOPT_URL, 'http://185.141.169.171:8080');
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     $data2 = curl_exec($ch);
@@ -197,7 +199,7 @@ class StreamingController extends Controller
     if ($data2 === false)
         echo curl_error($ch);
     else
-        echo "sent \n";
+        echo "\n has been sent \n";
     //echo $data2;
     curl_close($ch);
     $last_fetches[$serverIdx] = time();
