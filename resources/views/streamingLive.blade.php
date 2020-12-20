@@ -131,14 +131,8 @@
         .mainDivStream{
             width: 90%;
         }
-        @media (max-width: 991px) {
-            .mainDivStream{
-                width: 95%;
-            }
-            .mainShowBase {
-                width: 100% !important;
-            }
-        }
+
+
 
         .videoBanner{
             width: 100%;
@@ -147,6 +141,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            overflow: hidden;
         }
         .remainingTime{
             position: absolute;
@@ -166,6 +161,19 @@
         .remainingTime .name{
             font-size: 1.3em;
             font-weight: bold;
+        }
+        @media (max-width: 991px) {
+            .mainDivStream{
+                width: 95%;
+            }
+            .mainShowBase {
+                width: 100% !important;
+            }
+        }
+        @media (max-width: 767px) {
+            .remainingTime{
+                font-size: 23px;
+            }
         }
     </style>
 @endsection
