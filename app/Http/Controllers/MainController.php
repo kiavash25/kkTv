@@ -321,7 +321,7 @@ class MainController extends Controller
 
     public function storeSeenLog(Request $request)
     {
-        $nowDate = '1399-08-04';
+        $nowDate = '1399-09-30';
         if(!isset($_COOKIE['userCodeTV'])){
             $userCode = generateRandomString(10);
             while(UserSeenLog::where('userCode', $userCode)->count() > 0)

@@ -325,10 +325,10 @@
                         <div class="iconButton shareIcon share_pic">
                             @include('component.shareBox')
                         </div>
-{{--                        <div class="toolSectionInfosTab">--}}
-{{--                            <span id="nowUserSeen" class="toolSectionInfosTabNumber"></span>--}}
-{{--                            <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">--}}
-{{--                        </div>--}}
+                        <div class="toolSectionInfosTab">
+                            <span id="nowUserSeen" class="toolSectionInfosTabNumber"></span>
+                            <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -449,6 +449,7 @@
         // });
 
         var room = '{{$room}}';
+        var showUser = false;
 
         var setBottom = true;
         var updateChatTimeOut;
@@ -524,7 +525,33 @@
                 type: 'application/x-mpegURL',
                 withCredentials: false,
             });
+            showUser = true;
         }
+
+        function sendSeenPageLog(){
+            $.ajax({
+                type: 'post',
+                url: '{{route('streaming.getLiveUserSeen')}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    seenPageLogId: window.seenPageLogId,
+                    isMobile: window.isMobile,
+                    width: $(window).width(),
+                    height: $(window).height(),
+                    url: document.location.pathname
+                },
+                success: response => {
+                    if(response.status == 'ok') {
+                        window.seenPageLogId = response.seenPageLogId;
+                        if(showUser)
+                            $('#nowUserSeen').text(response.userSeenCount);
+                    }
+                    setTimeout(sendSeenPageLog, 30000);
+                },
+                error: err => setTimeout(sendSeenPageLog, 30000)
+            })
+        }
+        sendSeenPageLog();
 
         @if($startVideo == 1)
             createVideoTag('{{$video->url}}');

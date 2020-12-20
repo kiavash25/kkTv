@@ -6,6 +6,7 @@ use App\models\Live;
 use App\models\LiveChat;
 use App\models\LiveFeedBack;
 use App\models\LiveGuest;
+use App\models\UserSeenLog;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -175,6 +176,46 @@ class LiveController extends Controller
             return response()->json(['status' => 'nok']);
     }
 
+    function getLiveUserSeen(Request $request){
+        $nowDate = '1399-09-30';
+        if(!isset($_COOKIE['userCodeTV'])){
+            $userCode = generateRandomString(10);
+            while(UserSeenLog::where('userCode', $userCode)->count() > 0)
+                $userCode = generateRandomString(10);
+
+            setcookie('userCodeTV', $userCode, time()+(86400*30));
+        }
+        else
+            $userCode = $_COOKIE['userCodeTV'];
+
+        $url = $request->url;
+        $seenLog = UserSeenLog::where('url', $url)->where('userCode', $userCode)->first();
+        if($seenLog == null){
+            $seenLog = UserSeenLog::create([
+                'userCode' => $userCode,
+                'url' => $request->url,
+                'seenTime' => 0,
+                'date' => $nowDate,
+                'isMobile' => $request->isMobile,
+                'width' => $request->width,
+                'height' => $request->height,
+                'relatedId' => 0,
+            ]);
+        }
+        else{
+            $seenLog->seenTime = $seenLog->seenTime+30;
+            $seenLog->save();
+        }
+
+        if(\auth()->check() && $seenLog->userId == null){
+            $seenLog->userId = \auth()->user()->id;
+            $seenLog->save();
+        }
+
+        $randomUser = random_int(300, 320);
+        return response()->json(['status' => 'ok', 'seenPageLogId' => $seenLog->id, 'userSeenCount' => $randomUser]);
+    }
+
     public function testLive($room = '', $playTime = '00:00')
     {
         $lastChatId = 0;
@@ -218,4 +259,6 @@ class LiveController extends Controller
             return view('streamingLive', compact(['room', 'video', 'chats', 'user', 'lastChatId', 'startVideo', 'thisIsTest']));
         }
     }
+
+
 }

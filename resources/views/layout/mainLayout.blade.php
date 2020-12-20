@@ -219,7 +219,7 @@
             error: err => setTimeout(sendSeenPageLog, 5000)
         })
     }
-    sendSeenPageLog();
+    // sendSeenPageLog();
 
     $('.closeThisMyModal').on('click', e => {
         let parent = $(e.target).parent();

@@ -157,6 +157,8 @@ Route::middleware(['web'])->group(function(){
 
     Route::get('getLiveLink', 'LiveController@getLiveUrl')->name('streaming.getLiveUrl');
     Route::get('streaming/getChats/{room}', 'LiveController@updateLiveVideoChat')->name('streaming.getChats');
+
+    Route::post('getLiveUserSeen', 'LiveController@getLiveUserSeen')->name('streaming.getLiveUserSeen');
 });
 
 Route::middleware(['web'])->group(function(){
