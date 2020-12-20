@@ -495,7 +495,7 @@
             $.ajax({
                 timeout: 5000,
                 type: 'GET',
-                url: '{{route("streaming.getLiveUrl")}}?room='+room,
+                url: '{{route("streaming.getLiveUrl")}}?room='+room+'{{isset($thisIsTest) ? '&thisIsTest=1' : ''}}',
                 success: response => {
                     if(response.status == 'ok')
                         createVideoTag(response.url);

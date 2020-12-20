@@ -72,6 +72,10 @@ class LiveController extends Controller
         $code = $_GET['room'];
         $live = Live::where('code', $code)->first();
         if($live != null){
+
+            if(isset($_GET['thisIsTest']) && $_GET['thisIsTest'] == 1)
+                return response()->json(['status' => 'ok', 'url' => $live->url]);
+
             if($live->isLive == 1){
                 date_default_timezone_set('Asia/Tehran');
                 $today = Carbon::now()->format('Y-m-d');
@@ -210,7 +214,8 @@ class LiveController extends Controller
                 $user->pic = getUserPic(auth()->user()->id);
             }
 
-            return view('streamingLive', compact(['room', 'video', 'chats', 'user', 'lastChatId', 'startVideo']));
+            $thisIsTest = true;
+            return view('streamingLive', compact(['room', 'video', 'chats', 'user', 'lastChatId', 'startVideo', 'thisIsTest']));
         }
     }
 }
