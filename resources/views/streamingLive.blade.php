@@ -492,10 +492,15 @@
         }
 
         function checkLiveStarted(){
+            var additionalData = '';
+
+            @if(isset($thisIsTest))
+                additionalData = '&thisIsTest=1';
+            @endif
             $.ajax({
                 timeout: 5000,
                 type: 'GET',
-                url: '{{route("streaming.getLiveUrl")}}?room='+room+'{{isset($thisIsTest) ? '&thisIsTest=1' : ''}}',
+                url: '{{route("streaming.getLiveUrl")}}?room='+room+additionalData,
                 success: response => {
                     if(response.status == 'ok')
                         createVideoTag(response.url);

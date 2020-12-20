@@ -188,7 +188,7 @@ class LiveController extends Controller
         $nowTime = Carbon::now()->format('H:i');
 
         if($video != null){
-            $startVideo = $playTime.":00";
+            $startVideo = $nowTime >= $playTime ? 1 : $playTime.":00";
             $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();
             $video->banner = URL::asset('images/liveBanners/'.$video->beforeBanner);
 
