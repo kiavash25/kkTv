@@ -145,6 +145,8 @@ Route::middleware(['web'])->group(function(){
     Route::middleware(['vodShareData'])->group(function(){
         Route::get('streaming/live/{room?}', 'LiveController@streamingLive')->name('streaming.live');
         Route::get('live/{room?}', 'LiveController@streamingLive');
+
+        Route::get('testLive/{room?}', 'LiveController@testLive');
     });
 
     Route::middleware(['auth'])->group(function(){

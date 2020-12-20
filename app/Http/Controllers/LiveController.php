@@ -170,4 +170,49 @@ class LiveController extends Controller
         else
             return response()->json(['status' => 'nok']);
     }
+
+    public function testLive($room = '')
+    {
+        $video = Live::where('code', $room)->first();
+        date_default_timezone_set('Asia/Tehran');
+        $today = Carbon::now()->format('Y-m-d');
+        $nowTime = Carbon::now()->format('H:i');
+
+        if($video != null){
+            $startVideo = "16:00:00";
+            $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();
+            $video->banner = URL::asset('images/liveBanners/'.$video->beforeBanner);
+
+            $user = User::find($video->userId);
+            $user->pic = getUserPic($user->id);
+            $video->user = $user;
+
+            $video->likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
+            $video->disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
+
+            if($video->haveChat == 1) {
+                $chats = LiveChat::where('roomId', $room)->select(['id', 'text', 'username', 'userPic'])->get();
+                $video->uniqueUser = LiveChat::where('roomId', $room)->get()->groupBy('userId')->count();
+                $lastChatId = LiveChat::where('roomId', $room)->orderByDesc('id')->first();
+                $lastChatId = $lastChatId == null ? 0 : $lastChatId->id;
+            }
+
+            $video->guest = LiveGuest::where('videoId', $video->id)->get();
+            foreach ($video->guest as $guest)
+                $guest->pic = URL::asset('_images/video/live/'.$guest->videoId.'/'.$guest->pic);
+
+            $user = null;
+            $video->youLike = 0;
+            if(auth()->check()){
+                $yl = LiveFeedBack::where('videoId', $video->id)->where('userId', auth()->user()->id)->first();
+                if($yl != null)
+                    $video->youLike = $yl->like;
+
+                $user = User::select(['id', 'username'])->find(\auth()->user()->id);
+                $user->pic = getUserPic(auth()->user()->id);
+            }
+
+            return view('streamingLive', compact(['room', 'video', 'chats', 'user', 'lastChatId', 'startVideo']));
+        }
+    }
 }
