@@ -44,10 +44,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('video/show/{code}', 'MainController@showVideo')->name('video.show');
 
-    Route::get('streaming/live/{room?}', 'MainController@streamingLive')->name('streaming.live');
-
-    Route::get('streaming/getChats/{room}', 'MainController@updateLiveVideoChat')->name('streaming.getChats');
-
     Route::middleware(['auth'])->group(function () {
 
         Route::post('video/updateTopVideo', 'ProfileController@updateTopVideo')->name('profile.updateTopVideo');
@@ -70,15 +66,9 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
         Route::post('video/addToBookMark', 'ProfileController@addToBookMark')->name('profile.addToBookMark');
 
-        Route::post('streaming/storeLiveChat', 'MainController@storeLiveChat')->name('streaming.storeLiveChat');
-
         Route::post('video/setVideoFeedback', 'MainController@setVideoFeedback')->name('video.setVideoFeedback');
 
         Route::post('video/setVideoComment', 'MainController@setVideoComment')->name('video.setVideoComment');
-
-        Route::post('streaming/live/sendBroadcastMsg', 'MainController@sendBroadcastMsg')->name('sendBroadcastMsg');
-
-        Route::post('streaming/live/setVideoFeedback', 'MainController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
     });
 
 //    upload video
@@ -148,6 +138,23 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
 
     Route::get('policies', function(){ dd('policies'); })->name('policies');
     Route::get('profile', function(){ dd('profile'); })->name('profile');
+});
+
+Route::middleware(['web'])->group(function(){
+
+    Route::middleware(['vodShareData'])->group(function(){
+        Route::get('streaming/live/{room?}', 'LiveController@streamingLive')->name('streaming.live');
+        Route::get('live/{room?}', 'LiveController@streamingLive');
+    });
+
+    Route::middleware(['auth'])->group(function(){
+        Route::post('streaming/storeLiveChat', 'LiveController@storeLiveChat')->name('streaming.storeLiveChat');
+        Route::post('streaming/live/sendBroadcastMsg', 'LiveController@sendBroadcastMsg')->name('sendBroadcastMsg');
+        Route::post('streaming/live/setVideoFeedback', 'LiveController@setLiveFeedback')->name('streaming.live.setLiveFeedback');
+    });
+
+    Route::get('getLiveLink', 'LiveController@getLiveUrl')->name('streaming.getLiveUrl');
+    Route::get('streaming/getChats/{room}', 'LiveController@updateLiveVideoChat')->name('streaming.getChats');
 });
 
 Route::middleware(['web'])->group(function(){

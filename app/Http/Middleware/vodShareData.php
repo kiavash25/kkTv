@@ -32,28 +32,24 @@ class vodShareData
             }
         }
 
-        date_default_timezone_set('Asia/Tehran');
-        $userPicture = null;
-        if(auth()->check())
-            $userPicture = getUserPic(auth()->user()->id);
-        else
-            $userPicture = getUserPic(0);
+        $userPicture = getUserPic(auth()->check() ? auth()->user()->id : 0);
 
         $today = Carbon::now()->format('Y-m-d');
         $nowTime = Carbon::now()->format('H:i');
 
-        $timeToLive = null;
         $hasLive = false;
+        $timeToLive = null;
         $timeToLiveCode = false;
 
         $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
-        if($lives != null && ($lives->sDate < $today || ($lives->sDate == $today && $lives->sTime <= $nowTime))) {
+        if($lives != null) {
             $hasLive = $lives->code;
-            $timeToLiveCode = $lives->code;
-        }
-        else if($lives != null && $lives->sDate == $today) {
-            $timeToLive = $lives->sTime . ':00';
-            $timeToLiveCode = $lives->code;
+            if(($lives->sDate < $today || ($lives->sDate == $today && $lives->sTime <= $nowTime)))
+                $timeToLiveCode = $lives->code;
+            else if($lives->sDate == $today){
+                $timeToLive = $lives->sTime . ':00';
+                $timeToLiveCode = $lives->code;
+            }
         }
 
         $fileVersion = 2;
