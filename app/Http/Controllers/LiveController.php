@@ -171,15 +171,20 @@ class LiveController extends Controller
             return response()->json(['status' => 'nok']);
     }
 
-    public function testLive($room = '')
+    public function testLive($room = '', $playTime = '00:00')
     {
+        $lastChatId = 0;
+        $startVideo = -1;
+        $videoUrl = '';
+        $chats = [];
+
         $video = Live::where('code', $room)->first();
         date_default_timezone_set('Asia/Tehran');
         $today = Carbon::now()->format('Y-m-d');
         $nowTime = Carbon::now()->format('H:i');
 
         if($video != null){
-            $startVideo = "16:00:00";
+            $startVideo = $playTime.":00";
             $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();
             $video->banner = URL::asset('images/liveBanners/'.$video->beforeBanner);
 
@@ -189,13 +194,6 @@ class LiveController extends Controller
 
             $video->likeCount = LiveFeedBack::where('videoId', $video->id)->where('like', 1)->count();
             $video->disLikeCount = LiveFeedBack::where('videoId', $video->id)->where('like', -1)->count();
-
-            if($video->haveChat == 1) {
-                $chats = LiveChat::where('roomId', $room)->select(['id', 'text', 'username', 'userPic'])->get();
-                $video->uniqueUser = LiveChat::where('roomId', $room)->get()->groupBy('userId')->count();
-                $lastChatId = LiveChat::where('roomId', $room)->orderByDesc('id')->first();
-                $lastChatId = $lastChatId == null ? 0 : $lastChatId->id;
-            }
 
             $video->guest = LiveGuest::where('videoId', $video->id)->get();
             foreach ($video->guest as $guest)
