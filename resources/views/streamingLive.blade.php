@@ -161,6 +161,7 @@
         .remainingTime .name{
             font-size: 1.3em;
             font-weight: bold;
+            text-align: center;
         }
         @media (max-width: 991px) {
             .mainDivStream{
