@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\logs\UserScrollLog;
 use App\models\Tags;
 use App\models\UserSeenLog;
 use App\models\Video;
@@ -321,6 +322,16 @@ class MainController extends Controller
 
     public function storeSeenLog(Request $request)
     {
+        if(isset($request->seenPageLogId) && $request->seenPageLogId != 0){
+            $log = UserSeenLog::find($request->seenPageLogId);
+            if(auth()->check())
+                $log->userId = auth()->user()->id;
+            $log->seenTime = $log->seenTime + 5;
+            $log->save();
+            return response()->json(['status' => 'ok', 'seenPageLogId' => $log->id]);
+        }
+
+        $nowDate = Carbon::now()->format('Y-m-d');
         if(!isset($_COOKIE['userCodeTV'])){
             $userCode = generateRandomString(10);
             while(UserSeenLog::where('userCode', $userCode)->count() > 0)
@@ -331,30 +342,29 @@ class MainController extends Controller
         else
             $userCode = $_COOKIE['userCodeTV'];
 
-        $url = $request->url;
-        $seenLog = UserSeenLog::where('url', $url)->where('userCode', $userCode)->first();
-        if($seenLog == null){
+        if(auth()->check())
             $seenLog = UserSeenLog::create([
+                'userId' => auth()->user()->id,
                 'userCode' => $userCode,
                 'url' => $request->url,
                 'seenTime' => 0,
-                'date' => Carbon::now()->format('Y-m-d'),
+                'date' => $nowDate,
                 'isMobile' => $request->isMobile,
                 'width' => $request->width,
                 'height' => $request->height,
                 'relatedId' => 0,
             ]);
-        }
-        else{
-            $seenLog->seenTime = $seenLog->seenTime+5;
-            $seenLog->save();
-        }
-
-        if(\auth()->check() && $seenLog->userId == null){
-            $seenLog->userId = \auth()->user()->id;
-            $seenLog->save();
-        }
-
+        else
+            $seenLog = UserSeenLog::create([
+                'userCode' => $userCode,
+                'url' => $request->url,
+                'seenTime' => 0,
+                'date' => $nowDate,
+                'isMobile' => $request->isMobile,
+                'width' => $request->width,
+                'height' => $request->height,
+                'relatedId' => 0,
+            ]);
 
         return response()->json(['status' => 'ok', 'seenPageLogId' => $seenLog->id]);
     }
