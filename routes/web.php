@@ -13,6 +13,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('getVideoDuration', function(){
+    $videos = \App\models\Video::all();
+    $hour = 0;
+    $min = 0;
+    $second = 0;
+    foreach ($videos as $video) {
+        if($video->duration != null){
+            $exp = strpos($video->duration, ':');
+            if($exp !== false){
+                $explodes = explode(':', $video->duration);
+                $hour += (int)$explodes[0];
+                $min += (int)$explodes[1];
+                $second += (int)$explodes[2];
+            }
+            else{
+                $sec = strpos($video->duration, '.');
+                if($sec !== false)
+                    $second += (float)$video->duration;
+            }
+        }
+    }
+
+    dd($hour.':'.$min.':'.$second, count($videos));
+});
+
 
 Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamingController@updateLink"]);
 

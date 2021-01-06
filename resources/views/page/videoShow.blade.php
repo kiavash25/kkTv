@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css?v='.$fileVersion)}}">
 
     <link href="https://vjs.zencdn.net/5.19.2/video-js.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{URL::asset('js/video/videojs.ads.css')}}">
     <style type="text/css">
         .video-js {
             font-size: 1rem;
@@ -343,13 +344,27 @@
 
 @section('script')
     <script>
-        var player = videojs('video_1');
+        // var player = videojs('video_1');
+
+        var player = videojs('video_1', {}, function(){
+            @if($video->hasAD != null)
+                this.preroll({
+                    src:"{{URL::asset('video/videoAD1.mp4')}}",
+                    allowSkip: true
+                });
+            @endif
+            @if($isLink)
+                this.src({ src: '{{$video->link}}', type: 'application/x-mpegURL' });
+            @else
+                this.src({ src: '{{$video->link}}'});
+            @endif
+        });
         player.qualityPickerPlugin();
-        @if($isLink)
-            player.src({ src: '{{$video->link}}', type: 'application/x-mpegURL' });
-        @else
-            player.src({ src: '{{$video->link}}'});
-        @endif
+{{--        @if($isLink)--}}
+{{--            player.src({ src: '{{$video->link}}', type: 'application/x-mpegURL' });--}}
+{{--        @else--}}
+{{--            player.src({ src: '{{$video->link}}'});--}}
+{{--        @endif--}}
 
         var supportsOrientationChange = "onorientationchange" in window,
             orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
