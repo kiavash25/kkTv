@@ -137,7 +137,7 @@
 <script src="{{URL::asset('js/video/vjs-quality-picker.js?v=v0.0.2')}}"></script>
 <script src="{{URL::asset('js/default/load-image.all.min.js')}}"></script>
 
-<script src="{{URL::asset('js/video/videojs.ads.js')}}"></script>
+<script src="{{URL::asset('js/video/videojs.Tablig.js')}}"></script>
 <script src="{{URL::asset('js/video/videojs-preroll.min.js')}}"></script>
 
 <script>

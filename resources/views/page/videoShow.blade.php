@@ -30,8 +30,24 @@
     <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css?v='.$fileVersion)}}">
 
     <link href="https://vjs.zencdn.net/5.19.2/video-js.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{URL::asset('js/video/videojs.ads.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('js/video/videojs.Tablig.css')}}">
     <style type="text/css">
+        .preroll-skip-button{
+            position: absolute;
+            right: 0px;
+            bottom: 60px;
+            font-size: 31px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: normal;
+            border-right: 0;
+            opacity: .3;
+            background: #3a3a3a;
+            border-radius: 10px 0px 0px 10px;
+        }
+        .preroll-skip-button.enabled{
+            opacity: 1;
+        }
         .video-js {
             font-size: 1rem;
         }
@@ -349,8 +365,13 @@
         var player = videojs('video_1', {}, function(){
             @if($video->hasAD != null)
                 this.preroll({
-                    src:"{{URL::asset('video/videoAD1.mp4')}}",
-                    allowSkip: true
+                    src:"{{URL::asset('video/videoTablig1.mp4')}}",
+                    allowSkip: true,
+                    lang:{
+                        'skip':'رد کردن',
+                        'skip in': 'رد کردن در ',
+                        'video start in': 'شروع ویدیو در: '
+                    }
                 });
             @endif
             @if($isLink)
