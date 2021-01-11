@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\models\FestivalLimboContent;
-use App\models\localShops\LocalShops;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\places\Cities;
 use App\models\places\Hotel;
+use App\models\places\LocalShops;
 use App\models\places\MahaliFood;
 use App\models\places\Majara;
 use App\models\places\Place;

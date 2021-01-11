@@ -1,6 +1,6 @@
 <?php
 
-namespace App\models\localShops;
+namespace App\models\places;
 
 use App\models\Activity;
 use App\models\LogModel;
