@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\FestivalLimboContent;
+use App\models\localShops\LocalShops;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\places\Cities;
@@ -127,6 +128,12 @@ class VideoController extends Controller
                 $newVideo->state = $request->state;
                 $newVideo->save();
 
+                $limboLoc = $location . '/limbo/' . $limbo->video;
+                $nLoc .= '/' . $limbo->video;
+                rename($limboLoc, $nLoc);
+
+                $url = route('video.show', ['code' => $newVideo->code]);
+
                 VideoCategoryRelation::create([
                     'videoId' => $newVideo->id,
                     'categoryId' => $request->mainCategory,
@@ -169,6 +176,8 @@ class VideoController extends Controller
                 if (isset($request->places) && $request->places != null) {
                     $places = explode(',', $request->places);
                     foreach ($places as $place) {
+                        $checkExist = null;
+
                         $p = explode('_', $place);
                         if($p[0] == 'state')
                             $checkExist = State::find($p[1]);
@@ -193,21 +202,25 @@ class VideoController extends Controller
                                     $checkExist = MahaliFood::find($p[1]);
                                 elseif($kindPlace->id == 12)
                                     $checkExist = Boomgardy::find($p[1]);
+                                elseif($kindPlace->id == 12)
+                                    $checkExist = Boomgardy::find($p[1]);
+                                elseif($kindPlace->id == 13)
+                                    $checkExist = LocalShops::find($p[1]);
                             }
                         }
 
                         if($checkExist == null)
                             continue;
-
-
-                        $newRel = new VideoPlaceRelation();
-                        $newRel->videoId = $newVideo->id;
-                        if($p[0] == 'state' || $p[0] == 'city')
-                            $newRel->kind = $p[0];
-                        else
-                            $newRel->kindPlaceId = (int)$p[0];
-                        $newRel->placeId = (int)$p[1];
-                        $newRel->save();
+                        else {
+                            $newRel = new VideoPlaceRelation();
+                            $newRel->videoId = $newVideo->id;
+                            if ($p[0] == 'state' || $p[0] == 'city')
+                                $newRel->kind = $p[0];
+                            else
+                                $newRel->kindPlaceId = (int)$p[0];
+                            $newRel->placeId = (int)$p[1];
+                            $newRel->save();
+                        }
                     }
                 }
 
@@ -221,12 +234,6 @@ class VideoController extends Controller
                         $newTagRel->save();
                     }
                 }
-
-                $limboLoc = $location . '/limbo/' . $limbo->video;
-                $nLoc .= '/' . $limbo->video;
-                rename($limboLoc, $nLoc);
-
-                $url = route('video.show', ['code' => $newVideo->code]);
 
                 return response()->json(['status' => 'ok', 'url' => $url]);
             }
