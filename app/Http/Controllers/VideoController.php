@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\models\FestivalLimboContent;
+use App\models\places\Amaken;
+use App\models\places\Boomgardy;
 use App\models\places\Cities;
+use App\models\places\Hotel;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
 use App\models\places\Place;
+use App\models\places\Restaurant;
+use App\models\places\SogatSanaie;
 use App\models\places\State;
 use App\models\Tags;
 use App\models\UserPlayList;
@@ -171,8 +178,22 @@ class VideoController extends Controller
                             $kindPlace = Place::find($p[0]);
                             if($kindPlace == null)
                                 continue;
-                            else
-                                $checkExist = \DB::table($kindPlace->tableName)->find($p[1]);
+                            else{
+                                if($kindPlace->id == 1)
+                                    $checkExist = Amaken::find($p[1]);
+                                elseif($kindPlace->id == 3)
+                                    $checkExist = Restaurant::find($p[1]);
+                                elseif($kindPlace->id == 4)
+                                    $checkExist = Hotel::find($p[1]);
+                                elseif($kindPlace->id == 6)
+                                    $checkExist = Majara::find($p[1]);
+                                elseif($kindPlace->id == 10)
+                                    $checkExist = SogatSanaie::find($p[1]);
+                                elseif($kindPlace->id == 11)
+                                    $checkExist = MahaliFood::find($p[1]);
+                                elseif($kindPlace->id == 12)
+                                    $checkExist = Boomgardy::find($p[1]);
+                            }
                         }
 
                         if($checkExist == null)
