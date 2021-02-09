@@ -23,6 +23,8 @@ class vodShareData
      */
     public function handle($request, Closure $next)
     {
+        $fileVersion = 3;
+
         $vodCategory = VideoCategory::where('parent', 0)->get();
         foreach ($vodCategory as $cat){
             $cat->sub = VideoCategory::where('parent', $cat->id)->get();
@@ -52,7 +54,6 @@ class vodShareData
             }
         }
 
-        $fileVersion = 2;
 
         View::share(['vodCategory' => $vodCategory, 'userPicture' => $userPicture, 'timeToLive' => $timeToLive, 'timeToLiveCode' => $timeToLiveCode, 'hasLive' => $hasLive, 'fileVersion' => $fileVersion]);
 

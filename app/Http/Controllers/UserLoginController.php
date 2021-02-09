@@ -401,6 +401,7 @@ class UserLoginController extends Controller
             $user->email = makeValidInput($request->email);
             $user->phone = convertNumber('en', makeValidInput($request->phone));
             $user->invitationCode = $uInvitationCode;
+            $user->isKoochitaTv = 1;
             $user->level = 0;
 
             try {
@@ -595,6 +596,7 @@ class UserLoginController extends Controller
             $user->password = \Hash::make(makeValidInput($_POST["password"]));
             $user->email = makeValidInput($_POST["email"]);
             $user->level = 0;
+            $user->isKoochitaTv = 1;
             $user->created_at = date('Y-m-d h:m:s');
             $user->updated_at = date('Y-m-d h:m:s');
             $user->invitationCode = $invitationCode;
@@ -736,6 +738,8 @@ class UserLoginController extends Controller
                 $userCheckEmail->email = $user->email;
                 $userCheckEmail->picture = $user->picture;
                 $userCheckEmail->googleId = $user->id;
+                $userCheckEmail->isKoochitaTv = 1;
+
                 try {
                     $userCheckEmail->save();
                 }
@@ -763,6 +767,7 @@ class UserLoginController extends Controller
             $user->first_name = $request->firsName;
             $user->last_name = $request->lastName;
             $user->level = 0;
+            $user->isKoochitaTv = 1;
             $user->invitationCode = $invitationCode;
 
             try {

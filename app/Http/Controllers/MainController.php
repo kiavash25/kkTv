@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\models\logs\UserScrollLog;
 use App\models\Tags;
+use App\models\UserEventRegistr;
 use App\models\UserSeenLog;
 use App\models\Video;
 use App\models\VideoBookMark;
@@ -54,14 +55,18 @@ class MainController extends Controller
         foreach ($topVideos as $item)
             $item = getVideoFullInfo($item, false);
 
-        return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos']));
+        $registerInCarpet = false;
+        if(\auth()->check())
+            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() == 1;
+
+        return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos', 'registerInCarpet']));
     }
 
     public function videoList($kind, $value){
         if($kind == 'category'){
             $category = VideoCategory::find($value);
             if($category == null)
-                return redirect(route('streaming.index'));
+                return redirect(route('index'));
             else{
                 if($category->parent == 0) {
                     $confirmContidition = ['state' => 1, 'confirm' => 1];
@@ -367,6 +372,27 @@ class MainController extends Controller
             ]);
 
         return response()->json(['status' => 'ok', 'seenPageLogId' => $seenLog->id]);
+    }
+
+
+    public function registerInCarpetMatch()
+    {
+        if(\auth()->check()){
+            $user = \auth()->user();
+            $userInEvent = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
+            if($userInEvent == null){
+                $userInEvent = new UserEventRegistr();
+                $userInEvent->userId = $user->id;
+                $userInEvent->event = 'carpet';
+                $userInEvent->save();
+
+                return redirect()->back()->with(['msg' => 'carpetRegister']);
+            }
+            else
+                return redirect()->back()->with(['msg' => 'youHasIn']);
+        }
+        else
+            return redirect(route('index'));
     }
 
 }

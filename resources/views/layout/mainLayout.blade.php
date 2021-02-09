@@ -52,9 +52,9 @@
     @yield('head')
 
     <script>
-        function checkLogin(){
+        function checkLogin(_redirect = '{{Request::url()}}'){
             if (!hasLogin) {
-                showLoginPrompt('{{Request::url()}}');
+                showLoginPrompt(_redirect);
                 return false;
             }
             else

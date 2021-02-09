@@ -181,6 +181,57 @@
         @endforeach
 
     </div>
+
+
+    @if(!$registerInCarpet)
+    <style>
+        .carpetModal .closeIcon:before{
+            font-size: 60px;
+            line-height: 68px;
+            color: red;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: pointer;
+        }
+    </style>
+    <div id="carpetMatchModal" class="modal carpetModal">
+        <div class="modal-dialog" style="display: flex; justify-content: center; align-items: center;">
+            <div class="closeIcon" onclick="closeCarpetModal()"></div>
+            <img src="{{URL::asset('images/notImportant/carpetMatch.jpg')}}" alt="carpetMatch" style="height: 90vh; cursor:pointer;" onclick="registerInCarpet()">
+        </div>
+    </div>
+
+    <script>
+        $(window).ready(() => {
+            $('#carpetMatchModal').modal('show');
+        });
+
+        function registerInCarpet(){
+            @if(auth()->check())
+                location.href = '{{route("registerInCarpetMatch")}}';
+            @else
+                checkLogin('{{route("registerInCarpetMatch")}}');
+            @endif
+        }
+
+        function closeCarpetModal(){
+            $('#carpetMatchModal').modal('hide');
+        }
+    </script>
+
+    @endif
+
+    <script >
+        @if(session('msg'))
+            @if(session('msg') == 'carpetRegister')
+                showSuccessNotifi('ثبت نام شما در رویداد مجازی فرش با موفقیت انجام شد.', 'left', 'var(--koochita-blue)');
+            @elseif(session('msg') == 'youHasIn')
+                showSuccessNotifi('شما قبلا در رویداد مجازی فرش ثبت نام کرده اید.', 'left', 'var(--koochita-yellow)');
+            @endif
+        @endif
+    </script>
+
 @endsection
 
 @section('script')
