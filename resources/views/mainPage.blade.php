@@ -360,21 +360,16 @@
                 if($('#mainVideo').attr('src') != mobileVideo)
                     $('#mainVideo').attr('src', mobileVideo);
 
-                if($(this).width() < 500){
-                    $('#mainVideo').css('height', '100%');
-                    $('#mainVideo').css('width', 'auto');
-                }
-                else{
-                    $('#mainVideo').css('width', '100%');
-                    $('#mainVideo').css('height', 'auto');
-                }
+                if($(this).width() < 500)
+                    $('#mainVideo').css({height: '100%', width: 'auto'});
+                else
+                    $('#mainVideo').css({height: 'auto', width: '100%'});
             }
             else{
                 if($('#mainVideo').attr('src') != pcVideo)
                     $('#mainVideo').attr('src', pcVideo);
 
-                $('#mainVideo').css('height', '100%');
-                $('#mainVideo').css('width', 'auto');
+                $('#mainVideo').css({height: '100%', width: 'auto'});
             }
             document.getElementById('mainVideo').currentTime = currentTime;
         }

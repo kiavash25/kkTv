@@ -33,6 +33,10 @@ class VideoController extends Controller
 {
     public function uploadVideoPage()
     {
+        $user = auth()->user();
+        if($user->username != "koochita")
+            return redirect(route('index'));
+
         $this->deleteLimbo();
 
         $categories = VideoCategory::where('parent', 0)->get();
