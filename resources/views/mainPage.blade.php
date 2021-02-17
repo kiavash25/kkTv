@@ -349,8 +349,9 @@
             }
         }
 
-        let mobileVideo = "{{URL::asset('images/tv_mobile.mp4')}}";
-        let pcVideo = "{{URL::asset('images/comp2.mp4')}}";
+{{--        let mobileVideo = "{{URL::asset('images/tv_mobile.mp4')}}";--}}
+        let mobileVideo = "{{URL::asset('images/video/comp3.mp4')}}";
+        let pcVideo = "{{URL::asset('images/video/comp3.mp4')}}";
         $(window).on('resize', changeVideoSource);
 
         function changeVideoSource(){
