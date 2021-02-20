@@ -13,6 +13,11 @@ return [
     |
     */
 
+    'KOOCHITATV_NOUNC_CODE' => env('KOOCHITATV_NOUNC_CODE'),
+    'KOOCHITA_URL_API' => env('KOOCHITA_URL_API'),
+    'GOOGLE_CLIENT_ID' => env('GOOGLE_CLIENT_ID'),
+    'GOOGLE_CLIENT_SECRET' => env('GOOGLE_CLIENT_SECRET'),
+    'GOOGLE_RECAPTCHA_SITEKEY' => env('GOOGLE_RECAPTCHA_SITEKEY'),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

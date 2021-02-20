@@ -9,8 +9,8 @@ require_once(__DIR__ . '/../../../app/Http/Controllers/glogin/libraries/Google/a
 
 //Insert your cient ID and secret
 //You can get it from : https://console.developers.google.com/
-$client_id = env('GOOGLE_CLIENT_ID');
-$client_secret = env('GOOGLE_CLIENT_SECRET');
+$client_id = config('app.GOOGLE_CLIENT_ID');
+$client_secret = config('app.GOOGLE_CLIENT_SECRET');
 $redirect_uri = 'https://koochitatv.com/loginWithGoogle';
 
 $client = new \Google_Client();
@@ -230,7 +230,7 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                             </div>
                             <div>
                                 <script async src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
-                                <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_SITEKEY')}}"></div>
+                                <div class="g-recaptcha" data-sitekey="{{config('app.GOOGLE_RECAPTCHA_SITEKEY')}}"></div>
                             </div>
                             <button type="button" onclick="checkRecaptcha()" class="loginSubBtn btn btn-info active submitAndFinishBtn" disabled>{{__('ثبت')}}</button>
                             <p id="loginErrUserName"></p>

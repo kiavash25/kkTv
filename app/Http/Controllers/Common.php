@@ -3,6 +3,7 @@
 use App\models\ActivationCode;
 use App\models\DefaultPic;
 use App\models\Tags;
+use App\models\Video;
 use App\models\VideoComment;
 use App\models\VideoFeedback;
 use App\User;
@@ -230,11 +231,11 @@ function getVideoFullInfo($video, $main = false)
 {
     $userLogin = auth()->check();
 
-    $loc = __DIR__.'/../../../../assets/_images/video/' . $video->userId;
-    if(is_file($loc .'/min_'. $video->thumbnail))
-        $video->pic = \URL::asset('videos/' . $video->userId . '/min_' . $video->thumbnail);
+    $loc = __DIR__."/../../../../assets/_images/video/{$video->userId}";
+    if(is_file("{$loc}/min_{$video->thumbnail}"))
+        $video->pic = \URL::asset("videos/{$video->userId}/min_{$video->thumbnail}");
     else
-        $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
+        $video->pic = \URL::asset("videos/{$video->userId}/{$video->thumbnail}");
 
     $video->categoryName = $video->mainCategory[0]->name;
     $video->url = route('video.show', ['code' => $video->code]);
@@ -242,14 +243,16 @@ function getVideoFullInfo($video, $main = false)
     $video->userPic = getUserPic($video->userId);
     $video->time = getDifferenceTimeString($video->created_at);
 
-    $video->like = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', 1)->count();
-    $video->disLike = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->where('like', -1)->count();
+    $likesCount = VideoFeedback::where('videoId', $video->id)->whereNull('commentId')->selectRaw('COUNT(IF(`like` = 1, 1, null)) AS likeCount, COUNT(IF(`like` = -1, 1, null)) AS disLikeCount')->first();
+
+    $video->like = $likesCount->likeCount;
+    $video->disLike = $likesCount->disLikeCount;
     $video->commentsCount = VideoComment::where('videoId', $video->id)->count();
     $video->comments = [];
     $video->places = [];
 
     if($video->link == null)
-        $video->videoUrl = URL::asset('videos/' . $video->userId . '/' . $video->video);
+        $video->videoUrl = URL::asset("videos/{$video->userId}/{$video->video}");
     else
         $video->videoUrl = $video->link;
 
@@ -257,8 +260,8 @@ function getVideoFullInfo($video, $main = false)
         $video->seen = (floor($video->seen/100)/10) . ' K';
 
     if($main){
-        $video->pic = \URL::asset('videos/' . $video->userId . '/' . $video->thumbnail);
         $resultComment = [];
+        $video->pic = \URL::asset("videos/{$video->userId}/{$video->thumbnail}");
         $video->comments = getVideoComments($video->id, 0);
 
         $video->uLike = 0;

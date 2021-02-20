@@ -79,4 +79,9 @@ class Video extends Model
             return ['status' => 'nok', 'result' => $response->status()];
     }
 
+    public function scopeYouCanSee($query)
+    {
+        return $query->where('confirm', 1)->whereNotNull('link');
+    }
+
 }

@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/getVideosForPlaces', 'api\APIController@videoForPlaces');
 
+Route::get('/getNewestVideos', 'api\APIController@getNewestVideos');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
