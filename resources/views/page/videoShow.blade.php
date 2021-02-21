@@ -207,6 +207,7 @@
                            data-setup='{"fluid": true, "preload": "auto", "auto-play": true }'
                            poster="{{$video->pic}}"
                            autoplay
+                           muted
                            preload="auto"
                            controls
                            style="width: 100%; direction: ltr;"></video>
