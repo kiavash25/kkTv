@@ -217,9 +217,9 @@
             success: response => {
                 if(response.status == 'ok')
                     window.seenPageLogId = response.seenPageLogId;
-                setTimeout(sendSeenPageLog, 5000);
+                // setTimeout(sendSeenPageLog, 5000);
             },
-            error: err => setTimeout(sendSeenPageLog, 5000)
+            // error: err => setTimeout(sendSeenPageLog, 5000)
         })
     }
     sendSeenPageLog();
