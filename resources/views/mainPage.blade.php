@@ -184,51 +184,55 @@
 
 
     @if(!$registerInCarpet)
-    <style>
-        .carpetModal .closeIcon:before{
-            font-size: 60px;
-            line-height: 68px;
-            color: red;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            cursor: pointer;
-        }
-    </style>
-    <div id="carpetMatchModal" class="modal carpetModal">
-        <div class="modal-dialog" style="display: flex; justify-content: center; align-items: center;">
-            <div class="closeIcon" onclick="closeCarpetModal()"></div>
-            <img src="{{URL::asset('images/notImportant/carpetMatch.jpg')}}" alt="carpetMatch" style="height: 90vh; cursor:pointer;" onclick="registerInCarpet()">
+        <style>
+            .carpetModal .closeIcon:before{
+                font-size: 60px;
+                line-height: 68px;
+                color: red;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                cursor: pointer;
+            }
+        </style>
+        <div id="carpetMatchModal" class="modal carpetModal">
+            <div class="modal-dialog" style="display: flex; justify-content: center; align-items: center;">
+                <div class="closeIcon" onclick="closeCarpetModal()"></div>
+                <img src="{{URL::asset('images/notImportant/carpetMatch.jpg')}}" alt="carpetMatch" style="height: 90vh; cursor:pointer;" onclick="registerInCarpet()">
+            </div>
         </div>
-    </div>
 
-    <script>
-        $(window).ready(() => {
-            $('#carpetMatchModal').modal('show');
-        });
+        <script>
+            $(window).ready(() => $('#carpetMatchModal').modal('show'));
 
-        function registerInCarpet(){
-            @if(auth()->check())
-                location.href = '{{route("registerInCarpetMatch")}}';
-            @else
-                checkLogin('{{route("registerInCarpetMatch")}}');
-            @endif
-        }
+            function registerInCarpet(){
+                @if(auth()->check())
+                    location.href = '{{route("registerInCarpetMatch")}}';
+                @else
+                    checkLogin('{{route("registerInCarpetMatch")}}');
+                @endif
+            }
 
-        function closeCarpetModal(){
-            $('#carpetMatchModal').modal('hide');
-        }
-    </script>
-
+            function closeCarpetModal(){
+                $('#carpetMatchModal').modal('hide');
+            }
+        </script>
     @endif
 
-    <script >
+    <script>
         @if(session('msg'))
             @if(session('msg') == 'carpetRegister')
                 showSuccessNotifi('ثبت نام شما در رویداد مجازی فرش با موفقیت انجام شد.', 'left', 'var(--koochita-blue)');
             @elseif(session('msg') == 'youHasIn')
                 showSuccessNotifi('شما قبلا در رویداد مجازی فرش ثبت نام کرده اید.', 'left', 'var(--koochita-yellow)');
+            @elseif(session('msg') == 'notRegisterInCarpet')
+            openErrorAlert('شما دسترسی به این رویداد را ندارید.');
             @endif
+        @endif
+
+
+        @if(session('needToLogin') && session('needToLogin') == 1)
+            $(window).ready(() => checkLogin('{{route('streaming.live', ['room' => $hasLive])}}'));
         @endif
     </script>
 
@@ -280,16 +284,17 @@
                 init: function () {
 
                     let slideCount = this.slides.length;
+                    var thisElElement = $(this.el);
                     if(slideCount <= this.params.slidesPerView){
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'none');
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                        thisElElement.find(this.params.navigation.nextEl).css('display', 'none');
+                        thisElElement.find(this.params.navigation.prevEl).css('display', 'none');
                     }
                     else{
-                        $(this.el).find(this.params.navigation.nextEl).css('display', 'block');
-                        $(this.el).find(this.params.navigation.prevEl).css('display', 'block');
+                        thisElElement.find(this.params.navigation.nextEl).css('display', 'block');
+                        thisElElement.find(this.params.navigation.prevEl).css('display', 'block');
                     }
 
-                    $(this.el).find(this.params.navigation.prevEl).css('display', 'none');
+                    thisElElement.find(this.params.navigation.prevEl).css('display', 'none');
                 },
                 resize: function(){
                     let slideCount = this.slides.length;
@@ -355,21 +360,23 @@
         $(window).on('resize', changeVideoSource);
 
         function changeVideoSource(){
-            let currentTime = document.getElementById('mainVideo').currentTime;
+            var currentTime = document.getElementById('mainVideo').currentTime;
+            var mainVideoElementElements = $('#mainVideo');
+
             if($(this).width() < 771){
-                if($('#mainVideo').attr('src') != mobileVideo)
-                    $('#mainVideo').attr('src', mobileVideo);
+                if(mainVideoElementElements.attr('src') != mobileVideo)
+                    mainVideoElementElements.attr('src', mobileVideo);
 
                 if($(this).width() < 500)
-                    $('#mainVideo').css({height: '100%', width: 'auto'});
+                    mainVideoElementElements.css({height: '100%', width: 'auto'});
                 else
-                    $('#mainVideo').css({height: 'auto', width: '100%'});
+                    mainVideoElementElements.css({height: 'auto', width: '100%'});
             }
             else{
-                if($('#mainVideo').attr('src') != pcVideo)
-                    $('#mainVideo').attr('src', pcVideo);
+                if(mainVideoElementElements.attr('src') != pcVideo)
+                    mainVideoElementElements.attr('src', pcVideo);
 
-                $('#mainVideo').css({height: '100%', width: 'auto'});
+                mainVideoElementElements.css({height: '100%', width: 'auto'});
             }
             document.getElementById('mainVideo').currentTime = currentTime;
         }

@@ -35,21 +35,18 @@
     let alertWarningCallBack = false;
 
     function showSuccessNotifi(_msg, _side = 'right', _color = '#0076ac'){
-        $('#successNotifiAlert').text(_msg);
-        $('#successNotifiAlert').addClass('topAlert');
-
-        $('#successNotifiAlert').css('background', _color);
+        var successNotifiAlertElement = $('#successNotifiAlert');
+        successNotifiAlertElement.text(_msg).addClass('topAlert').css('background', _color);
 
         if(_side == 'right')
-            $('#successNotifiAlert').addClass('rightAlert');
+            successNotifiAlertElement.addClass('rightAlert');
         else
-            $('#successNotifiAlert').addClass('leftAlert');
+            successNotifiAlertElement.addClass('leftAlert');
 
         setTimeout(function(){
-            $('#successNotifiAlert').removeClass('topAlert');
+            successNotifiAlertElement.removeClass('topAlert');
             setTimeout(function () {
-                $('#successNotifiAlert').removeClass('leftAlert');
-                $('#successNotifiAlert').removeClass('rightAlert');
+                successNotifiAlertElement.removeClass('leftAlert').removeClass('rightAlert');
             }, 1000);
         }, 5000);
 

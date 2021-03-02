@@ -29,11 +29,11 @@ class MainController extends Controller
 {
     public function indexStreaming()
     {
-        $confirmContidition = ['state' => 1, 'confirm' => 1];
-        $lastVideos = Video::where($confirmContidition)
-                            ->take(10)
-                            ->orderByDesc('created_at')
-                            ->get();
+        $confirmConditions = ['state' => 1, 'confirm' => 1];
+        $lastVideos = Video::where($confirmConditions)
+            ->orderByDesc('created_at')
+            ->take(10)
+            ->get();
 
         foreach ($lastVideos as $lvid)
             $lvid = getVideoFullInfo($lvid, false);
@@ -41,7 +41,7 @@ class MainController extends Controller
         $videoCategory = VideoCategory::where('parent', 0)->get();
         foreach ($videoCategory as $vic) {
             $catId = VideoCategory::where('parent', $vic->id)->pluck('id')->toArray();
-            $vic->video = Video::where($confirmContidition)->whereIn('categoryId', $catId)->take(10)->orderByDesc('created_at')->get();
+            $vic->video = Video::where($confirmConditions)->whereIn('categoryId', $catId)->take(10)->orderByDesc('created_at')->get();
             foreach ($vic->video as $catVid)
                 $catVid = getVideoFullInfo($catVid, false);
         }
@@ -58,6 +58,7 @@ class MainController extends Controller
         $registerInCarpet = false;
         if(\auth()->check())
             $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() == 1;
+//            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() != 1;
 
         return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos', 'registerInCarpet']));
     }
@@ -69,20 +70,20 @@ class MainController extends Controller
                 return redirect(route('index'));
             else{
                 if($category->parent == 0) {
-                    $confirmContidition = ['state' => 1, 'confirm' => 1];
+                    $confirmConditions = ['state' => 1, 'confirm' => 1];
 
                     $category->subs = VideoCategory::where('parent', $category->id)->get();
                     foreach ($category->subs as $item)
                         $item->icon = \URL::asset('images/video/category/'.$item->offIcon);
 
                     $subsId = VideoCategory::where('parent', $category->id)->pluck('id')->toArray();
-                    $category->lastVideo = Video::where($confirmContidition)->whereIn('categoryId', $subsId)->take(10)->orderByDesc('created_at')->get();
+                    $category->lastVideo = Video::where($confirmConditions)->whereIn('categoryId', $subsId)->take(10)->orderByDesc('created_at')->get();
                     foreach ($category->lastVideo  as $catVid)
                         $catVid = getVideoFullInfo($catVid, false);
 
                     foreach ($category->subs as $item){
-                        $item->video = Video::where($confirmContidition)->where('categoryId', $item->id)->take(10)->orderByDesc('created_at')->get();
-                        $item->totalCount = Video::where($confirmContidition)->where('categoryId', $item->id)->count();
+                        $item->video = Video::where($confirmConditions)->where('categoryId', $item->id)->take(10)->orderByDesc('created_at')->get();
+                        $item->totalCount = Video::where($confirmConditions)->where('categoryId', $item->id)->count();
                         foreach ($item->video as $catVid)
                             $catVid = getVideoFullInfo($catVid, false);
                     }
@@ -125,7 +126,7 @@ class MainController extends Controller
         $perPage = $request->perPage;
         $page = $request->page;
 
-        $confirmContidition = ['state' => 1, 'confirm' => 1];
+        $confirmConditions = ['state' => 1, 'confirm' => 1];
 
         if($kind == 'category'){
             $category = VideoCategory::find($value);
@@ -136,7 +137,7 @@ class MainController extends Controller
                 else
                     $catId = [$category->id];
 
-                $videos = Video::where($confirmContidition)->whereIn('categoryId', $catId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
+                $videos = Video::where($confirmConditions)->whereIn('categoryId', $catId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
                 foreach ($videos as $item)
                     $item = getVideoFullInfo($item, false);
 
@@ -380,6 +381,18 @@ class MainController extends Controller
         if(\auth()->check()){
             $user = \auth()->user();
             $userInEvent = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
+
+//            if($userInEvent == null){
+//                $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
+//                if($lives != null)
+//                    return redirect(route('streaming.live', ['room' => $lives->code]));
+//                else
+//                    return redirect(url('/'));
+//            }
+//            else
+//                return redirect(url('/'))->with(['msg' => 'notRegisterInCarpet']);
+
+
             if($userInEvent == null){
                 $userInEvent = new UserEventRegistr();
                 $userInEvent->userId = $user->id;
@@ -392,7 +405,7 @@ class MainController extends Controller
                 return redirect()->back()->with(['msg' => 'youHasIn']);
         }
         else
-            return redirect(route('index'));
+            return redirect(url('/'))->with(['needToLogin' => 1]);
     }
 
 }

@@ -45,23 +45,27 @@
         .liveChatSec .lastChats{
             height: 0px;
             transition: .3s;
-            overflow: auto;
+            overflow: hidden;
             margin-bottom: 15px;
             background: #232323;
-            border-radius: 10px 10px 0px 0px;
+            border-radius: 10px;
+        }
+        .liveChatSec .lastChats .showLastChats{
+            height: 100%;
+            overflow: auto;
         }
         .liveChatSec .lastChats .chatRow{
             border-bottom: solid;
             margin-bottom: 10px;
         }
         .liveChatSec .lastChats .chatRow .userName{
-            color: white;
+            color: gray;
             font-size: 10px;
         }
         .liveChatSec .lastChats .chatRow .text{
             margin-right: 10px;
             margin-bottom: 5px;
-            color: #d8d8d8;
+            color: white;
             font-weight: 300;
         }
         .inputYouChat{
@@ -187,7 +191,9 @@
                 @if($video->haveChat)
                     <div class="liveChatSec open">
                         <div class="row title downArrowIconAfter" style="cursor: pointer" onclick="closeLiveChatSection()"> گفتگو زنده </div>
-                        <div class="lastChats"></div>
+                        <div class="lastChats">
+                            <div class="showLastChats"></div>
+                        </div>
                         <div class="inputYouChat">
                             @if($user != null)
                                 <div class="userInfo">
@@ -278,12 +284,10 @@
 
                                 <div class="liveComments display-none">
                                     <div class="liveCommentsFirstLine">
-                                        <div class="liveCommentsTitle">
-                                            در گفتگو شرکت کنید
-                                        </div>
+                                        <div class="liveCommentsTitle"> در گفتگو شرکت کنید </div>
                                         <div class="liveCommentStatistics">
                                             <div class="liveCommentsQuantity liveCommentStatisticsDivs">
-                                                <div class="liveCommentsNums chatCount">{{count($video->chats)}}</div>
+                                                <div class="liveCommentsNums chatCount">{{count($chats)}}</div>
                                                 <div class="liveCommentsQuantityIcon"></div>
                                             </div>
                                             <div class="liveCommentWriters liveCommentStatisticsDivs">
@@ -326,7 +330,7 @@
                             @include('component.shareBox')
                         </div>
                         <div class="toolSectionInfosTab">
-                            <span id="nowUserSeen" class="toolSectionInfosTabNumber"></span>
+                            <span id="nowUserSeen" class="toolSectionInfosTabNumber hidden"></span>
                             <img src="{{URL::asset('images/mainPics/eye.png')}}" class="eyeClass" style="width: 25px">
                         </div>
                     </div>
@@ -336,7 +340,9 @@
             @if($video->haveChat)
                 <div class="liveChatSec open hideOnWide" style="margin-top: 20px;">
                     <div class="row title downArrowIconAfter" style="cursor: pointer" onclick="closeLiveChatSection()"> گفتگو زنده </div>
-                    <div class="lastChats"></div>
+                    <div class="lastChats">
+                        <div class="showLastChats"></div>
+                    </div>
                     <div class="inputYouChat">
                         @if($user != null)
                             <div class="userInfo">
@@ -475,19 +481,19 @@
                 },
                 success: function(response){
                     if(response.status == 'ok'){
-                        $('.likeVideoButton').removeClass('fill');
-                        $('.disLikeVideoButton').removeClass('fill');
+                        var likeVideoButtonElement = $('.likeVideoButton');
+                        var disLikeVideoButtonElement = $('.disLikeVideoButton');
+                        likeVideoButtonElement.removeClass('fill');
+                        disLikeVideoButtonElement.removeClass('fill');
 
                         if(response.youLike == 1)
-                            $('.likeVideoButton').addClass('fill');
+                            likeVideoButtonElement.addClass('fill');
                         else if(response.youLike == -1)
-                            $('.disLikeVideoButton').addClass('fill');
+                            disLikeVideoButtonElement.addClass('fill');
 
-                        $('.likeVideoButton').text(response.like);
-                        $('.disLikeVideoButton').text(response.disLike);
+                        likeVideoButtonElement.text(response.like);
+                        disLikeVideoButtonElement.text(response.disLike);
                     }
-                    else
-                        console.log(response);
                 }
             })
         }
@@ -503,11 +509,12 @@
                 type: 'GET',
                 url: '{{route("streaming.getLiveUrl")}}?room='+room+additionalData,
                 success: response => {
-                    if(response.status == 'ok')
+                    var status = response.status;
+                    if(status == 'ok')
                         createVideoTag(response.url);
-                    else if(response.status == 'notTime')
+                    else if(status == 'notTime')
                         setTimeout(checkLiveStarted, 5000);
-                    else if(response.status == 'error2') {
+                    else if(status == 'error2') {
                         alert('ویدیو اماده پخش نیست');
                         location.href = '{{route('index')}}'
                     }
@@ -564,12 +571,9 @@
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                if(hours < 10)
-                    hours = '0'+hours;
-                if(minutes < 10)
-                    minutes = '0'+minutes;
-                if(seconds < 10)
-                    seconds = '0'+seconds;
+                hours = (hours < 10 ? '0' : '') + hours;
+                minutes = (minutes < 10 ? '0' : '') + minutes;
+                seconds = (seconds < 10 ? '0' : '') + seconds;
 
                 $('.timeToStart').html(`${hours}:${minutes}:${seconds}`);
                 if (distance <= 0) {
@@ -585,6 +589,8 @@
         <script>
             let lastChats = {!! json_encode($chats) !!};
             let lastChatId = {{$lastChatId}};
+            var updateLiveChatTime = 7000;
+            var userSeenTimer = 0;
 
             @if(auth()->check())
                 window.userPic = '{{$user->pic}}';
@@ -592,6 +598,7 @@
                     if(e.keyCode == 13)
                         sendLiveChat($(e.target).val());
                 });
+
                 function sendLiveChat(_text){
                     if (!checkLogin)
                         return;
@@ -612,15 +619,15 @@
                                     updateLiveChat();
                                 }
                             },
-                            error: err => console.log(err)
                         })
                     }
                 }
             @endif
 
-            $('.lastChats').on('scroll', () => setBottom = $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight);
+            $('.showLastChats').on('scroll', function() {
+                setBottom = $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight;
+            });
 
-            let userSeenTimer = 0;
             function updateLiveChat(){
                 $.ajax({
                     type: 'get',
@@ -637,34 +644,34 @@
 
                             createChatRow(response.chats);
                         }
-                        updateChatTimeOut = setTimeout(updateLiveChat, 2000);
+                        updateChatTimeOut = setTimeout(updateLiveChat, updateLiveChatTime);
                     },
                     error: err =>{
-                        updateChatTimeOut = setTimeout(updateLiveChat, 2000);
-                        console.log(err);
+                        updateChatTimeOut = setTimeout(updateLiveChat, updateLiveChatTime);
                     },
                 })
             }
 
             function createChatRow(_chats){
-                let text = '';
+                var lastChatElements = $('.showLastChats');
+                var html = '';
                 _chats.map(item => {
-                    text += '<div class="chatRow">\n' +
-                        '   <div class="userInfo">\n' +
-                        '       <div class="pic" style="width: 20px; height: 20px;">\n' +
-                        `           <img src="${item.userPic}" style="width: 100%">\n` +
-                        '       </div>\n' +
-                        `       <div class="userName" style="margin-right: 5px">${item.username}:</div>\n` +
-                        '   </div>\n' +
-                        `   <div class="text">${item.text}</div>\n` +
-                        '</div>';
+                    html += `<div class="chatRow">
+                              <div class="userInfo">
+                                  <div class="pic" style="width: 20px; height: 20px;">
+                                       <img src="${item.userPic}" style="width: 100%">
+                                  </div>
+                                   <div class="userName" style="margin-right: 5px">${item.username}:</div>
+                              </div>
+                               <div class="text">${item.text}</div>
+                           </div>`;
                 });
 
-                $('.lastChats').append(text);
+                lastChatElements.append(html);
 
                 if(setBottom) {
-                    for (let i = 0; i < $('.lastChats').length; i++)
-                        $($('.lastChats')[i]).scrollTop($('.lastChats')[i].scrollHeight);
+                    for (let i = 0; i < lastChatElements.length; i++)
+                        $(lastChatElements[i]).scrollTop(lastChatElements[i].scrollHeight);
                 }
             }
 
@@ -672,7 +679,7 @@
                 $(element).next().toggle()
             }
 
-            createChatRow({!! $video->chats !!});
+            createChatRow({!! $chats !!});
             updateLiveChat();
         </script>
     @endif

@@ -6,6 +6,7 @@ use App\models\Live;
 use App\models\LiveChat;
 use App\models\LiveFeedBack;
 use App\models\LiveGuest;
+use App\models\UserEventRegistr;
 use App\models\UserSeenLog;
 use App\User;
 use Carbon\Carbon;
@@ -16,6 +17,16 @@ class LiveController extends Controller
 {
     public function streamingLive($room = '')
     {
+        if(!auth()->check())
+            return redirect(url('/'))->with(['needToLogin' => 1]);
+        else{
+            $user = auth()->user();
+            $checkRegisterInCarpet = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
+            if($checkRegisterInCarpet == null)
+                return redirect(url('/'))->with(['msg' => 'notRegisterInCarpet']);
+        }
+
+
         $lastChatId = 0;
         $startVideo = -1;
         $videoUrl = '';
@@ -30,7 +41,7 @@ class LiveController extends Controller
             if($video != null && $video->isLive == 1 && $video->sDate == $today){
                 $startVideo = $nowTime >= $video->sTime ? 1 : $video->sTime.':00';
                 $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();
-                $video->banner = URL::asset('images/liveBanners/'.$video->beforeBanner);
+                $video->banner = URL::asset("images/liveBanners/{$video->beforeBanner}");
 
                 $user = User::find($video->userId);
                 $user->pic = getUserPic($user->id);
