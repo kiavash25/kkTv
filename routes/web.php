@@ -131,8 +131,6 @@ Route::middleware(['web', 'vodShareData'])->group(function (){
         Route::get('logout', array('as' => 'logout', 'uses' => 'UserLoginController@logout'));
     });
 
-
-
     Route::get('/importVideoToDB', 'StreamingController@importVideoToDB');
 
     Route::get('/setVideoDuration', 'StreamingController@setVideoDuration');
@@ -145,6 +143,7 @@ Route::middleware(['web'])->group(function(){
 
     Route::middleware(['vodShareData'])->group(function(){
         Route::get('streaming/live/{room?}', 'LiveController@streamingLive')->name('streaming.live');
+
         Route::get('live/{room?}', 'LiveController@streamingLive');
 
         Route::get('testLive/{room}/{playTime}', 'LiveController@testLive');

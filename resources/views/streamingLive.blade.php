@@ -1,7 +1,9 @@
 @extends('layout.mainLayout')
 
 @section('head')
-    <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/videoShow.css?v='.$fileVersion)}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/liveVideo.css?v='.$fileVersion)}}">
+
 
     <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
 
@@ -15,172 +17,6 @@
         پخش زنده
         {{$video->title}}
     </title>
-    <style>
-
-        #videoThisVideo{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            max-height: 530px;
-            overflow: auto;
-        }
-        #videoThisVideo > div{
-            margin-bottom: 10px;
-            width: 49%;
-        }
-        .mainShowBase{
-            padding: 15px 5px;
-            width: calc(100% - 320px);
-        }
-        .pcGuestSide{
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .liveChatSec{
-            border-bottom: solid 2px #232323;
-            margin-bottom: 15px;
-        }
-        .liveChatSec .lastChats{
-            height: 0px;
-            transition: .3s;
-            overflow: hidden;
-            margin-bottom: 15px;
-            background: #232323;
-            border-radius: 10px;
-        }
-        .liveChatSec .lastChats .showLastChats{
-            height: 100%;
-            overflow: auto;
-        }
-        .liveChatSec .lastChats .chatRow{
-            border-bottom: solid;
-            margin-bottom: 10px;
-        }
-        .liveChatSec .lastChats .chatRow .userName{
-            color: gray;
-            font-size: 10px;
-        }
-        .liveChatSec .lastChats .chatRow .text{
-            margin-right: 10px;
-            margin-bottom: 5px;
-            color: white;
-            font-weight: 300;
-        }
-        .inputYouChat{
-            display: flex;
-            flex-direction: column;
-            padding: 0px 5px;
-        }
-        .userInfo{
-            display: flex;
-            align-items: center;
-            color: white;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-        .userInfo .pic{
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border-radius: 50%;
-        }
-        .userInfo .userName{
-            margin-right: 10px;
-        }
-        .inputYouChat .inputRow{
-            display: flex;
-        }
-        .inputYouChat input{
-            width: 100%;
-            background: #3a3a3a;
-            border: none;
-            border-bottom: solid 1px gray;
-            color: white;
-            height: 30px;
-        }
-        .inputYouChat .submitChat{
-            color: #232323;
-            transform: rotate(225deg);
-            font-size: 30px;
-            display: flex;
-            justify-content: center;
-            width: 45px;
-            margin-right: auto;
-            cursor: pointer;
-        }
-
-
-        .liveChatSec.open .downArrowIconAfter:after{
-            transform: rotate(180deg)
-        }
-        .liveChatSec.open .lastChats{
-            height: 400px;
-            padding: 10px;
-        }
-        .liveInfosAndComments .title, .liveChatSec .title{
-            font-size: 20px;
-            color: var(--koochita-yellow);
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .mainDivStream{
-            width: 90%;
-        }
-
-
-
-        .videoBanner{
-            width: 100%;
-            height: 70vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .remainingTime{
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #00000052;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-size: 40px;
-        }
-        .remainingTime .timeToStart{
-            font-size: 1.8em;
-        }
-        .remainingTime .name{
-            font-size: 1.3em;
-            font-weight: bold;
-            text-align: center;
-        }
-        @media (max-width: 991px) {
-            .mainDivStream{
-                width: 95%;
-            }
-            .mainShowBase {
-                width: 100% !important;
-            }
-        }
-        @media (max-width: 767px) {
-            .remainingTime{
-                font-size: 23px;
-            }
-        }
-    </style>
 @endsection
 
 @section('body')
@@ -221,18 +57,12 @@
                                             <img src="{{$item->pic}}" style="width: 100%;">
                                         </div>
                                     </div>
-                                    <div class="col-md-12 guestName">
-                                        {{$item->name}}
-                                    </div>
-                                    <div class="col-md-12 guestAction" >
-                                        {{$item->action}}
-                                    </div>
+                                    <div class="col-md-12 guestName"> {{$item->name}} </div>
+                                    <div class="col-md-12 guestAction" > {{$item->action}} </div>
                                 </div>
                                 @if($item->text != null)
                                     <div class="guestSideSection setMarginInGuestSection">
-                                        <div class="guestText">
-                                            {{$item->text}}
-                                        </div>
+                                        <div class="guestText"> {{$item->text}} </div>
                                     </div>
                                 @endif
                             </div>
@@ -251,7 +81,7 @@
                         <div id="bannerSection" class="videoBanner">
                             <div class="remainingTime">
                                 <div class="timeToStart"></div>
-                                <div> مانده تا شروع</div>
+                                <div> مانده تا شروع </div>
                                 <div class="name">{{$video->title}}</div>
                             </div>
                             <img src="{{$video->banner}}" style="height: 100%; display: {{$startVideo == 1 ? 'none' : 'block'}};">
@@ -368,22 +198,19 @@
             @if($video->description != '')
                 <div class="descriptionSection">
                     <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            معرفی کلی
-                        </div>
+                        <div class="headerWithLineText"> معرفی کلی </div>
                     </div>
-                    <div class="descriptionSectionBody">
-                        {{$video->description}}
-                    </div>
+                    <div class="descriptionSectionBody"> {{$video->description}} </div>
                 </div>
             @endif
+
+
+            @include('questionInLiveCarpet')
 
             <div class="guestNotPcSection">
                 <div class="row">
                     <div class="headerWithLine">
-                        <div class="headerWithLineText">
-                            مهمانان برنامه
-                        </div>
+                        <div class="headerWithLineText"> مهمانان برنامه </div>
                     </div>
                 </div>
                 <div class="guestPhoneRows">
@@ -417,6 +244,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 

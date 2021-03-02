@@ -301,10 +301,20 @@ class MainController extends Controller
     public function setVideoComment(Request $request)
     {
         $videoId = json_decode($request->data)->videoId;
-        $video = Video::find($videoId);
+        $isLive = (isset($request->isLive) && $request->isLive == 1) ? 1 : 0;
+
+        if($isLive == 0)
+            $video = Video::find($videoId);
+        else
+            $video = Live::find($videoId);
+
         if($video != null){
             $newComment = new VideoComment();
-            $newComment->videoId = $video->id;
+            if($isLive == 0)
+                $newComment->videoId = $video->id;
+            else
+                $newComment->liveVideoId = $video->id;
+
             $newComment->parent = $request->ansTo;
             $newComment->text = $request->text;
             $newComment->userId = auth()->user()->id;
