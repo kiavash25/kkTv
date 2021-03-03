@@ -56,8 +56,8 @@ class MainController extends Controller
             $item = getVideoFullInfo($item, false);
 
         $registerInCarpet = false;
-        if(\auth()->check())
-            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() == 1;
+//        if(\auth()->check())
+//            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() == 1;
 //            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() != 1;
 
         return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos', 'registerInCarpet']));
@@ -392,27 +392,19 @@ class MainController extends Controller
             $user = \auth()->user();
             $userInEvent = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
 
-//            if($userInEvent == null){
-//                $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
-//                if($lives != null)
-//                    return redirect(route('streaming.live', ['room' => $lives->code]));
-//                else
-//                    return redirect(url('/'));
-//            }
-//            else
-//                return redirect(url('/'))->with(['msg' => 'notRegisterInCarpet']);
-
-
             if($userInEvent == null){
                 $userInEvent = new UserEventRegistr();
                 $userInEvent->userId = $user->id;
                 $userInEvent->event = 'carpet';
                 $userInEvent->save();
-
-                return redirect()->back()->with(['msg' => 'carpetRegister']);
             }
+
+            $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
+            if($lives != null)
+                return redirect(route('streaming.live', ['room' => $lives->code]));
             else
-                return redirect()->back()->with(['msg' => 'youHasIn']);
+                return redirect(url('/'));
+
         }
         else
             return redirect(url('/'))->with(['needToLogin' => 1]);

@@ -198,7 +198,7 @@
         <div id="carpetMatchModal" class="modal carpetModal">
             <div class="modal-dialog" style="display: flex; justify-content: center; align-items: center;">
                 <div class="closeIcon" onclick="closeCarpetModal()"></div>
-                <img src="{{URL::asset('images/notImportant/carpetMatch.jpg')}}" alt="carpetMatch" style="height: 90vh; cursor:pointer;" onclick="registerInCarpet()">
+                <img src="{{URL::asset('images/notImportant/carpetMatch.jpeg?v=1')}}" alt="carpetMatch" style="height: 90vh; cursor:pointer;" onclick="registerInCarpet()">
             </div>
         </div>
 
