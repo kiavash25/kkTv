@@ -35,11 +35,12 @@ class LiveController extends Controller
                 else{
                     $user = auth()->user();
                     $checkRegisterInCarpet = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
-                    if($checkRegisterInCarpet == null)
-                        return redirect(url('/'))->with(['msg' => 'notRegisterInCarpet']);
-
-                    if($user->username !== 'koochita')
-                        return redirect(url('/'));
+                    if($checkRegisterInCarpet == null){
+                        $checkRegisterInCarpet = new UserEventRegistr();
+                        $checkRegisterInCarpet->userId = $user->id;
+                        $checkRegisterInCarpet->event = 'carpet';
+                        $checkRegisterInCarpet->save();
+                    }
                 }
 
 
