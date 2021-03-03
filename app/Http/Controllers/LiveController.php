@@ -37,7 +37,11 @@ class LiveController extends Controller
                     $checkRegisterInCarpet = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
                     if($checkRegisterInCarpet == null)
                         return redirect(url('/'))->with(['msg' => 'notRegisterInCarpet']);
+
+                    if($user->username !== 'koochita')
+                        return redirect(url('/'));
                 }
+
 
                 $startVideo = $nowTime >= $video->sTime ? 1 : $video->sTime.':00';
                 $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();

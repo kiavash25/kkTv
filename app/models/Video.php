@@ -44,7 +44,7 @@ class Video extends Model
 
     public function getPlaces()
     {
-        $nouns = env('KOOCHITATV_NOUNC_CODE');
+        $nouns = config('app.KOOCHITATV_NOUNC_CODE');
         $time = Carbon::now()->getTimestamp();
         $hash = Hash::make($nouns.'_'.$time);
 
@@ -65,7 +65,7 @@ class Video extends Model
             }
         }
 
-        $response = Http::get(env("KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
+        $response = Http::get(config("app.KOOCHITA_URL_API").'/getPlacesForKoochitaTv', [
             'time' => $time,
             'code' => $hash,
             'state' => json_encode($states),

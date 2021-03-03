@@ -77,7 +77,7 @@
             <div class="darkShadowBox" style="border-radius: 5px;">
                 <div class="showVideo">
                     <div class="videoContainer">
-                        <video id="video_1" class="video-js playads" controls style="width: 100%; direction: ltr; display: {{$startVideo == 1 ? 'block' : 'none'}};" data-setup='{"fluid": true}'></video>
+                        <video id="video_1" class="video-js playads" mute controls style="width: 100%; direction: ltr; display: {{$startVideo == 1 ? 'block' : 'none'}};" data-setup='{"fluid": true}' autoplay></video>
                         <div id="bannerSection" class="videoBanner">
                             <div class="remainingTime">
                                 <div class="timeToStart"></div>
