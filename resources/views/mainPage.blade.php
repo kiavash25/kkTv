@@ -60,23 +60,24 @@
     <div class="container mainShowBase">
         <div class="mainSlider">
             <div id="mainSlider" class="swiper-container backgroundColorForSlider" style="display: flex; justify-content: center; align-items: center;">
-                <video id="mainVideo" src="#" autoplay muted loop></video>
-                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>
-                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>
+{{--                <video id="mainVideo" src="#" autoplay muted loop></video>--}}
+{{--                <div class="commonSoundIcon soundIcon" style="display: none" onclick="toggleVideoSound(0, this)"></div>--}}
+{{--                <div class="commonSoundIcon muteIcon" onclick="toggleVideoSound(1, this)"></div>--}}
 
-{{--                <div class="swiper-wrapper">--}}
-{{--                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden; justify-content: start;">--}}
-{{--                        <img src="{{URL::asset('images/notImportant/banner.jpg')}}" class="resizeImgClass" onload="showThisVideoSugg(this)" style="width: 100%">--}}
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide mobileHeight imgOfSliderBox" style="overflow: hidden; justify-content: start;">
+                        <img src="{{URL::asset('images/notImportant/carpetBanner.jpg')}}" class="resizeImgClass" style="width: 100%">
 {{--                        <div class="nowSeeThisVideoDiv" style="color: white; font-size: 35px; flex-direction: column; align-items: flex-end;">--}}
 {{--                            <div id="timeToStart"></div>--}}
 {{--                            <div style="color: #f4c15b; font-size: 19px;">مانده به شروع پخش زنده</div>--}}
 {{--                        </div>--}}
-{{--                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $timeToLiveCode])}}" class="playSliderIcon">--}}
-{{--                            <img src="{{URL::asset('images/mainPics/play.png')}}">--}}
-{{--                            <div style="color: white; font-size: 32px;">همین حالا ببینید</div>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                        <a id="playSliderIcon" href="{{route('streaming.live', ['room' => $hasLive])}}" class="playSliderIcon" style="display: flex">
+                            <img src="{{URL::asset('images/mainPics/play.png')}}">
+                            <div style="color: white; font-size: 32px;">رویداد مجازی فرش دستباف</div>
+                        </a>
+                    </div>
+                </div>
+
 {{--                <div class="swiper-pagination"></div>--}}
 {{--                <div class="swiper-button-next"></div>--}}
 {{--                <div class="swiper-button-prev"></div>--}}
@@ -342,45 +343,46 @@
         //     },
         // });
 
-        function toggleVideoSound(_kind, _element){
-            $(_element).hide();
-            if(_kind == 1){
-                $('#mainVideo').prop('muted', false);
-                $(_element).prev().show();
-            }
-            else{
-                $('#mainVideo').prop('muted', true);
-                $(_element).next().show();
-            }
-        }
+        // function toggleVideoSound(_kind, _element){
+        //     $(_element).hide();
+        //     if(_kind == 1){
+        //         $('#mainVideo').prop('muted', false);
+        //         $(_element).prev().show();
+        //     }
+        //     else{
+        //         $('#mainVideo').prop('muted', true);
+        //         $(_element).next().show();
+        //     }
+        // }
 
 {{--        let mobileVideo = "{{URL::asset('images/tv_mobile.mp4')}}";--}}
-        let mobileVideo = "{{URL::asset('images/video/comp3.mp4')}}";
-        let pcVideo = "{{URL::asset('images/video/comp3.mp4')}}";
-        $(window).on('resize', changeVideoSource);
 
-        function changeVideoSource(){
-            var currentTime = document.getElementById('mainVideo').currentTime;
-            var mainVideoElementElements = $('#mainVideo');
+{{--        let mobileVideo = "{{URL::asset('images/video/comp3.mp4')}}";--}}
+{{--        let pcVideo = "{{URL::asset('images/video/comp3.mp4')}}";--}}
+{{--        $(window).on('resize', changeVideoSource);--}}
 
-            if($(this).width() < 771){
-                if(mainVideoElementElements.attr('src') != mobileVideo)
-                    mainVideoElementElements.attr('src', mobileVideo);
+{{--        function changeVideoSource(){--}}
+{{--            var currentTime = document.getElementById('mainVideo').currentTime;--}}
+{{--            var mainVideoElementElements = $('#mainVideo');--}}
 
-                if($(this).width() < 500)
-                    mainVideoElementElements.css({height: '100%', width: 'auto'});
-                else
-                    mainVideoElementElements.css({height: 'auto', width: '100%'});
-            }
-            else{
-                if(mainVideoElementElements.attr('src') != pcVideo)
-                    mainVideoElementElements.attr('src', pcVideo);
+{{--            if($(this).width() < 771){--}}
+{{--                if(mainVideoElementElements.attr('src') != mobileVideo)--}}
+{{--                    mainVideoElementElements.attr('src', mobileVideo);--}}
 
-                mainVideoElementElements.css({height: '100%', width: 'auto'});
-            }
-            document.getElementById('mainVideo').currentTime = currentTime;
-        }
+{{--                if($(this).width() < 500)--}}
+{{--                    mainVideoElementElements.css({height: '100%', width: 'auto'});--}}
+{{--                else--}}
+{{--                    mainVideoElementElements.css({height: 'auto', width: '100%'});--}}
+{{--            }--}}
+{{--            else{--}}
+{{--                if(mainVideoElementElements.attr('src') != pcVideo)--}}
+{{--                    mainVideoElementElements.attr('src', pcVideo);--}}
 
-        $(document).ready(changeVideoSource);
+{{--                mainVideoElementElements.css({height: '100%', width: 'auto'});--}}
+{{--            }--}}
+{{--            document.getElementById('mainVideo').currentTime = currentTime;--}}
+{{--        }--}}
+
+{{--        $(document).ready(changeVideoSource);--}}
     </script>
 @endsection
