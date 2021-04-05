@@ -205,7 +205,7 @@
             @endif
 
 
-            @include('questionInLiveCarpet')
+{{--            @include('questionInLiveCarpet')--}}
 
             <div class="guestNotPcSection">
                 <div class="row">

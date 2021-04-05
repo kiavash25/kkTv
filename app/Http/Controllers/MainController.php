@@ -30,10 +30,7 @@ class MainController extends Controller
     public function indexStreaming()
     {
         $confirmConditions = ['state' => 1, 'confirm' => 1];
-        $lastVideos = Video::where($confirmConditions)
-            ->orderByDesc('created_at')
-            ->take(10)
-            ->get();
+        $lastVideos = Video::where($confirmConditions)->orderByDesc('created_at')->take(10)->get();
 
         foreach ($lastVideos as $lvid)
             $lvid = getVideoFullInfo($lvid, false);
@@ -55,12 +52,7 @@ class MainController extends Controller
         foreach ($topVideos as $item)
             $item = getVideoFullInfo($item, false);
 
-        $registerInCarpet = false;
-//        if(\auth()->check())
-//            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() == 1;
-//            $registerInCarpet = UserEventRegistr::where('userId', \auth()->user()->id)->where('event', 'carpet')->count() != 1;
-
-        return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos', 'registerInCarpet']));
+        return view('mainPage', compact(['lastVideos', 'videoCategory', 'topVideos']));
     }
 
     public function videoList($kind, $value){
@@ -384,30 +376,4 @@ class MainController extends Controller
 
         return response()->json(['status' => 'ok', 'seenPageLogId' => $seenLog->id]);
     }
-
-
-    public function registerInCarpetMatch()
-    {
-        if(\auth()->check()){
-            $user = \auth()->user();
-            $userInEvent = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
-
-            if($userInEvent == null){
-                $userInEvent = new UserEventRegistr();
-                $userInEvent->userId = $user->id;
-                $userInEvent->event = 'carpet';
-                $userInEvent->save();
-            }
-
-            $lives = Live::where('isLive', 1)->orderBy('sDate')->orderBy('sTime')->first();
-            if($lives != null)
-                return redirect(route('streaming.live', ['room' => $lives->code]));
-            else
-                return redirect(url('/'));
-
-        }
-        else
-            return redirect(url('/'))->with(['needToLogin' => 1]);
-    }
-
 }

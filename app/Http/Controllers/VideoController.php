@@ -34,7 +34,7 @@ class VideoController extends Controller
     public function uploadVideoPage()
     {
         $user = auth()->user();
-        if($user->username != "koochita")
+        if($user->username != "koochita" && $user->username != "KoochitaTV")
             return redirect(route('index'));
 
         $this->deleteLimbo();

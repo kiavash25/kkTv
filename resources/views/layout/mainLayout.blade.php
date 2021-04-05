@@ -16,15 +16,6 @@
     <meta property="og:site_name" content="کوچیتا تی وی | اولین تلویزیون اینترنتی گردشگری و صنایع دستی ایران" />
 
 
-{{--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>--}}
-{{--    <script>--}}
-{{--        window.dataLayer = window.dataLayer || [];--}}
-{{--        function gtag(){dataLayer.push(arguments);}--}}
-{{--        gtag('js', new Date());--}}
-
-{{--        gtag('config', 'UA-158914626-1');--}}
-{{--    </script>--}}
-
     <link rel="icon" href="{{URL::asset('images/icons/TVFAV0.svg')}}" sizes="any" type="image/svg+xml">
     <link rel="apple-touch-icon-precomposed" href="{{URL::asset('images/icons/TVFAV0.svg')}}" sizes="any" type="image/svg+xml">
 

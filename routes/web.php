@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('registerInCarpetMatch', 'MainController@registerInCarpetMatch')->name('registerInCarpetMatch');
 
 Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamingController@updateLink"]);
 

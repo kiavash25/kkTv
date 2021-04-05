@@ -30,20 +30,6 @@ class LiveController extends Controller
 
             if($video != null && $video->isLive == 1 && $video->sDate == $today){
 
-                if(!auth()->check())
-                    return redirect(url('/'))->with(['needToLogin' => 1]);
-                else{
-                    $user = auth()->user();
-                    $checkRegisterInCarpet = UserEventRegistr::where('userId', $user->id)->where('event', 'carpet')->first();
-                    if($checkRegisterInCarpet == null){
-                        $checkRegisterInCarpet = new UserEventRegistr();
-                        $checkRegisterInCarpet->userId = $user->id;
-                        $checkRegisterInCarpet->event = 'carpet';
-                        $checkRegisterInCarpet->save();
-                    }
-                }
-
-
                 $startVideo = $nowTime >= $video->sTime ? 1 : $video->sTime.':00';
                 $video->date = Carbon::createFromFormat('Y-m-d', $video->sDate)->toFormattedDateString();
                 $video->banner = URL::asset("images/liveBanners/{$video->beforeBanner}");
