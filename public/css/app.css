@@ -262,8 +262,9 @@
 }
 .profileTopSection .bannerSec {
     width: 100%;
-    max-height: 300px;
-    min-height: 200px;
+    height: 300px;
+    /*max-height: 300px;*/
+    /*min-height: 200px;*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -690,6 +691,10 @@
     .profilePageHeader .hTab .tab{
         width: 100px;
         font-size: 15px;
+    }
+
+    .profileTopSection .bannerSec{
+        height: 200px;
     }
 }
 
