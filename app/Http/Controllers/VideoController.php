@@ -91,9 +91,7 @@ class VideoController extends Controller
         $user = auth()->user();
         if (isset($request->name) && isset($request->fileName) && isset($request->mainCategory)) {
 
-            $limbo = VideoLimbo::where('video', $request->fileName)
-                                ->where('userId', $user->id)
-                                ->first();
+            $limbo = VideoLimbo::where('video', $request->fileName)->where('userId', $user->id)->first();
 
             $categoryCheck = VideoCategory::find($request->mainCategory);
             if($categoryCheck == null)
@@ -129,10 +127,11 @@ class VideoController extends Controller
                 $newVideo->thumbnail = $thumbanil;
                 $newVideo->seen = 0;
                 $newVideo->confirm = 1;
-                $newVideo->state = $request->state;
+                $newVideo->state = -1;
+//                $newVideo->state = $request->state;
                 $newVideo->save();
 
-                $limboLoc = $location . '/limbo/' . $limbo->video;
+                $limboLoc =  "{$location}/limbo/{$limbo->video}";
                 $nLoc .= '/' . $limbo->video;
                 rename($limboLoc, $nLoc);
 

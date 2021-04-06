@@ -174,7 +174,8 @@ class MainController extends Controller
 
         $isLink = true;
 
-        if (($video->confirm == 1 && $video->state == 1 && $video->link != null) || ($video->userId == $uId)) {
+//        && $video->state == 1 && $video->link != null
+        if (($video->confirm == 1) || ($video->userId == $uId)) {
 
             if (!\Cookie::has('video_' . $video->code)) {
                 \Cookie::queue(\Cookie::make('video_' . $video->code, 1, 5));

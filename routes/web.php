@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -161,11 +162,11 @@ Route::middleware(['web'])->group(function(){
 });
 
 Route::middleware(['web'])->group(function(){
-    Route::get('ajax/getVideoPlaces', 'AjaxController@getVideoPlaces')->name('ajax.getVideoPlaces');
+    Route::get('ajax/getVideoPlaces', [AjaxController::class, 'getVideoPlaces'])->name('ajax.getVideoPlaces');
 
-    Route::get('ajax/totalPlaceSearch', 'AjaxController@totalPlaceSearch')->name('ajax.totalPlaceSearch');
+    Route::get('ajax/totalPlaceSearch', [AjaxController::class, 'totalPlaceSearch'])->name('ajax.totalPlaceSearch');
 
-    Route::get('ajax/getTags', 'AjaxController@getTags')->name('ajax.getTags');
+    Route::get('ajax/getTags', [AjaxController::class, 'getTags'])->name('ajax.getTags');
 });
 
 Auth::routes();
