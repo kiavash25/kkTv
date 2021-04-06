@@ -191,7 +191,7 @@ class MainController extends Controller
                 foreach ($categ as $vid)
                     $vid = getVideoFullInfo($vid, false);
 
-            if($video->userId == $uId && $video->link == null) {
+            if($video->link == null) {
                 $video->link = URL::asset('videos/' . $video->userId . '/' . $video->video);
                 $isLink = false;
             }
