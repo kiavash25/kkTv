@@ -127,8 +127,8 @@ class VideoController extends Controller
                 $newVideo->thumbnail = $thumbanil;
                 $newVideo->seen = 0;
                 $newVideo->confirm = 1;
-                $newVideo->state = -1;
-//                $newVideo->state = $request->state;
+                $newVideo->status = -1;
+                $newVideo->state = $request->state;
                 $newVideo->save();
 
                 $limboLoc =  "{$location}/limbo/{$limbo->video}";
