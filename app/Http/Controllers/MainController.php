@@ -29,7 +29,7 @@ class MainController extends Controller
 {
     public function indexStreaming()
     {
-        $confirmConditions = ['state' => 1, 'confirm' => 1];
+        $confirmConditions = ['confirm' => 1];
         $lastVideos = Video::where($confirmConditions)->orderByDesc('created_at')->take(10)->get();
 
         foreach ($lastVideos as $lvid)
