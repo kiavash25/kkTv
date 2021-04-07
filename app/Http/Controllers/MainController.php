@@ -9,6 +9,7 @@ use App\models\UserSeenLog;
 use App\models\Video;
 use App\models\VideoBookMark;
 use App\models\VideoCategory;
+use App\models\VideoCategoryRelation;
 use App\models\VideoComment;
 use App\models\VideoFeedback;
 use App\models\VideoLimbo;
@@ -129,15 +130,16 @@ class MainController extends Controller
                 else
                     $catId = [$category->id];
 
-                $videos = Video::where($confirmConditions)->whereIn('categoryId', $catId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
+                $videosId = VideoCategoryRelation::whereIn('categoryId', $catId)->pluck('videoId')->get();
+
+                $videos = Video::where($confirmConditions)->whereIn('id', $videosId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
                 foreach ($videos as $item)
                     $item = getVideoFullInfo($item, false);
 
-                echo json_encode(['status' => 'ok', 'videos' => $videos]);
+                return response()->json(['status' => 'ok', 'videos' => $videos]);
             }
             else
-                echo json_encode(['status' => 'nok']);
-            return;
+                return response()->json(['status' => 'nok']);
         }
     }
 
