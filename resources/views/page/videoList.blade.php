@@ -296,33 +296,24 @@
                         page: page,
                         perPage: perPage
                     },
+                    complete: closeLoading,
                     success: function (response) {
-                        closeLoading();
-                        try {
-                            response = JSON.parse(response);
-                            if (response['status'] == 'ok') {
-                                page++;
+                        if (response.status == 'ok') {
+                            page++;
 
-                                if(response.videos.length < perPage)
-                                    isEnd = true;
+                            if(response.videos.length < perPage)
+                                isEnd = true;
 
-                                createVideoSuggestionDiv(response.videos, 'allVideo', function(){
-                                    $('#allVideo').find('.videoSuggestion').addClass('videoInList');
-                                    resizeFitImg('resizeImgClass');
-                                    inGet = false;
+                            createVideoSuggestionDiv(response.videos, 'allVideo', function(){
+                                $('#allVideo').find('.videoSuggestion').addClass('videoInList');
+                                resizeFitImg('resizeImgClass');
+                                inGet = false;
 
-                                    resizeRows('videoInList');
-                                    loadMoreCheck();
-                                }, true);
-
-                            }
-                        }
-                        catch (e) {
+                                resizeRows('videoInList');
+                                loadMoreCheck();
+                            }, true);
 
                         }
-                    },
-                    error: function (err) {
-                        closeLoading();
                     }
                 });
             }

@@ -130,7 +130,7 @@ class MainController extends Controller
                 else
                     $catId = [$category->id];
 
-                $videosId = VideoCategoryRelation::whereIn('categoryId', $catId)->pluck('videoId')->get();
+                $videosId = VideoCategoryRelation::whereIn('categoryId', $catId)->pluck('videoId')->toArray();
 
                 $videos = Video::where($confirmConditions)->whereIn('id', $videosId)->skip(($page - 1) * $perPage)->take($perPage)->orderByDesc('created_at')->get();
                 foreach ($videos as $item)

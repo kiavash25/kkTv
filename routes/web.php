@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,17 +35,17 @@ Route::post('log/storeSeenLog', 'MainController@storeSeenLog')->name('log.storeS
 
 Route::middleware(['web', 'vodShareData'])->group(function (){
 
-    Route::get('/', 'MainController@indexStreaming')->name('index');
+    Route::get('/', [MainController::class ,'indexStreaming'])->name('index');
 
-    Route::get('profile/page/{user:username}', 'ProfileController@showProfile')->name('profile.show');
+    Route::get('profile/page/{user:username}', [ProfileController::class ,'showProfile'])->name('profile.show');
 
-    Route::post('video/search', 'MainController@search')->name('video.search');
+    Route::post('video/search', [MainController::class ,'search'])->name('video.search');
 
-    Route::get('list/{kind}/{value}', 'MainController@videoList')->name('video.list');
+    Route::get('list/{kind}/{value}', [MainController::class ,'videoList'])->name('video.list');
 
-    Route::post('getListElems', 'MainController@getVideoListElems')->name('video.list.getElems');
+    Route::post('getListElems', [MainController::class ,'getVideoListElems'])->name('video.list.getElems');
 
-    Route::get('video/show/{code}', 'MainController@showVideo')->name('video.show');
+    Route::get('video/show/{code}', [MainController::class ,'showVideo'])->name('video.show');
 
     Route::middleware(['auth'])->group(function () {
 
