@@ -8,12 +8,9 @@ use Illuminate\Http\Request;
 
 class PlayListController extends Controller
 {
-    public function newPlayList(Request $request)
-    {
+    public function newPlayList(Request $request){
         if(isset($request->text)){
-            $upl = UserPlayList::where('userId', auth()->user()->id)
-                ->where('name', $request->text)
-                ->first();
+            $upl = UserPlayList::where('userId', auth()->user()->id)->where('name', $request->text)->first();
             if($upl == null){
                 $upl = new UserPlayList();
                 $upl->userId = auth()->user()->id;

@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::get('/kish', function(){
+   return redirect('http://5.253.24.93');
+});
 Route::post('updateLink', ["as" => "updateLink", "uses" => "StreamingController@updateLink"]);
 
 Route::get("liveTest", function () {
